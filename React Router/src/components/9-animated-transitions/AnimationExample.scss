@@ -1,0 +1,65 @@
+.container {
+  position: absolute;
+  backface-visibility: grey;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  height: 40px;
+  width: 100%;
+  background: rgb(199, 199, 199);
+  list-style: none;
+  
+  li {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+.content {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+}
+
+.hsl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: white;
+  font-size: 2rem;
+  padding-top: 20px;
+}
+
+.rgb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: yellow;
+  font-size: 2rem;
+  padding-top: 20px;
+}
+
+.fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
+}

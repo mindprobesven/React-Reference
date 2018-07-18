@@ -1,0 +1,23 @@
+.page-container {
+  display: flex;
+  padding: 1rem;
+  background: rgb(196, 196, 196);
+}
+
+.sidebar {
+  flex-basis: 40%;
+  max-width: 300px;
+  padding: 1rem;
+  background: rgb(66, 66, 66);
+  color: white;
+
+  a {
+    color: rgb(255, 238, 0);
+  }
+}
+
+.main {
+  flex: 1;
+  padding: 1rem;
+  background: white;
+}
