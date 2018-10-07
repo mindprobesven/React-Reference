@@ -1,0 +1,19 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+.nav-list {
+ margin: 1rem;
+
+  li {
+    margin: 1rem;
+  }
+}

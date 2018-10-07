@@ -39,14 +39,17 @@ function logProps(WrappedComponent, selectData) {
 
     render() {
       const { forwardedRef, ...passThroughProps } = this.props;
-
+      console.log(forwardedRef, this.props)
       return (
         <WrappedComponent {...passThroughProps} data={this.state.date} custom={this.state.custom} ref={forwardedRef} />
       );
     }
   }
 
-  const forwardRef = (props, ref) => <LogProps {...props} forwardedRef={ref} />;
+  const forwardRef = (props, ref) => {
+   
+    return <LogProps {...props} forwardedRef={ref} />
+  };
   const name = WrappedComponent.displayName || WrappedComponent.name;
   forwardRef.displayName = `logProps(${name})`;
 

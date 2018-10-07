@@ -1,0 +1,21 @@
+{
+  "plugins": [
+    "react"
+  ],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "document": false
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "max-len": [1, 120, 2, {"ignoreComments": true}],
+    "semi": [2, "never"],
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/react-in-jsx-scope": 2
+  },
+  "extends": ["airbnb-base"]
+}

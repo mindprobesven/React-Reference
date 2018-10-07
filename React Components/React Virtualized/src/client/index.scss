@@ -1,0 +1,107 @@
+@import 'presets';
+
+$baseFont: $font;
+$infoBoxBackgroundColor: $color1;
+$infoBoxTextColor: $color7;
+$optionsMenuBackgroundColor: $color1;
+$buttonAddBorderColor: $color4;
+$buttonAddBackgroundColor: $color7;
+$buttonAddTextColor: $color4;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: $font;
+  font-size: 1rem;
+}
+
+body {
+  width: 100%;
+  padding: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.info-box {
+  background-color: $infoBoxBackgroundColor;
+  border-radius: 12px;
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: $infoBoxTextColor;
+
+  .headline {
+    margin-bottom: 1rem;
+  }
+
+  .body-text {
+    line-height: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .body-text:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.options-menu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: $optionsMenuBackgroundColor;
+  border-radius: 12px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+
+  .button-add {
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 4rem;
+    color: $buttonAddTextColor;
+    background-color: $buttonAddBackgroundColor;
+    border: 2px solid $buttonAddBorderColor;
+    border-radius: 8px;
+    padding: 0 20px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  html {
+    //font-size: 0.55rem;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  html {
+    //font-size: 0.75rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  html {
+    //font-size: 1rem;
+  }
+
+  .options-menu .button-add {
+    line-height: 3rem;
+  }
+}

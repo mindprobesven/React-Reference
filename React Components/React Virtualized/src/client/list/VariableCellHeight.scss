@@ -1,0 +1,80 @@
+@import '../presets';
+
+$leftColumnBackgroundColor: $color5;
+$leftColumnTextColor: $color7;
+$rightColumnBackgroundColor: $color1;
+$rightColumnTextColor: $color7;
+$noRowsBackgroundColor: $color5;
+$noRowsTextColor: $color7;
+$headerBackgroundColor: $color5;
+$headerTextColor: $color7;
+
+.list-container {
+  min-width: 300px;
+  max-width: 700px;
+  margin-right: auto;
+  margin-left: auto;
+  height: 500px;
+}
+
+.header {
+  background-color: $headerBackgroundColor;
+  color: $headerTextColor;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.window-size-list {
+  background-color: white;
+
+  .item-container {
+    padding-bottom: 5px;
+  }
+}
+
+.two-column-container {
+  display: flex;
+  background-color: $leftColumnBackgroundColor;
+  height: 100%;
+
+  .left-column-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 50px;
+
+    .content {
+      font-weight: bold;
+      color: $leftColumnTextColor;
+    }
+  }
+
+  .right-column-container {
+    display: flex;
+    flex: 1;
+    background-color: $rightColumnBackgroundColor;
+    padding: 0 10px;
+
+    .content {
+      color: $rightColumnTextColor;
+    }
+  }
+}
+
+.isScrollingPlaceholder {
+  color: #DDD;
+  font-style: italic;
+}
+
+.noRows {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $noRowsTextColor;
+  background-color: $noRowsBackgroundColor;
+}

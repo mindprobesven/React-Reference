@@ -1,0 +1,122 @@
+@import '../presets';
+
+$leftColumnBackgroundColor: $color5;
+$leftColumnTextColor: $color7;
+$rightColumnBackgroundColor: $color1;
+$rightColumnTextColor: $color7;
+$noRowsBackgroundColor: $color5;
+$noRowsTextColor: $color7;
+
+.static-size-list {
+  background-color: white;
+
+  .item-container {
+    padding-bottom: 5px;
+  }
+}
+
+.two-column-container {
+  display: flex;
+  background-color: $leftColumnBackgroundColor;
+  height: 100%;
+
+  .left-column-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 50px;
+
+    .content {
+      font-weight: bold;
+      color: $leftColumnTextColor;
+    }
+  }
+
+  .right-column-container {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    background-color:$rightColumnBackgroundColor;
+    padding: 0 10px;
+
+    .content {
+      color: $rightColumnTextColor
+    }
+  }
+}
+
+.isScrollingPlaceholder {
+  color: #DDD;
+  font-style: italic;
+}
+
+.noRows {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $noRowsTextColor;
+  background-color: $noRowsBackgroundColor;
+}
+
+
+
+
+
+.list {
+  width: 100%;
+  border: 1px solid green;
+  padding: 15px
+}
+
+.row {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 25px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+.letter {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 40px;
+  color: white;
+  font-size: 1.5em;
+  margin-right: 25px;
+}
+.name {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+.index {
+  color: #37474f;
+}
+.height {
+  flex: 1;
+  text-align: right;
+  color: #bdbdbd;
+  font-size: .75em;
+  font-weight: 100;
+}
+
+
+
+.checkboxLabel {
+  margin-left: .5rem;
+}
+.checkboxLabel:first-of-type {
+  margin-left: 0;
+}
+.checkbox {
+  margin-right: 5px;
+}
+
