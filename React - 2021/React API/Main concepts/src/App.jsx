@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './style.css';
 
 import UserList from './UserList';
+import CounterList from './CounterList';
 
 const users = [
   {
@@ -21,6 +22,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <CounterList startValue={1} />
         <UserList users={users} />
       </div>
     );
