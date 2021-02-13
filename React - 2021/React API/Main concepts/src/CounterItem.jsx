@@ -6,19 +6,16 @@ class CounterItem extends Component {
     super(props);
 
     this.state = {
-      currentCount: 0,
+      prevCount: 0,
       counter: 0,
     };
   }
 
   componentDidMount() {
-    console.log(`===>===> ${this.constructor.name} did mount`);
     this.updateCounter();
   }
 
   componentDidUpdate(prevProps) {
-    console.log(`===>===> ${this.constructor.name} did update`);
-
     const { count } = this.props;
 
     if (prevProps.count !== count) {
@@ -32,11 +29,11 @@ class CounterItem extends Component {
 
   updateCounter() {
     const { count, intervalAt } = this.props;
-    const { currentCount } = this.state;
+    const { prevCount } = this.state;
 
-    if (count - currentCount >= intervalAt) {
+    if (count - prevCount >= intervalAt) {
       this.setState((state, props) => ({
-        currentCount: props.count,
+        prevCount: props.count,
         counter: state.counter + 1,
       }));
     }
@@ -44,13 +41,15 @@ class CounterItem extends Component {
 
   render() {
     const { counterID, intervalAt, count } = this.props;
-    const { currentCount, counter } = this.state;
+    const { prevCount, counter } = this.state;
 
     return (
       <div>
         <p>
-          {`Counter ${counterID} - 
-          [ ${intervalAt} ]: ${count} => ${currentCount} => ${counter}`}
+          {
+            `Counter ${counterID} - [ ${intervalAt} ]: ${count} => 
+            ${prevCount} => ${counter}`
+          }
         </p>
       </div>
     );

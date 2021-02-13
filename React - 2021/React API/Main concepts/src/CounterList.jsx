@@ -13,8 +13,6 @@ class CounterList extends Component {
   }
 
   componentDidMount() {
-    console.log(`===> ${this.constructor.name} did mount`);
-
     this.timerID = setInterval(() => this.tick(), 1000);
   }
 

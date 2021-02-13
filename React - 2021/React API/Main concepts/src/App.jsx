@@ -4,6 +4,8 @@ import './style.css';
 
 import UserList from './UserList';
 import CounterList from './CounterList';
+import ToggleButton from './ToggleButton';
+import Warning from './Warning';
 
 const users = [
   {
@@ -22,7 +24,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Warning />
+        <hr />
+        <ToggleButton />
+        <hr />
         <CounterList startValue={1} />
+        <hr />
         <UserList users={users} />
       </div>
     );
