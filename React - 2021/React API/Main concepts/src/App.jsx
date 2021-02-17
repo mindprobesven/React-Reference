@@ -6,6 +6,7 @@ import UserList from './UserList';
 import CounterList from './CounterList';
 import ToggleButton from './ToggleButton';
 import Warning from './Warning';
+import Calcuator from './Calculator';
 
 const users = [
   {
@@ -24,6 +25,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Calcuator />
+        <hr />
         <Warning />
         <hr />
         <ToggleButton />

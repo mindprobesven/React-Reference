@@ -50,7 +50,7 @@ class Warning extends Component {
 }
 
 WarningButton.propTypes = {
-  onClick: PropTypes.shape(PropTypes.object).isRequired,
+  onClick: PropTypes.func.isRequired,
   status: PropTypes.bool.isRequired,
 };
 
