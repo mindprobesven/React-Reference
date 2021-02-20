@@ -1,12 +1,16 @@
+/* eslint-disable max-len */
 // import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import './style.css';
 
-import Counter from './Counter';
+import CounterWithDataSource from './BasicHOC/CounterWithDataSource';
+import ArticleListWithDataSource from './HOCWithArgs/ArticleListWithDataSource';
 
 const App = () => (
   <div className="app">
-    <Counter />
+    <CounterWithDataSource />
+    <ArticleListWithDataSource id="dog" />
+    <ArticleListWithDataSource id="cat" />
   </div>
 );
 

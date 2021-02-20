@@ -1,4 +1,4 @@
-class DataSourceClass {
+class DataSource {
   constructor() {
     this.intervalID1 = null;
     this.counter1 = 0;
@@ -17,6 +17,7 @@ class DataSourceClass {
 
   updateCounter() {
     this.counter1 += 1;
+    if (this.counter1 >= 5) clearInterval(this.intervalID1);
   }
 
   getCounter(id) {
@@ -27,7 +28,5 @@ class DataSourceClass {
     return null;
   }
 }
-
-const DataSource = new DataSourceClass();
 
 export default DataSource;

@@ -28,12 +28,12 @@ h1 {
   height: 100%;
   width: 90%;
   margin: 0 auto;
-  background-color: #ccc;
 }
 
 .counter {
   margin-top: 1em;
   padding: 1em;
+  background-color: #ddd;
 }
 
 .text_input {
@@ -45,4 +45,10 @@ h1 {
 
 .text_input:last-child {
   margin-bottom: 0;
+}
+
+.articles {
+  margin-top: 1em;
+  padding: 1em;
+  background-color: #ddd;
 }

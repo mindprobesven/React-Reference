@@ -7,21 +7,23 @@ const withDataSource = (WrappedComponent) => {
     constructor(props) {
       super(props);
 
+      this.DataSource = new DataSource();
+
       this.state = {
-        data: DataSource.getCounter(1),
+        data: this.DataSource.getCounter(1),
       };
     }
 
     componentDidMount() {
-      DataSource.addChangeListener(this.handleChange);
+      this.DataSource.addChangeListener(this.handleChange);
     }
 
     componentWillUnmount() {
-      DataSource.removeChangeListener();
+      this.DataSource.removeChangeListener();
     }
 
     handleChange = () => {
-      this.setState({ data: DataSource.getCounter(1) });
+      this.setState({ data: this.DataSource.getCounter(1) });
     }
 
     render() {
