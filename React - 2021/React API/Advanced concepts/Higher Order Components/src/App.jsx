@@ -5,9 +5,11 @@ import './style.css';
 
 import CounterWithDataSource from './BasicHOC/CounterWithDataSource';
 import ArticleListWithDataSource from './HOCWithArgs/ArticleListWithDataSource';
+import ChatBox from './HOCWithForwardRef/ChatBox';
 
 const App = () => (
   <div className="app">
+    <ChatBox />
     <CounterWithDataSource />
     <ArticleListWithDataSource id="dog" />
     <ArticleListWithDataSource id="cat" />
