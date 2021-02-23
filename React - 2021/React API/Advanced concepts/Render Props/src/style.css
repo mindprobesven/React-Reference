@@ -1,0 +1,59 @@
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  min-width: 320px;
+}
+
+body {
+  height: 100%;
+  font-size: 20px;
+  font-family: Arial;
+}
+
+p {
+  font-size: 1em;
+}
+
+h1 {
+  font-size: 1.5em;
+  margin-bottom: .5em;
+}
+
+.app {
+  height: 100%;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.chat-box {
+  padding: 1em;
+  margin-top: 1em;
+  background-color: #ccc;
+}
+
+.chat-box .message-text {
+  font-size: 1em;
+  width: 100%;
+  height: 10em;
+  padding: 1em;
+  box-sizing:  border-box;
+}
+
+.chat-box .input-text {
+  font-size: 1em;
+  width: 100%;
+  padding: 1em;
+  margin-top: 1em;
+  box-sizing:  border-box;
+}
+
+.chat-box .send-button {
+  font-size: 1em;
+  padding: 1em 2em;
+  margin-top: 1em;
+}
