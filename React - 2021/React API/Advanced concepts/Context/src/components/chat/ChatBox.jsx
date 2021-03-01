@@ -18,7 +18,6 @@ class ChatBox extends Component {
   render() {
     return (
       <div className="chat-box">
-
         <UserStore>
           <UserContext.Consumer>
             {
@@ -38,9 +37,5 @@ class ChatBox extends Component {
     );
   }
 }
-
-/* ChatBox.propTypes = {
-  render: PropTypes.func.isRequired,
-}; */
 
 export default ChatBox;
