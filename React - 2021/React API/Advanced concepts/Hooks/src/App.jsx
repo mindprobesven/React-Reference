@@ -4,12 +4,12 @@ import React from 'react';
 import './styles/base.scss';
 
 import ErrorBoundary from './components/ErrorBoundary';
-import ModalParent from './components/ModalParent';
+import Counter from './components/Counter';
 
 const App = () => (
   <div className="app">
     <ErrorBoundary>
-      <ModalParent />
+      <Counter />
     </ErrorBoundary>
   </div>
 );
