@@ -4,12 +4,12 @@ import React from 'react';
 import './styles/base.scss';
 
 import ErrorBoundary from './components/ErrorBoundary';
-import Counter from './components/Counter';
+import CounterList from './components/CounterList';
 
 const App = () => (
   <div className="app">
     <ErrorBoundary>
-      <Counter />
+      <CounterList />
     </ErrorBoundary>
   </div>
 );

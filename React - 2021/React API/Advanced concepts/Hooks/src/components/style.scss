@@ -6,9 +6,20 @@ button {
 
 .container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 80%;
+  height: 15em;
+  background-color: $grey-75;
+}
+
+.counter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  margin: 1em;
   padding: 1em;
+  box-sizing: border-box;
   background-color: $grey-50;
 }
