@@ -17,6 +17,7 @@ class DataSource {
 
   static subscribe(subscriberCallback) {
     this.addSubscriber(subscriberCallback);
+    console.log(`Subscribers: ${this.subscribers.length}`);
 
     if (!this.intervalID) {
       this.intervalID = setInterval(() => {
