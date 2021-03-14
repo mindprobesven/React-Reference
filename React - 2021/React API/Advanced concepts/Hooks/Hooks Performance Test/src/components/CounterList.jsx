@@ -1,44 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import React from 'react';
 
-import React, { useState, useEffect, useRef } from 'react';
+import CounterItem from './CounterItem';
 
-import './style.scss';
-import Counter from './Counter';
+import '../styles/style.scss';
 
-const CounterList = () => {
-  const [state, setState] = useState({
-    counter1: 0,
-    counter2: 0,
-  });
-
-  const prevStateRef = useRef();
-
-  useEffect(() => {
-    console.log('Effect');
-    prevStateRef.current = state;
-  }, [state]);
-
-  const handleChange = React.useCallback((e, id) => {
-    setState((prevState) => ({ ...prevState, [id]: prevState[id] + 1 }));
-  }, []);
-
-  const createCounterList = () => (
-    Object.entries(state).map(([counterID, count]) => (
-      <Counter
-        key={counterID}
-        id={counterID}
-        count={count}
-        handleChange={handleChange}
-      />
-    )));
-
-  console.log(state);
-  console.log(prevStateRef.current);
+const CounterList = ({ counters, handleIncrement }) => {
+  const counterList = counters.map((counter) => (
+    <CounterItem
+      key={counter.id}
+      data={counter}
+      handleIncrement={handleIncrement}
+    />
+  ));
 
   return (
-    <div className="container">
-      {createCounterList()}
+    <div className="counter-list-container">
+      {counterList}
     </div>
   );
 };

@@ -9,4 +9,6 @@ const CounterItem = React.memo(({ data, handleIncrement }) => (
   </div>
 ), (prevProps, nextProps) => prevProps.data.count === nextProps.data.count);
 
+CounterItem.displayName = 'CounterItem';
+
 export default CounterItem;

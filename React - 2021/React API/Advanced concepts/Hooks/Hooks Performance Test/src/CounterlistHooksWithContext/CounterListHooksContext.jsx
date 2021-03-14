@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import useCounterData from './useCounterData';
+import { CounterContext } from '../contexts/CounterStore';
 import CounterItem from '../components/CounterItem';
 
 import '../styles/style.scss';
 
-const CounterListHooks = () => {
-  const [counters, handleIncrement] = useCounterData();
+const CounterListHooksContext = () => {
+  const { counters, handleIncrement } = useContext(CounterContext);
 
   const counterList = counters.map((counter) => (
     <CounterItem
@@ -23,4 +23,4 @@ const CounterListHooks = () => {
   );
 };
 
-export default CounterListHooks;
+export default CounterListHooksContext;
