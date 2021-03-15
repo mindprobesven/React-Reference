@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState, useEffect, useRef, useLayoutEffect,
+} from 'react';
 
 import './style.scss';
 import Counter from './Counter';
@@ -14,8 +16,13 @@ const CounterList = () => {
 
   const prevStateRef = useRef();
 
+  useLayoutEffect(() => {
+    console.log('CounterList useLayoutEffect');
+    document.title = `Counter 1: ${state.counter1}`;
+  });
+
   useEffect(() => {
-    console.log('Effect');
+    console.log('CounterList useEffect');
     prevStateRef.current = state;
   }, [state]);
 

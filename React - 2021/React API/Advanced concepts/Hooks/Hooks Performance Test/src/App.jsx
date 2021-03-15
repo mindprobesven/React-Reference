@@ -14,10 +14,14 @@ import CounterData from './CounterlistWithRenderProps/CounterData';
 import CounterListHooks from './CounterlistHooks/CounterListHooks';
 import CounterStore, { CounterContext } from './contexts/CounterStore';
 import CounterListHooksContext from './CounterlistHooksWithContext/CounterListHooksContext';
+import CounterListWithReducer from './CounterlistHooksReducer/CounterListWithReducer';
 
 const App = () => (
   <div className="app">
     <ErrorBoundary>
+      {/* Hooks with Reducer */}
+      <CounterListWithReducer />
+
       {/* Hooks with Context */}
       <CounterStore>
         <CounterListHooksContext />
