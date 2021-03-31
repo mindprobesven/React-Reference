@@ -27,6 +27,9 @@ const App = () => (
         <CounterListHooksContext />
       </CounterStore>
 
+      {/* Custom Hook */}
+      <CounterListHooks />
+
       {/* Context */}
       <CounterStore>
         <CounterContext.Consumer>
@@ -40,9 +43,6 @@ const App = () => (
           }
         </CounterContext.Consumer>
       </CounterStore>
-
-      {/* Custom Hook */}
-      <CounterListHooks />
 
       {/* HOC */}
       <CounterListWithHOC />
