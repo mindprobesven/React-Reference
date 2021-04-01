@@ -6,7 +6,7 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './dist',
+    historyApiFallback: true,
     hot: true,
   },
   module: {
@@ -30,5 +30,8 @@ module.exports = merge(common, {
         ],
       },
     ],
+  },
+  output: {
+    publicPath: '/',
   },
 });
