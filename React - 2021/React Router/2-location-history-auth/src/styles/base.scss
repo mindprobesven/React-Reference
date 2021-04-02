@@ -1,0 +1,27 @@
+@import 'colors';
+
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+html {
+  font-family: Arial;
+  font-size: 14px;
+  
+}
+
+body, .app {
+  height: 100%;
+  min-width: 320px;
+}
+
+.app {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.error-container {
+  padding: 1rem;
+  background-color: $grey-50;
+}
