@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import {
@@ -21,6 +22,8 @@ import Login from './components/Login';
 const App = () => (
   <div className="app">
     <ErrorBoundary>
+      {/* The AuthProvider provides the context for the user's authentication state and
+      signIn and signOut functions */}
       <AuthProvider>
         <Router>
           <div>
@@ -49,6 +52,9 @@ const App = () => (
               <Route path="/login">
                 <Login />
               </Route>
+              {/* The ProtectedRoute uses the AuthContext to check if the user is authenticated.
+              If the user is authenticated, its children are rendered, otherwise a <Redirect> to
+              the /login route is rendered. */}
               <ProtectedRoute path="/protected">
                 <Protected />
               </ProtectedRoute>

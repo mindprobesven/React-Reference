@@ -23,12 +23,26 @@ const AuthProvider = ({ children }) => {
           authenticated: true,
         }
       ));
-      resolve('OK');
+      resolve(true);
+    }, 1000);
+  });
+
+  const signOut = () => new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('Signing out user...');
+      setAuthState((prevState) => (
+        {
+          ...prevState,
+          user: null,
+          authenticated: false,
+        }
+      ));
+      resolve(true);
     }, 1000);
   });
 
   return (
-    <AuthContext.Provider value={{ authState, signIn }}>
+    <AuthContext.Provider value={{ authState, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
