@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
 // import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
 } from 'react-router-dom';
 
 import './styles/base.scss';
@@ -16,6 +14,7 @@ import About from './components/About';
 import Dashboard from './components/Dashboard';
 import MainNavigation from './components/MainNavigation';
 import Topics from './components/Topics';
+import NoMatch404 from './components/404';
 
 const App = () => (
   <div className="app">
@@ -43,6 +42,11 @@ const App = () => (
             </Route>
             <Route path="/nestedRouteTopics">
               <Topics />
+            </Route>
+            {/* A <Route path="*"> always matches. When used as the last <Route> in a <Switch> it can
+            be used as a "fallback" route to catch 404 errors. */}
+            <Route path="*">
+              <NoMatch404 />
             </Route>
           </Switch>
         </div>

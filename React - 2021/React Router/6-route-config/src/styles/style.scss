@@ -1,0 +1,17 @@
+@import 'colors';
+
+.container {
+  display: flex;
+  height: 100%;
+}
+
+.sidebar {
+  width: 40%;
+  padding: 1rem;
+  background-color: $grey-50;
+}
+
+.main {
+  flex-grow: 1;
+  padding: 1rem;
+}

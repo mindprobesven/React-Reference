@@ -16,6 +16,9 @@ const MainNavigation = () => (
       <li>
         <Link to="/nestedRouteTopics">Topics</Link>
       </li>
+      <li>
+        <Link to="/noMatch">No Match (404)</Link>
+      </li>
     </ul>
   </div>
 );
