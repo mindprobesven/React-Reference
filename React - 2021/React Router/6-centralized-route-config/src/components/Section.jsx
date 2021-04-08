@@ -1,9 +1,6 @@
-/* eslint-disable react/jsx-indent */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/prop-types */
-/* eslint-disable max-len */
 import React from 'react';
 import {
   Link, Switch, Route, useRouteMatch,
@@ -29,6 +26,9 @@ const Section = ({ routes }) => {
       </div>
       <div className="main">
         <Switch>
+          {/* We want to render something when the URL is /cars exactly.
+          We use useRouteMatch() to get access to the match data and render
+          this <Route> when the match.path = /cars and is exact = true */}
           <Route
             path={match.path}
             exact

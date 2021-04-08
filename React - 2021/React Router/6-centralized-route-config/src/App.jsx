@@ -1,15 +1,11 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
-/* eslint-disable max-len */
 // import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Link,
-  Route,
 } from 'react-router-dom';
 
 import './styles/base.scss';
@@ -28,6 +24,11 @@ const routes = [
     exact: true,
     label: 'Home',
     component: Home,
+  },
+  {
+    path: '/computers',
+    label: 'Computers',
+    component: Gallery,
   },
   {
     path: '/cars',
@@ -69,19 +70,13 @@ const App = () => (
         <Switch>
           {
             routes.map((route, index) => {
-              // console.log({ ...route });
+              console.log(JSON.stringify(route));
 
               return (
+              /* A custom <Route> wrapper that can handle rendering sub-routes */
                 <RouteWithSubRoutes
                   key={index}
                   {...route}
-                  /* key={index}
-                  path={route.path}
-                  exact={route.exact}
-                  route={route} */
-                  /* path={route.path}
-                  exact={route.exact}
-                  component={route.component} */
                 />
               );
             })
