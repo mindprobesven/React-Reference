@@ -1,10 +1,11 @@
+/* eslint-disable max-len */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { useRouteMatch, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const GalleryModal = ({ images }) => {
-  const match = useRouteMatch();
-  console.log(match);
+  console.log('Gallery Modal');
+  const location = useLocation();
 
   return (
     <div>
@@ -13,8 +14,15 @@ const GalleryModal = ({ images }) => {
         {
           images.map((image) => (
             <li key={image.id}>
+              {/* The /gallery-with-modal 'location' is stored in 'state.background'
+                when an image link is clicked in the gallery with modal.
+                This makes it possible for the <Switch> to use it as a location and show
+                the gallery in the background, behind the modal. */}
               <Link
-                to={`/img/${image.id}`}
+                to={{
+                  pathname: `/img/${image.id}`,
+                  state: { background: location },
+                }}
               >
                 {image.title}
               </Link>

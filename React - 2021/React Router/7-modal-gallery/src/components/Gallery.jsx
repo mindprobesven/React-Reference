@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { useRouteMatch, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Gallery = ({ images }) => {
-  const match = useRouteMatch();
-  console.log(match);
+  console.log('Gallery');
 
   return (
     <div>

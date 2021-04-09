@@ -1,23 +1,18 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 // import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
   Link,
-  Route,
 } from 'react-router-dom';
 
 import './styles/base.scss';
 import './styles/style.scss';
 
 import ErrorBoundary from './components/ErrorBoundary';
-import Home from './components/Home';
-import Gallery from './components/Gallery';
-import GalleryModal from './components/GalleryModal';
-import ImageView from './components/ImageView';
-import Modal from './components/Modal';
+import SwitchController from './components/SwitchController';
 
 const images = [
   { id: 0, title: 'Dark Orchid', color: 'DarkOrchid' },
@@ -46,23 +41,10 @@ const App = () => (
         </div>
 
         <hr />
-        <Modal />
-        <div>
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/gallery-no-modal">
-              <Gallery images={images} />
-            </Route>
-            <Route path="/gallery-with-modal">
-              <GalleryModal images={images} />
-            </Route>
-            <Route path="/img/:id">
-              <ImageView images={images} />
-            </Route>
-          </Switch>
-        </div>
+        {/* <Switch> needs to be in a custom wrapper component, here <SwitchController>
+        to be able to access 'location' via useLocation(). The <SwitchController> will
+        be able to access 'location' via useLocation() because it is a child of <Router> */}
+        <SwitchController images={images} />
       </Router>
     </ErrorBoundary>
   </div>
