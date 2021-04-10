@@ -14,24 +14,19 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Home from './components/Home';
 import About from './components/About';
 import Dashboard from './components/Dashboard';
-import ScrollToTop from './components/ScrollToTop';
+import RouteScrollMemory from './components/RouteScrollMemory';
+// import ScrollToTop from './components/ScrollToTop';
 
 const App = () => (
   <div className="app">
     <ErrorBoundary>
       <Router>
-        <ScrollToTop />
+        <RouteScrollMemory />
+        {/* <ScrollToTop /> */}
         <div className="header">
           <div className="menu">
             <div className="item">
-              <Link
-                to={{
-                  pathname: '/',
-                  state: { lastScrollPosY: 500 },
-                }}
-              >
-                Home
-              </Link>
+              <Link to="/">Home</Link>
             </div>
             <div className="item">
               <Link to="/about">About</Link>
