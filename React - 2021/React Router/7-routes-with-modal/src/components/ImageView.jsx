@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import ImageItem from './ImageItem';
 
 const ImageView = ({ images }) => {
+  console.log('ImageView');
+
   const { id } = useParams();
   const image = images[parseInt(id, 10)];
 

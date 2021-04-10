@@ -1,0 +1,34 @@
+@import 'colors';
+
+.header {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: $grey-25;
+
+  .menu {
+    display: flex;
+    height: 4rem;
+    width: 100%;
+    
+    .item {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      padding: 0 1rem;
+      margin-left: 2px;
+      background: $grey-50;
+    }
+
+    .item:first-child {
+      flex-grow: 2;
+      margin: 0;
+    }
+  }
+}
+
+.body {
+  margin-top: 4rem;
+}

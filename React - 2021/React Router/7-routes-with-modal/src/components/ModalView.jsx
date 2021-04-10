@@ -5,9 +5,9 @@ import ImageItem from './ImageItem';
 
 const ModalView = ({ images }) => {
   console.log('ModalView');
+
   const { id } = useParams();
   const image = images[parseInt(id, 10)];
-  console.log(image);
 
   const history = useHistory();
 
