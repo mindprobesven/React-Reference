@@ -15,14 +15,13 @@ import Home from './components/Home';
 import About from './components/About';
 import Dashboard from './components/Dashboard';
 import RouteScrollMemory from './components/RouteScrollMemory';
-// import ScrollToTop from './components/ScrollToTop';
 
 const App = () => (
   <div className="app">
     <ErrorBoundary>
       <Router>
+        {/* This custom component manages the window scroll position restoration for routes */}
         <RouteScrollMemory />
-        {/* <ScrollToTop /> */}
         <div className="header">
           <div className="menu">
             <div className="item">
