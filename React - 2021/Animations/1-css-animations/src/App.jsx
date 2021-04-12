@@ -1,8 +1,7 @@
 // import { hot } from 'react-hot-loader/root';
 import React from 'react';
 
-import './styles/base.scss';
-import './styles/style.scss';
+import './sass/main.scss';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import AnimatedImageView from './components/AnimatedImageView';
