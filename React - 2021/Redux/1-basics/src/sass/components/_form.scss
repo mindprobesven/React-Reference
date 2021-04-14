@@ -1,0 +1,22 @@
+.form {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 1rem;
+  height: 100%;
+  color: $grey-75;
+  background: $grey-25;
+  box-sizing: border-box;
+
+  &__input {
+    flex-grow: 1;
+    min-width: 1px;
+    padding: 1rem;
+    color: $grey-75;
+    background: $grey-50;
+    border: none;
+
+    &::placeholder {
+      color: $blue-50;
+    }
+  }
+}

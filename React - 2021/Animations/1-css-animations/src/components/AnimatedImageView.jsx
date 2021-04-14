@@ -14,9 +14,12 @@ const content = {
 const AnimatedImageView = () => {
   const infoSwiperRef = useRef();
 
+  /* We want to display additional info on top of the image with a cool slide in panel <InfoSwiper>.
+  The visibility state of <InfoSwiper> is modifed via classList.toggle().
+  Toggling 'info-swiper--is-open' slides the <InfoSwiper> in and out with an animated transition. */
   function handleClick() {
-    const overlayContainer = infoSwiperRef.current;
-    overlayContainer.classList.toggle('is-open');
+    const infoSwiperNode = infoSwiperRef.current;
+    infoSwiperNode.classList.toggle('info-swiper--is-open');
   }
 
   return (

@@ -29,6 +29,10 @@
   transform: translateX(-100%);
   transition: transform 0.5s;
 
+  &--is-open {
+    transform: translateX(0%);
+  }
+
   &__button {
     position: absolute;
     display: flex;
@@ -63,9 +67,5 @@
   &__content {
     padding: 2rem;
     color: $grey-75;
-  }
-
-  &.is-open {
-    transform: translateX(0%);
   }
 }
