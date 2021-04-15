@@ -23,7 +23,7 @@ console.log(store.getState());
 store.subscribe(() => console.log('Redux state upated'));
 
 // To change the state we dispatch an action
-store.dispatch(addArticle({ id: 1, title: 'Adding an article title via store.dispatch' }));
+store.dispatch(addArticle('Adding an article title via store.dispatch'));
 
 // Returns the current state after having dispatched the action addArticle(payload)
 console.log(store.getState());
@@ -32,7 +32,7 @@ console.log(store.getState());
 
 const App = () => (
   // With the react-redux library the Redux store is connected to React components
-  // The 'Prodiver' is a HOC from react-redux and provides the Redux store
+  // The 'Prodiver' is a wrapper component from react-redux and provides the Redux store
   <Provider store={store}>
     <div className="app">
       <ErrorBoundary>

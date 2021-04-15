@@ -1,13 +1,17 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
+import { connect } from 'react-redux';
 
-const Counter = () => {
+const Counter = ({ articles }) => {
   console.log('Counter');
 
   return (
     <div className="counter">
-      <h1 className="counter__text">0</h1>
+      <h1 className="counter__text">{articles.length}</h1>
     </div>
   );
 };
 
-export default Counter;
+// This component only requires data from the Redux state, no actions.
+// The mapDispatchToProps can be omitted from the 'connect' arguments.
+export default connect(({ articles }) => ({ articles }))(Counter);

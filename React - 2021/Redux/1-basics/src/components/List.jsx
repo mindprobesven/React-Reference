@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { deleteArticle } from '../redux/store';
 
-const ConnectedList = ({ articles, deleteArticle }) => {
+const List = ({ articles, deleteArticle }) => {
   console.log('List');
 
   function handleRemove(articleID) {
@@ -34,22 +34,35 @@ const ConnectedList = ({ articles, deleteArticle }) => {
   );
 };
 
-/*
-Long form
+/* ------------------------------------------------------------------------
+The 'connect' method from the react-redux library connects a React component
+with the Redux store. 'connect' requires a 'Provider' wrapper HOC from react-redux.
 
-const mapStateToProps = (state) => ({ articles: state.articles });
+The 'connect' method is used with two arguments:
+
+1. A mapStateToProps function
+Connects part of the Redux state to the props of a component.
+
+2. A mapDispatchToProps function
+Connects Redux actions to the props of a component.
+------------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------------
+Verbose form
+
+const mapStateToProps = (state) => (
+  { articles: state.articles },
+);
 
 const mapDispatchToProps = (dispatch) => (
   { _deleteArticle: (articleID) => dispatch(deleteArticle(articleID)) }
 );
 
-const List = connect(mapStateToProps, { deleteArticle })(ConnectedList);
-*/
+const List = connect(mapStateToProps, { deleteArticle })(List);
+------------------------------------------------------------------------ */
 
 // Shorthand form
-const List = connect(
+export default connect(
   ({ articles }) => ({ articles }),
   { deleteArticle },
-)(ConnectedList);
-
-export default List;
+)(List);

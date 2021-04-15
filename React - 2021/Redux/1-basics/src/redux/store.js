@@ -1,8 +1,10 @@
 import { createStore } from 'redux';
 
 // ----------------------------------------------------------------------------------
+// In this example the store, reducers, actions and constants are all in one file.
+// Normally, these would be placed in separate files and directories
 
-// Constants/
+// Constants
 // Actions types should be declared as constants to avoid typos and duplicates
 export const ADD_ARTICLE = 'ADD_ARTICLE';
 export const DELETE_ARTICLE = 'DELETE_ARTICLE';
@@ -38,8 +40,18 @@ const initialState = {
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
-  case ADD_ARTICLE:
-    return { ...state, articles: [...state.articles, action.payload] };
+  case ADD_ARTICLE: {
+    const sortedByID = [...state.articles].sort((a, b) => b.id - a.id);
+    const newArticleID = sortedByID[0].id + 1;
+    const newArticle = {
+      id: newArticleID,
+      title: action.payload,
+    };
+    return {
+      ...state,
+      articles: [...state.articles, newArticle],
+    };
+  }
   case DELETE_ARTICLE: {
     const articleIdToDelete = action.payload;
     const filteredArticles = state.articles.filter(
