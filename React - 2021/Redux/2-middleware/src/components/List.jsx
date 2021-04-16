@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import { deleteArticle } from '../redux/store';
 
 const List = ({ articles, deleteArticle }) => {
-  function handleRemove(articleID) {
-    deleteArticle(articleID);
+  function handleRemove(id) {
+    deleteArticle({ id });
   }
 
   return (
@@ -33,6 +33,6 @@ const List = ({ articles, deleteArticle }) => {
 };
 
 export default connect(
-  ({ articles }) => ({ articles }),
+  ({ articlesState: { data: { articles } } }) => ({ articles }),
   { deleteArticle },
 )(List);

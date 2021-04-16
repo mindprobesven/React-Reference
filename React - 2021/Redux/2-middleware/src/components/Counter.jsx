@@ -8,4 +8,6 @@ const Counter = ({ articles }) => (
   </div>
 );
 
-export default connect(({ articles }) => ({ articles }))(Counter);
+export default connect(
+  ({ articlesState: { data: { articles } } }) => ({ articles }),
+)(Counter);

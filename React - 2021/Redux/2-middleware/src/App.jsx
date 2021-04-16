@@ -9,16 +9,16 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Counter from './components/Counter';
 import Form from './components/Form';
 import List from './components/List';
+// import ErrorStatus from './components/ErrorStatus';
 
 import store from './redux/store';
-import ErrorStatus from './components/ErrorStatus';
 
 const App = () => (
   <Provider store={store}>
     <div className="app">
       <ErrorBoundary>
         <div className="body">
-          <ErrorStatus />
+          {/* <ErrorStatus /> */}
           <div className="double-column">
             <div className="double-column__container" style={{ width: '20%' }}>
               <Counter />

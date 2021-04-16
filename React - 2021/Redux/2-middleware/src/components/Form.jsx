@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
 import { addArticle } from '../redux/store';
+import Status from './Status';
 
 const initialState = {
   title: '',
@@ -31,22 +32,25 @@ const Form = ({ _addArticle }) => {
   }
 
   return (
-    <div className="form">
-      <input
-        className="form__input"
-        type="text"
-        placeholder="Enter article text"
-        value={state.title}
-        onChange={handleChange}
-      />
-      <button
-        className="button"
-        type="button"
-        onClick={handleSubmit}
-      >
-        Add
-      </button>
-    </div>
+    <>
+      <Status />
+      <div className="form">
+        <input
+          className="form__input"
+          type="text"
+          placeholder="Enter article text"
+          value={state.title}
+          onChange={handleChange}
+        />
+        <button
+          className="button"
+          type="button"
+          onClick={handleSubmit}
+        >
+          Add
+        </button>
+      </div>
+    </>
   );
 };
 

@@ -1,31 +1,27 @@
+/* eslint-disable no-multi-spaces */
 /* eslint-disable func-names */
 import { createStore, applyMiddleware, compose } from 'redux';
 
 // ----------------------------------------------------------------------------------
 
 // Constants
-export const ADD_ARTICLE = 'ADD_ARTICLE';
-export const DELETE_ARTICLE = 'DELETE_ARTICLE';
-export const HANDLE_ERROR = 'HANDLE_ERROR';
-export const RESET_ERROR = 'RESET_ERROR';
+export const ARTICLE_ADD = 'ARTICLE_ADD';
+export const ARTICLE_DELETE = 'ARTICLE_DELETE';
+export const ARTICLE_RESULT = 'ARTICLE_RESULT';
 
 // ----------------------------------------------------------------------------------
 
 // Actions
-export function addArticle(payload) {
-  return { type: ADD_ARTICLE, payload };
+export function addArticle({ title }) {
+  return { type: ARTICLE_ADD, data: { title } };
 }
 
-export function deleteArticle(payload) {
-  return { type: DELETE_ARTICLE, payload };
+export function deleteArticle({ id }) {
+  return { type: ARTICLE_DELETE, data: { id } };
 }
 
-export function handleError(payload) {
-  return { type: HANDLE_ERROR, payload };
-}
-
-export function resetError() {
-  return { type: RESET_ERROR };
+export function resultArticle({ data, error }) {
+  return { type: ARTICLE_RESULT, data, error };
 }
 
 // ----------------------------------------------------------------------------------
@@ -38,44 +34,53 @@ export function forbiddenWordsMiddleware({ dispatch }) {
     return function (action) {
       console.log('Middleware forbiddenWordsMiddleware intercepting...');
 
-      // This middleware only intercepts actions of type ADD_ARTICLE
+      // This middleware only intercepts actions of type ARTICLE_ADD
       // It will check if bad words are in the title, then it will either
-      // dispatch an error action or continue with the ADD_ARTICLE action.
-      if (action.type === ADD_ARTICLE) {
+      // dispatch an error action or continue with the ARTICLE_ADD action.
+      if (action.type === ARTICLE_ADD) {
         const forbiddenWords = ['spam', 'money'];
         const foundWord = forbiddenWords.filter(
-          (word) => action.payload.title.includes(word),
+          (word) => action.data.title.includes(word),
         );
 
         if (foundWord.length) {
           // The middleware can dispatch another action if necessary.
-          // For example here the handleError() action gets dispatched.
+          // For example here the errorArticle() action gets dispatched.
           // The reducer will execute this action and update the Redux store state
           // with this new error data. A React component can then catch the error state
           // and update it's UI (Show an error message to the user).
-          return dispatch(handleError({
-            type: 'INVALID_TITLE',
-            message: 'Found a bad word!',
-            stack: ADD_ARTICLE,
+          dispatch(resultArticle({
+            data: null,
+            error: {
+              type: 'INVALID_TITLE',
+              message: 'Found a bad word!',
+              stack: ARTICLE_ADD,
+            },
+          }));
+        } else {
+          dispatch(resultArticle({
+            data: action.data,
+            error: null,
           }));
         }
       }
       // next(action) will move the application forward, either to the next middleware or
-      // action in the chain. In this case, it will continue with the ADD_ARTICLE action
+      // action in the chain. In this case, it will continue with the ARTICLE_ADD action
       // if no bad words are present in the title.
       return next(action);
     };
   };
 }
 
-export function resetErrorMiddleware({ dispatch }) {
+export function errorLoggingMiddleware() {
   return function (next) {
     return function (action) {
-      console.log('Middleware resetErrorMiddleware intercepting...');
+      console.log('Middleware errorLoggingMiddleware intercepting...');
 
-      if (action.type === ADD_ARTICLE) {
-        dispatch(resetError());
+      if (action.error) {
+        console.log('An error ocurred somewhere');
       }
+
       return next(action);
     };
   };
@@ -85,61 +90,100 @@ export function resetErrorMiddleware({ dispatch }) {
 
 // Reducers
 const initialState = {
-  articles: [
-    { id: 2, title: 'Title 2' },
-    { id: 3, title: 'Title 3' },
-    { id: 4, title: 'Title 4' },
-  ],
-  error: undefined,
+  articlesState: {
+    data: {
+      articles: [
+        { id: 2, title: 'Title 2' },
+        { id: 3, title: 'Title 3' },
+        { id: 4, title: 'Title 4' },
+      ],
+    },
+    result: {
+      status: 'idle',   // success, error or idle
+      data: null,
+      error: null,
+    },
+  },
 };
 
-function rootReducer(state = initialState, action) {
+function articlesReducer(state = initialState, action) {
   switch (action.type) {
-  case ADD_ARTICLE: {
-    console.log('Dispatch action ADD_ARTICLE');
-    const { title } = action.payload;
+  case ARTICLE_ADD: {
+    console.log('Dispatched action ARTICLE_ADD');
+
+    const { error } = state.articlesState.result;
+
+    if (error) {
+      console.log('ARTICLE_ADD result = ERROR...Aborting!');
+      return state;
+    }
+
+    const { title } = state.articlesState.result.data;
     let newArticle = {
       id: 0,
       title,
     };
 
-    if (state.articles.length) {
-      const id = [...state.articles].sort((a, b) => b.id - a.id)[0].id + 1;
+    const newArticlesState = { ...state.articlesState };
+    const { articles } = state.articlesState.data;
+
+    if (articles.length) {
+      const id = [...articles].sort((a, b) => b.id - a.id)[0].id + 1;
       newArticle = {
         id,
         title,
       };
-      return {
-        ...state,
-        articles: [...state.articles, newArticle],
+
+      newArticlesState.data.articles = [...articles, newArticle];
+    } else {
+      newArticlesState.data.articles = [newArticle];
+    }
+
+    return {
+      ...state,
+      articlesState: newArticlesState,
+    };
+  }
+  case ARTICLE_DELETE: {
+    console.log('Dispatched action ARTICLE_DELETE');
+
+    const { id } = action.data;
+    const { articles } = state.articlesState.data;
+    const filteredArticles = articles.filter(
+      (article) => article.id !== id,
+    );
+
+    const newArticlesState = { ...state.articlesState };
+    newArticlesState.data.articles = filteredArticles;
+
+    return {
+      ...state,
+      articlesState: newArticlesState,
+    };
+  }
+  case ARTICLE_RESULT: {
+    console.log('Dispatched action ARTICLE_RESULT');
+
+    const { data, error } = action;
+    const newArticlesState = { ...state.articlesState };
+
+    if (error) {
+      newArticlesState.result = {
+        status: 'error',
+        data,
+        error,
+      };
+    } else {
+      newArticlesState.result = {
+        status: 'success',
+        data,
+        error,
       };
     }
+
     return {
       ...state,
-      articles: [newArticle],
-    };
-  }
-  case DELETE_ARTICLE: {
-    const articleIdToDelete = action.payload;
-    const filteredArticles = state.articles.filter(
-      (article) => article.id !== articleIdToDelete,
-    );
-    return { ...state, articles: filteredArticles };
-  }
-  case HANDLE_ERROR: {
-    console.log('Dispatch action HANDLE_ERROR');
-    console.log(action.payload);
-    const { type, message, stack } = action.payload;
-    return {
-      ...state,
-      error: { type, message, stack },
-    };
-  }
-  case RESET_ERROR: {
-    console.log('Dispatch action RESET_ERROR');
-    return {
-      ...state,
-      error: undefined,
+      articlesState: newArticlesState,
     };
   }
   default:
@@ -151,11 +195,11 @@ function rootReducer(state = initialState, action) {
 
 // Store
 const store = createStore(
-  rootReducer,
+  articlesReducer,
   // To wire up a middleware use applyMiddleware() from the redux library
   compose(
-    applyMiddleware(resetErrorMiddleware),
     applyMiddleware(forbiddenWordsMiddleware),
+    applyMiddleware(errorLoggingMiddleware),
   ),
 );
 
