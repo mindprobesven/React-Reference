@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-multi-spaces */
 /* eslint-disable func-names */
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -111,6 +112,64 @@ function articlesReducer(state = initialState, action) {
   case ARTICLE_ADD: {
     console.log('Dispatched action ARTICLE_ADD');
 
+    const { title } = action.data;
+
+    const forbiddenWords = ['spam', 'money'];
+    const foundWord = forbiddenWords.filter(
+      (word) => action.data.title.includes(word),
+    );
+
+    const newArticlesState = { ...state.articlesState };
+
+    if (foundWord.length) {
+      newArticlesState.result = {
+        status: 'error',
+        data: null,
+        error: {
+          type: 'INVALID_TITLE',
+          message: 'Found a bad word!',
+          stack: ARTICLE_ADD,
+        },
+      };
+      return {
+        ...state,
+        articlesState: newArticlesState,
+      };
+    }
+
+    const { articles } = state.articlesState.data;
+
+    let newArticle = {
+      id: 0,
+      title,
+    };
+
+    if (articles.length) {
+      const id = [...articles].sort((a, b) => b.id - a.id)[0].id + 1;
+      newArticle = {
+        id,
+        title,
+      };
+
+      newArticlesState.data.articles = [...articles, newArticle];
+    } else {
+      newArticlesState.data.articles = [newArticle];
+    }
+
+    newArticlesState.result = {
+      status: 'success',
+      data: null,
+      error: null,
+    };
+
+    return {
+      ...state,
+      articlesState: newArticlesState,
+    };
+  }
+  case 'ARTICLE_ADD_OLD': {
+    console.log('Dispatched action ARTICLE_ADD');
+
     const { error } = state.articlesState.result;
 
     if (error) {
@@ -198,8 +257,8 @@ const store = createStore(
   articlesReducer,
   // To wire up a middleware use applyMiddleware() from the redux library
   compose(
-    applyMiddleware(forbiddenWordsMiddleware),
-    applyMiddleware(errorLoggingMiddleware),
+    // applyMiddleware(forbiddenWordsMiddleware),
+    // applyMiddleware(errorLoggingMiddleware),
   ),
 );
 
