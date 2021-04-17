@@ -2,20 +2,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const Status = ({ status, error }) => {
+const Status = ({ status, message, error }) => {
   console.log('Status');
 
   if (status === 'error') {
     return (
       <div className="status status--red">
-        <p>{`Error: ${error.type} - ${error.message} - at ${error.stack}`}</p>
+        <p>{`Error: ${error.type} - ${message}`}</p>
       </div>
     );
   }
   if (status === 'success') {
     return (
       <div className="status status--green">
-        <p>Successfully added the new article!</p>
+        <p>{message}</p>
       </div>
     );
   }
@@ -23,5 +23,9 @@ const Status = ({ status, error }) => {
 };
 
 export default connect(
-  ({ articlesState: { result: { status, error } } }) => ({ status, error }),
+  ({
+    articlesState: {
+      actionResult: { status, message, error },
+    },
+  }) => ({ status, message, error }),
 )(Status);
