@@ -1,8 +1,13 @@
-import { createStore } from 'redux';
-
 // ----------------------------------------------------------------------------------
+//
+// Redux - Store, reducer, action and connect
+//
+// Note:
 // In this example the store, reducers, actions and constants are all in one file.
 // Normally, these would be placed in separate files and directories
+// ----------------------------------------------------------------------------------
+
+import { createStore } from 'redux';
 
 // Constants
 // Actions types should be declared as constants to avoid typos and duplicates
@@ -11,9 +16,9 @@ export const DELETE_ARTICLE = 'DELETE_ARTICLE';
 
 // ----------------------------------------------------------------------------------
 
-// Actions
-// Actions are objects with two properties; type and payload(optional data to be passed)
-// As a best practice actions are wrapped into functions that are exported for reuse.
+// Action creators
+// Actions are objects and are usally wrapped in action creator functions that can
+// be exported for reuse.
 export function addArticle(payload) {
   return { type: ADD_ARTICLE, payload };
 }

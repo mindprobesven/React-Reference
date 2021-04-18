@@ -15,6 +15,7 @@
 // UPDATE_ACTION_RESULT_STATE which updates the Redux store state (actionResultState) with the
 // new actionResult object. actionResultState can be used to update a React component UI to show the user
 // an error or success message.
+//
 // ----------------------------------------------------------------------------------
 
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -31,7 +32,7 @@ export const UPDATE_ACTION_RESULT_STATE = 'UPDATE_ACTION_RESULT_STATE';
 
 // ----------------------------------------------------------------------------------
 
-// Actions
+// Actions creators
 export function addArticle(formData) {
   return {
     type: ARTICLE_ADD,
