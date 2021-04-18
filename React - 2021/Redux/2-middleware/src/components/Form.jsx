@@ -27,8 +27,10 @@ const Form = ({ _addArticle }) => {
     // If bad words are found, the middleware will dispatch the handleError() action, it will update
     // the 'error' property in the Redux store state with the current error. This Redux state updated
     // can then be detected by some React component that hows an error UI.
-    _addArticle({ title });
-    setState(initialState);
+    if (title.length) {
+      _addArticle({ title });
+      setState(initialState);
+    }
   }
 
   return (

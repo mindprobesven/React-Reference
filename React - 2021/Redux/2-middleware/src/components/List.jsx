@@ -7,7 +7,7 @@ import { deleteArticle } from '../redux/store';
 
 const List = ({ articles, deleteArticle }) => {
   function handleRemove(id) {
-    deleteArticle({ id });
+    deleteArticle(id);
   }
 
   return (

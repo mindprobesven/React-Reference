@@ -1,7 +1,22 @@
-/* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-multi-spaces */
-/* eslint-disable func-names */
+// ----------------------------------------------------------------------------------
+//
+// Redux Middleware
+//
+// In this example, two custom Redux middleware functions are used.
+//
+// - formValidationMiddleware() catches actions of type ARTICLE_ADD. It checks if the
+// new article's title contains bad words. If not, the middleware dispatches the action
+// ARTICLE_ADD_SUCCESS, which adds the new article to the Redux store state (articlesState).
+// If yes, it dispatches the action ARTICLE_ADD_FAILURE
+//
+// - actionResultMiddleware() catches all actions that contain an action.actionResult object.
+// Both the ARTICLE_ADD_SUCCESS and ARTICLE_ADD_FAILURE actions contain these. The actionResult object
+// describes if an action was a success or resulted in an error. The middleware dispatches
+// UPDATE_ACTION_RESULT_STATE which updates the Redux store state (actionResultState) with the
+// new actionResult object. actionResultState can be used to update a React component UI to show the user
+// an error or success message.
+// ----------------------------------------------------------------------------------
+
 import { createStore, applyMiddleware, compose } from 'redux';
 
 // ----------------------------------------------------------------------------------
@@ -11,6 +26,8 @@ export const ARTICLE_ADD = 'ARTICLE_ADD';
 export const ARTICLE_ADD_SUCCESS = 'ARTICLE_ADD_SUCCESS';
 export const ARTICLE_ADD_FAILURE = 'ARTICLE_ADD_FAILURE';
 export const ARTICLE_DELETE = 'ARTICLE_DELETE';
+
+export const UPDATE_ACTION_RESULT_STATE = 'UPDATE_ACTION_RESULT_STATE';
 
 // ----------------------------------------------------------------------------------
 
@@ -22,24 +39,32 @@ export function addArticle(formData) {
   };
 }
 
-export function addArticleSuccess(validatedFormData) {
+export function addArticleSuccess(validatedFormData, actionResult) {
   return {
     type: ARTICLE_ADD_SUCCESS,
     payload: { validatedFormData },
+    actionResult,
   };
 }
 
-export function addArticleFailure(error) {
+export function addArticleFailure(actionResult) {
   return {
     type: ARTICLE_ADD_FAILURE,
-    payload: { error },
+    actionResult,
   };
 }
 
-export function deleteArticle({ id }) {
+export function deleteArticle(id) {
   return {
     type: ARTICLE_DELETE,
     payload: { id },
+  };
+}
+
+export function updateActionResultState(actionResultState) {
+  return {
+    type: UPDATE_ACTION_RESULT_STATE,
+    actionResultState,
   };
 }
 
@@ -48,35 +73,41 @@ export function deleteArticle({ id }) {
 // Middleware
 // A Redux middleware is a function that is able to intercept actions before they reach the reducer.
 // In a middleware you can access getState and dispatch middlewareFunc({ getState, dispatch })
+// A middleware can dispatch one more other other actions.
 
-// This middleware only intercepts actions of type ARTICLE_ADD.
-// ARTICLE_ADD is not processed in the reducer, in fact, it is not even in the reducer. Instead,
-// ARTICLE_ADD is only processed when intercepted by this middleware.
-// This middleware checks if action.payload.formData has a valid title
-// and then dispatches a success or failure action.
 export function formValidationMiddleware({ dispatch }) {
   return (next) => (action) => {
-    console.log('Middleware formValidationMiddleware intercepting...');
-
+    // Catch actions of type ARTICLE_ADD
     if (action.type === ARTICLE_ADD) {
+      console.log('Middleware formValidationMiddleware intercepting...');
+
+      const { formData } = action.payload;
+      let actionResult;
+
       const forbiddenWords = ['spam', 'money'];
       const foundWord = forbiddenWords.filter(
-        (word) => action.payload.formData.title.includes(word),
+        (word) => formData.title.includes(word),
       );
 
       if (foundWord.length) {
-        // A middleware can dispatch one more other other actions.
-        // For example addArticleFailure can set some error message in the Redux store state.
-        // A React component can then catch the error state and update it's UI (Show an error
-        // message to the user).
-        const error = {
-          type: 'INVALID_TITLE',
-          message: 'Found a bad word!',
+        actionResult = {
+          status: 'error',
+          message: null,
+          error: {
+            type: 'INVALID_TITLE',
+            message: 'Found a bad word!',
+          },
         };
 
-        dispatch(addArticleFailure(error));
+        dispatch(addArticleFailure(actionResult));
       } else {
-        dispatch(addArticleSuccess(action.payload.formData));
+        actionResult = {
+          status: 'success',
+          message: 'Successfully added the new article!',
+          error: null,
+        };
+
+        dispatch(addArticleSuccess(formData, actionResult));
       }
     }
 
@@ -86,15 +117,20 @@ export function formValidationMiddleware({ dispatch }) {
   };
 }
 
-// This middleware catches all actions. It checks if any action's action.payload contains
-// an 'error' property. If so, it would mean some action resulted in an error.
-// This middleware could be used as a centralized error handler for example.
-export function errorLoggingMiddleware() {
+export function actionResultMiddleware({ dispatch }) {
   return (next) => (action) => {
-    console.log('Middleware errorLoggingMiddleware intercepting...');
+    // If action.actionResult is undefined, move forward to the next middleware or action
+    if (!action.actionResult) {
+      return next(action);
+    }
 
-    if (Object.prototype.hasOwnProperty.call(action.payload, 'error')) {
-      console.log('An error ocurred somewhere');
+    console.log('Middleware actionResultMiddleware intercepting...');
+    console.log(action.actionResult);
+
+    const { status } = action.actionResult;
+
+    if (status === 'success' || status === 'error') {
+      dispatch(updateActionResultState(action.actionResult));
     }
 
     return next(action);
@@ -113,11 +149,12 @@ const initialState = {
         { id: 4, title: 'Title 4' },
       ],
     },
-    actionResult: {
-      status: 'idle',   // success, error or idle
-      message: null,
-      error: null,
-    },
+  },
+  actionResultState: {
+    // success, error or idle
+    status: 'idle',
+    message: null,
+    error: null,
   },
 };
 
@@ -148,30 +185,6 @@ function articlesReducer(state = initialState, action) {
       newArticlesState.data.articles = [newArticle];
     }
 
-    // Update the actionResult state
-    newArticlesState.actionResult = {
-      status: 'success',
-      message: 'Successfully added the new article!',
-      error: null,
-    };
-
-    return {
-      ...state,
-      articlesState: newArticlesState,
-    };
-  }
-  case ARTICLE_ADD_FAILURE: {
-    console.log('Dispatched action ARTICLE_ADD_FAILURE');
-
-    const newArticlesState = { ...state.articlesState };
-
-    // Update the actionResult state
-    newArticlesState.actionResult = {
-      status: 'error',
-      message: action.payload.error.message,
-      error: action.payload.error,
-    };
-
     return {
       ...state,
       articlesState: newArticlesState,
@@ -195,6 +208,16 @@ function articlesReducer(state = initialState, action) {
       articlesState: newArticlesState,
     };
   }
+  case UPDATE_ACTION_RESULT_STATE: {
+    console.log('Dispatched action UPDATE_ACTION_RESULT_STATE');
+
+    const { actionResultState } = action;
+
+    return {
+      ...state,
+      actionResultState,
+    };
+  }
   default:
     return state;
   }
@@ -206,7 +229,7 @@ function articlesReducer(state = initialState, action) {
 const store = createStore(
   articlesReducer,
   // To wire up a middleware use applyMiddleware() from the redux library
-  compose(applyMiddleware(formValidationMiddleware, errorLoggingMiddleware)),
+  compose(applyMiddleware(formValidationMiddleware, actionResultMiddleware)),
 );
 
 export default store;
