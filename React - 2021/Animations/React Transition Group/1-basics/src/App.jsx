@@ -14,6 +14,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 
 import CSSTransitionBasics from './1-CSSTransitionBasics/CSSTransitionBasics';
 import TransitionGroupMethods from './2-TransitionGroup/TransitionGroupMethods';
+import FadeOneByOneList from './2-TransitionGroup/FadeOneByOneList';
 
 const App = () => (
   <Provider store={store}>
@@ -22,6 +23,11 @@ const App = () => (
         <div className="body">
           <div className="single-column">
             <CSSTransitionBasics />
+          </div>
+        </div>
+        <div className="body">
+          <div className="single-column">
+            <FadeOneByOneList />
           </div>
         </div>
         <div className="body">

@@ -19,9 +19,9 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import uuid from 'uuid';
 
 const articles = [
-  { id: uuid(), title: 'Title 1', exitTransition: true },
-  { id: uuid(), title: 'Title 2', exitTransition: true },
-  { id: uuid(), title: 'Title 3', exitTransition: true },
+  { id: 1, title: 'Title 1', transitionKey: uuid(), exitTransition: true },
+  { id: 2, title: 'Title 2', transitionKey: uuid(), exitTransition: true },
+  { id: 3, title: 'Title 3', transitionKey: uuid(), exitTransition: true },
 ];
 
 const ListText = ({ title }) => (
@@ -77,7 +77,7 @@ const TransitionGroupMethods = () => {
           exitTransition: false,
           // useEffect will replace the old item in the array with this one. It contains a different
           // ID, which is used as key by <CSSTransition>. The key change causes the transition to take place.
-          replaceWithItem: { id: uuid(), title: 'Title updated', exitTransition: true },
+          replaceWithItem: { id, title: `Title ${id} updated!`, transitionKey: uuid(), exitTransition: true },
         };
       }
       return item;
@@ -90,19 +90,14 @@ const TransitionGroupMethods = () => {
     // A set of <CSSTransition> components must be rendered as children of the <TransitionGroup> component.
     <CSSTransition
       // <TransitionGroup> uses the 'key' prop as the identifier for each <CSSTransition> component to pass (in, etc)
-      key={item.id}
+      key={item.transitionKey}
       appear
       timeout={300}
       classNames="fade"
       enter
       // The exit transition plays when clicking the Toggle button, but not when the item is replaced (Edit button).
       exit={item.exitTransition}
-      onExit={() => console.log('onExit', item.id)}
       onEnter={() => console.log('onEnter', item.id)}
-      onEntering={() => console.log('onEntering', item.id)}
-      onEntered={() => console.log('onEntered', item.id)}
-      onExiting={() => console.log('onExiting', item.id)}
-      onExited={() => console.log('onExited', item.id)}
     >
       <div className="list__item">
         <ListText title={item.title} />
