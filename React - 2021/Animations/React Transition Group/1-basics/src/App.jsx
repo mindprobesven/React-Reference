@@ -8,11 +8,12 @@ import './sass/main.scss';
 import store from './redux/store';
 
 import ErrorBoundary from './components/ErrorBoundary';
-import Counter from './components/Counter';
-import Form from './components/Form';
-import List from './components/List';
+// import Counter from './components/Counter';
+// import Form from './components/Form';
+// import List from './components/List';
 
 import CSSTransitionBasics from './1-CSSTransitionBasics/CSSTransitionBasics';
+import TransitionGroupMethods from './2-TransitionGroup/TransitionGroupMethods';
 
 const App = () => (
   <Provider store={store}>
@@ -24,6 +25,11 @@ const App = () => (
           </div>
         </div>
         <div className="body">
+          <div className="single-column">
+            <TransitionGroupMethods />
+          </div>
+        </div>
+        {/* <div className="body">
           <div className="double-column">
             <div className="double-column__container" style={{ width: '20%' }}>
               <Counter />
@@ -35,7 +41,7 @@ const App = () => (
           <div className="single-column">
             <List />
           </div>
-        </div>
+        </div> */}
       </ErrorBoundary>
     </div>
   </Provider>
