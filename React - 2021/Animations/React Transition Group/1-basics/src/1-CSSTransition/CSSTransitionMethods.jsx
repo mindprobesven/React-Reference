@@ -20,7 +20,7 @@ const ListText = ({ title }) => (
   </div>
 );
 
-const CSSTransitionBasics = () => {
+const CSSTransitionMethods = () => {
   const [isVisible1, setIsVisible1] = useState(true);
   const [isVisible2, setIsVisible2] = useState(true);
   const [isVisible3, setIsVisible3] = useState(false);
@@ -148,4 +148,4 @@ const CSSTransitionBasics = () => {
   );
 };
 
-export default CSSTransitionBasics;
+export default CSSTransitionMethods;

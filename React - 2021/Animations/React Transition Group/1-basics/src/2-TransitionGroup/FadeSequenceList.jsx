@@ -1,23 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-/* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 // ----------------------------------------------------------------------------------
 //
-// TransitionGroup component
+// FadeSequenceList
 //
+// This example shows how to transition (fade-in) all items of a list in sequence one by one.
+// This is accomplished by adding the items of a list one by one to the 'items' state array using
+// setInterval. The <TransitionGroup> will mount the new items and play the 'enter' transition.
 //
 // ----------------------------------------------------------------------------------
 
 import React, { useState, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import uuid from 'uuid';
 
 const articles = [
-  { id: 1, title: 'Title 1', transitionKey: uuid() },
-  { id: 2, title: 'Title 2', transitionKey: uuid() },
-  { id: 3, title: 'Title 3', transitionKey: uuid() },
+  { id: 1, title: 'Title 1' },
+  { id: 2, title: 'Title 2' },
+  { id: 3, title: 'Title 3' },
 ];
 
 const ListText = ({ title }) => (
@@ -26,17 +25,17 @@ const ListText = ({ title }) => (
   </div>
 );
 
-const FadeOneByOneList = () => {
-  console.log('FadeOneByOneList');
+const FadeSequenceList = () => {
+  console.log('FadeSequenceList');
 
   const [items, setItems] = useState([]);
 
-  let intervalID;
-  const total = articles.length;
-  let counter = 0;
-
   useEffect(() => {
     console.log('Mounted');
+
+    const total = articles.length;
+    let intervalID;
+    let counter = 0;
 
     if (!intervalID) {
       console.log('Starting interval...');
@@ -56,7 +55,7 @@ const FadeOneByOneList = () => {
 
   const itemsList = items.map((item) => (
     <CSSTransition
-      key={item.transitionKey}
+      key={item.id}
       appear
       timeout={300}
       classNames="fade"
@@ -83,4 +82,4 @@ const FadeOneByOneList = () => {
   );
 };
 
-export default FadeOneByOneList;
+export default FadeSequenceList;

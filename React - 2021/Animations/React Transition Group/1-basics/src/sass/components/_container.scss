@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: $container-padding * 2;
+  margin-bottom: 3rem;
+  background: $grey-50;
+
+  &__header {
+    padding: 0.5rem 1rem;
+    color: $blue-50;
+  }
+}
