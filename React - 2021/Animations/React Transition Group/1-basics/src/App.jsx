@@ -10,10 +10,16 @@ import CSSTransitionMethods from './1-CSSTransition/CSSTransitionMethods';
 import TransitionGroupMethods from './2-TransitionGroup/TransitionGroupMethods';
 import FadeSequenceList from './2-TransitionGroup/FadeSequenceList';
 import SwitchTransitionMethods from './3-SwitchTransition/SwitchTransitionMethods';
+import FadeOverContainer from './2-TransitionGroup/FadeOverContainer';
 
 const App = () => (
   <div className="app">
     <ErrorBoundary>
+      <div className="container">
+        <h3 className="container__header">SwitchTransition</h3>
+        {/* Animated enter and exit transitions when switching between elements */}
+        <FadeOverContainer />
+      </div>
       <div className="container">
         <h3 className="container__header">SwitchTransition</h3>
         {/* Animated enter and exit transitions when switching between elements */}
