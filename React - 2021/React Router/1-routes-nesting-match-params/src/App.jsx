@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import {
@@ -18,28 +19,36 @@ import NoMatch404 from './components/404';
 
 const App = () => (
   <div className="app">
-    <Router>
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <Router>
         <div>
           <MainNavigation />
 
           <hr />
 
           {/* A <Switch> looks through all children and renders the 'first' one whose path
-          matches the current URL */}
+          matches the current URL. It uses 'location' by default, which contains the current URL data.
+          <Switch location={location}> */}
           <Switch>
-            {/* The Router component renders some UI when its path matches the current URL.  */}
+            {/* The <Route> component renders a UI component when its path matches the current URL. */}
 
-            {/* The 'exact' will only be true if the path matches the location.pathname exactlly. */}
+            {/* The 'exact' will only be true if the path matches the location.pathname exactly. */}
             <Route exact path="/">
               <Home />
             </Route>
+            {/* Not specifying 'exact' will consider this path (/about/bla) also as a match and render
+            <About> instead of a 404.  */}
             <Route path="/about">
               <About />
             </Route>
-            <Route path="/dashboard">
+            {/* The 'exact' here will only render <Dashboard> with the path (/dasboard). Therefore, the path
+            ( (/dashboard/bla) will results in a 404 */}
+            <Route exact path="/dashboard">
               <Dashboard />
             </Route>
+            {/* <Topics> contains nested routes, so we don't specify 'exact'.
+            A path like (/nestedRouteTopics/electronics) will render the <Topics> component, as
+            well as the nested route component inside <Topics> that has a match. */}
             <Route path="/nestedRouteTopics">
               <Topics />
             </Route>
@@ -50,8 +59,8 @@ const App = () => (
             </Route>
           </Switch>
         </div>
-      </ErrorBoundary>
-    </Router>
+      </Router>
+    </ErrorBoundary>
   </div>
 );
 

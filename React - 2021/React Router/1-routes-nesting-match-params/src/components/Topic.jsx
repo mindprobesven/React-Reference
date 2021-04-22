@@ -13,6 +13,14 @@ const Topic = () => {
   // {"path":"/nestedRouteTopics/:topicId","url":"/nestedRouteTopics/react","isExact":true,"params":{"topicId":"react"}}
   console.log(JSON.stringify({ ...useRouteMatch() }));
 
+  // It is possible to manually check if a specified path is an exact match.
+  const isMatch = useRouteMatch({
+    path: '/nestedRouteTopics/react',
+    exact: true,
+  });
+  // Returns a match object if a match, otherwise null
+  console.log(isMatch);
+
   return <h3>{`Requested topic ID: ${topicId}`}</h3>;
 };
 

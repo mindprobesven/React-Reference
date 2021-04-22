@@ -46,11 +46,11 @@ const App = () => (
               <Route exact path="/">
                 <Home />
               </Route>
-              <Route path="/public">
-                <Public />
-              </Route>
               <Route path="/login">
                 <Login />
+              </Route>
+              <Route path="/public">
+                <Public />
               </Route>
               {/* The ProtectedRoute uses the AuthContext to check if the user is authenticated.
               If the user is authenticated, its children are rendered, otherwise a <Redirect> to

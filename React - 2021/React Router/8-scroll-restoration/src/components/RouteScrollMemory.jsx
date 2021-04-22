@@ -75,7 +75,7 @@ const RouteScrollMemory = () => {
       // The scroll position is restored.
       window.scrollTo(0, routes[routeIndex].posY);
     } else {
-      // No match was found in the routs state array for the current location pathname and key.
+      // No match was found in the routes state array for the current location pathname and key.
       // The page is scrolled to the top.
       window.scrollTo(0, 0);
     }
