@@ -1,0 +1,47 @@
+.switch-appear {
+  opacity: 0;
+  transform: translateY(50px);
+  
+  &-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms ease, transform 300ms ease;
+  }
+  
+  &-done {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.switch-enter {
+  opacity: 0;
+  transform: translateX(100%);
+  
+  &-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 200ms ease, transform 200ms ease;
+  }
+
+  &-done {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.switch-exit {
+  opacity: 1;
+  transform: translateX(0);
+
+  &-active {
+    opacity: 0;
+    transform: translateX(-50%);
+    transition: opacity 300ms ease-in, transform 300ms ease-in;
+  }
+
+  &-done {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+}

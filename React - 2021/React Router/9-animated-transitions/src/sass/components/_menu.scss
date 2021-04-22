@@ -1,0 +1,24 @@
+.menu {
+  display: flex;
+  list-style: none;
+
+  &__button {
+    flex-grow: 1;
+    padding: 1rem;
+    margin-left: 3px;
+    background: $blue-50;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+  
+  a {
+    color: $grey-25;
+    text-decoration: none;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}
