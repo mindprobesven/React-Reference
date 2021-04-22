@@ -16,26 +16,26 @@ const App = () => (
   <div className="app">
     <ErrorBoundary>
       <div className="container">
-        <h3 className="container__header">SwitchTransition</h3>
-        {/* Animated enter and exit transitions when switching between elements */}
-        <FadeOverContainer />
-      </div>
-      <div className="container">
-        <h3 className="container__header">SwitchTransition</h3>
+        <h3 className="container__header">SwitchTransition Methods</h3>
         {/* Animated enter and exit transitions when switching between elements */}
         <SwitchTransitionMethods />
       </div>
       <div className="container">
-        <h3 className="container__header">TransitionGroupMethods - FadeSequenceList</h3>
+        <h3 className="container__header">TransitionGroup Methods - FadeSequenceList</h3>
         <FadeSequenceList />
       </div>
       <div className="container">
-        <h3 className="container__header">TransitionGroupMethods</h3>
+        <h3 className="container__header">TransitionGroup Methods</h3>
         {/* Animated enter and exit transitions of a list of elements */}
         <TransitionGroupMethods />
       </div>
       <div className="container">
-        <h3 className="container__header">CSSTransitionMethods</h3>
+        <h3 className="container__header">CSSTransition Methods - FadeOverContainer</h3>
+        {/* Fade-in a new element on top of a previous element with a transparency effect. */}
+        <FadeOverContainer />
+      </div>
+      <div className="container">
+        <h3 className="container__header">CSSTransition Methods</h3>
         {/* Animated enter and exit transitions of a single element */}
         <CSSTransitionMethods />
       </div>
