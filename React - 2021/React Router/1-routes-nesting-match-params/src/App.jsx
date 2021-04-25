@@ -27,8 +27,7 @@ const App = () => (
           <hr />
 
           {/* A <Switch> looks through all children and renders the 'first' one whose path
-          matches the current URL. It uses 'location' by default, which contains the current URL data.
-          <Switch location={location}> */}
+          matches the current URL. */}
           <Switch>
             {/* The <Route> component renders a UI component when its path matches the current URL. */}
 
