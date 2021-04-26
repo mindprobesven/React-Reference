@@ -1,15 +1,12 @@
-import { ARTICLE_ADD_SUCCESS } from '../constants/articles';
+/* eslint-disable no-unused-vars */
+import { ARTICLES_STATE_UPDATE } from '../constants/articles';
 
 export default function articlesReducer(state = {}, action) {
   switch (action.type) {
-  case ARTICLE_ADD_SUCCESS: {
-    console.log('articlesReducer: (ARTICLE_ADD_SUCCESS)');
+  case ARTICLES_STATE_UPDATE: {
+    console.log('articlesReducer: (ARTICLES_STATE_UPDATE)');
 
-    const { newArticle, newArticleID } = action.payload;
-
-    const { articles } = state;
-    const byID = { ...articles.byID, ...newArticle };
-    const allIDs = [...articles.allIDs, newArticleID];
+    const { byID, allIDs } = action.payload;
 
     return { ...state, articles: { byID, allIDs } };
   }

@@ -4,8 +4,8 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 const Status = ({ validationType, statusBar }) => {
-  console.log('Status');
-  console.log(JSON.stringify(statusBar));
+  // console.log('Status');
+  // console.log(JSON.stringify(statusBar));
 
   const {
     isShowing,
@@ -14,9 +14,9 @@ const Status = ({ validationType, statusBar }) => {
     error,
   } = statusBar[validationType];
 
-  useEffect(() => {
+  /* useEffect(() => {
     console.log('Status updated');
-  });
+  }); */
 
   if (!isShowing) {
     return null;

@@ -1,12 +1,16 @@
 /* eslint-disable import/prefer-default-export */
+import { UI_STATUS_STATE_UPDATE } from '../constants/ui';
 
-import { UI_STATUS_UPDATE_SUCCESS } from '../constants/ui';
+function uiStatusStateUpdate(statusBar) {
+  return {
+    type: UI_STATUS_STATE_UPDATE,
+    payload: { statusBar },
+  };
+}
 
-/* eslint-disable no-unused-vars */
 export function uiStatusUpdate(validationResult) {
   return (dispatch) => {
     console.log('Action: (uiStatusUpdate)');
-    console.log(validationResult);
 
     const {
       validation,
@@ -15,7 +19,7 @@ export function uiStatusUpdate(validationResult) {
       error,
     } = validationResult;
 
-    const newStatusBar = {
+    const statusBar = {
       add: {
         isShowing: false,
         status: null,
@@ -31,7 +35,7 @@ export function uiStatusUpdate(validationResult) {
     };
 
     if (validation === 'ADD') {
-      newStatusBar.add = {
+      statusBar.add = {
         isShowing: true,
         status,
         message,
@@ -40,7 +44,7 @@ export function uiStatusUpdate(validationResult) {
     }
 
     if (validation === 'DELETE') {
-      newStatusBar.delete = {
+      statusBar.delete = {
         isShowing: true,
         status,
         message,
@@ -48,9 +52,6 @@ export function uiStatusUpdate(validationResult) {
       };
     }
 
-    dispatch({
-      type: UI_STATUS_UPDATE_SUCCESS,
-      payload: { newStatusBar },
-    });
+    dispatch(uiStatusStateUpdate(statusBar));
   };
 }

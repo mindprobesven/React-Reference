@@ -1,4 +1,4 @@
-import { UI_STATUS_UPDATE_SUCCESS } from '../constants/ui';
+import { UI_STATUS_STATE_UPDATE } from '../constants/ui';
 
 const initialState = {
   components: {
@@ -16,17 +16,20 @@ const initialState = {
         error: null,
       },
     },
+    someBox: {
+      title: 'BLAAAA',
+    },
   },
 };
 
 export default function UIReducer(state = initialState, action) {
   switch (action.type) {
-  case UI_STATUS_UPDATE_SUCCESS: {
-    console.log('Dispatched action UI_STATUS_UPDATE_SUCCESS');
+  case UI_STATUS_STATE_UPDATE: {
+    console.log('UIReducer: (UI_STATUS_STATE_UPDATE)');
 
-    console.log(action.payload);
-
-    return state;
+    const { statusBar } = action.payload;
+    const components = { ...state.components, statusBar };
+    return { ...state, components };
   }
   default:
     return state;

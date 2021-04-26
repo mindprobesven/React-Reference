@@ -3,10 +3,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { deleteArticle } from '../redux/actions/articles';
+
 import Status from './Status';
 
-const List = ({ articles }) => {
+const List = ({ articles, _deleteArticle }) => {
   console.log('List');
+
+  function handleRemove(id) {
+    _deleteArticle(id);
+  }
 
   return (
     <div className="list">
@@ -20,6 +26,7 @@ const List = ({ articles }) => {
             <button
               className="button"
               type="button"
+              onClick={() => handleRemove(id)}
             >
               Remove
             </button>
@@ -32,5 +39,5 @@ const List = ({ articles }) => {
 
 export default connect(
   ({ articlesState: { articles } }) => ({ articles }),
-  null,
+  { _deleteArticle: deleteArticle },
 )(List);

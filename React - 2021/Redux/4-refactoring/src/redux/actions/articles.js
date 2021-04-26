@@ -1,7 +1,24 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable import/prefer-default-export */
-import { ARTICLE_ADD_SUCCESS } from '../constants/articles';
+import { ARTICLES_STATE_UPDATE } from '../constants/articles';
+
 import { uiStatusUpdate } from './ui';
+
+function articleValidationResult(validationResult) {
+  return (dispatch) => {
+    console.log('Action: (articleValidationResult)');
+
+    dispatch(uiStatusUpdate(validationResult));
+  };
+}
+
+function articlesStateUpdate(byID, allIDs) {
+  return {
+    type: ARTICLES_STATE_UPDATE,
+    payload: { byID, allIDs },
+  };
+}
+
+// ----------------------------------------------------------------------
 
 function articleAddSuccess(formData) {
   return (dispatch, getState) => {
@@ -9,23 +26,22 @@ function articleAddSuccess(formData) {
 
     const { articles } = getState().articlesState;
 
-    const newArticleID = Math.max(...articles.allIDs) + 1;
+    let newArticleID;
+
+    if (articles.allIDs.length) {
+      newArticleID = Math.max(...articles.allIDs) + 1;
+    } else {
+      newArticleID = 1;
+    }
+
     const newArticle = {
       [newArticleID]: { title: formData.title },
     };
 
-    dispatch({
-      type: ARTICLE_ADD_SUCCESS,
-      payload: { newArticleID, newArticle },
-    });
-  };
-}
+    const byID = { ...articles.byID, ...newArticle };
+    const allIDs = [...articles.allIDs, newArticleID];
 
-function articleValidationResult(validationResult) {
-  return (dispatch) => {
-    console.log('Action: (articleValidationResult)');
-
-    dispatch(uiStatusUpdate(validationResult));
+    dispatch(articlesStateUpdate(byID, allIDs));
   };
 }
 
@@ -58,6 +74,61 @@ export function addArticle(formData) {
         error: null,
       };
       dispatch(articleAddSuccess(formData));
+    }
+
+    dispatch(articleValidationResult(validationResult));
+  };
+}
+
+// ----------------------------------------------------------------------
+
+function articleDeleteSuccess(id) {
+  return (dispatch, getState) => {
+    console.log('Action: (articleDeleteSuccess)');
+
+    const { articles } = getState().articlesState;
+
+    const allIDs = articles.allIDs.filter((articleID) => articleID !== id);
+
+    const byID = {};
+
+    allIDs.forEach((articleID) => {
+      byID[articleID] = { ...articles.byID[articleID] };
+    });
+
+    dispatch(articlesStateUpdate(byID, allIDs));
+  };
+}
+
+export function deleteArticle(id) {
+  return (dispatch, getState) => {
+    console.log('Action: (deleteArticle)');
+
+    let validationResult;
+
+    const { articles } = getState().articlesState;
+
+    // Check if the article ID exists in the allIDs array
+    const exists = articles.allIDs.includes(id);
+
+    if (!exists) {
+      validationResult = {
+        validation: 'DELETE',
+        status: 'ERROR',
+        message: null,
+        error: {
+          type: 'INVALID_ID',
+          message: 'Article with ID not found!',
+        },
+      };
+    } else {
+      validationResult = {
+        validation: 'DELETE',
+        status: 'SUCCESS',
+        message: 'Successfully deleted the article!',
+        error: null,
+      };
+      dispatch(articleDeleteSuccess(id));
     }
 
     dispatch(articleValidationResult(validationResult));
