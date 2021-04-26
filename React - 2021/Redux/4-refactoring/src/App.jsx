@@ -120,8 +120,8 @@ import configureStore from './redux/configureStore';
 
 import ErrorBoundary from './components/ErrorBoundary';
 
-// import Counter from './components/Counter';
-// import Form from './components/Form';
+import Counter from './components/Counter';
+import Form from './components/Form';
 import List from './components/List';
 
 const store = configureStore();
@@ -131,11 +131,6 @@ const App = () => (
     <div className="app">
       <ErrorBoundary>
         <div className="body">
-          <div className="single-column">
-            <List />
-          </div>
-        </div>
-        {/* <div className="body">
           <div className="double-column">
             <div className="double-column__container" style={{ width: '20%' }}>
               <Counter />
@@ -147,7 +142,7 @@ const App = () => (
           <div className="single-column">
             <List />
           </div>
-        </div> */}
+        </div>
       </ErrorBoundary>
     </div>
   </Provider>

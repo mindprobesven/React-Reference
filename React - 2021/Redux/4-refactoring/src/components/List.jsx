@@ -3,13 +3,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// import { deleteArticle } from '../redux/store';
+import Status from './Status';
 
 const List = ({ articles }) => {
   console.log('List');
 
   return (
     <div className="list">
+      <Status validationType="delete" />
       {
         articles.allIDs.map((id) => (
           <div key={id} className="list__item">
