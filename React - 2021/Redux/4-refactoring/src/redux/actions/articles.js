@@ -1,22 +1,14 @@
 /* eslint-disable no-unused-vars */
-/*
-----------------------------------------------------------------------------------
-
-Actions - articles
-
-- Updates the top-level state (uiState), defined in the rootReducer
-- In this example, <Status> is the only React component connected to uiState. It
-utilizes the state provided by uiState.components.statusBar to show a validation
-success or error UI bar when an articles is added or removed.
-- UIReducer sets its own initalState to pre-set the <Status> React component.
-
-----------------------------------------------------------------------------------
-*/
-
 import { ARTICLES_STATE_UPDATE } from '../constants/articles';
 
 import { uiStatusUpdate } from './ui';
 
+/*
+- Is dispatched after an article action (add or delete) validated.
+- Dispatches the uiStatusUpdate action with a validationResult object,
+which triggers a UI state update to show a success or error notification in
+the <Status> UI component.
+*/
 function articleValidationResult(validationResult) {
   return (dispatch) => {
     console.log('Action: (articleValidationResult)');
@@ -34,6 +26,14 @@ function articlesStateUpdate(updatedArticles) {
 
 // ----------------------------------------------------------------------
 
+/*
+- Is dispatched when the new article to be added passed validation
+- Creates a newArticle object with unique ID.
+- Creates an updatedArticles state update object, containing the data of
+previous articles, plus the new one.
+- Dispatches articlesStateUpdate action with the updatedArticles object, which is
+then caught by the articlesReducer (ARTICLES_STATE_UPDATE) to update the state.
+*/
 function articleAddSuccess(formData) {
   return (dispatch, getState) => {
     console.log('Action: (articleAddSuccess)');
@@ -61,6 +61,15 @@ function articleAddSuccess(formData) {
   };
 }
 
+/*
+- Called by <Form> component to add a new article.
+- Validates a new article's title for bad words.
+- Creates a validationResult object.
+- Dispatches articleValidationResult action with the validationResult object.
+- The validationResult action dispatches a UI state update to show a success
+or error notification in the <Status> UI component.
+- If the validation passes, dispatches the articleAddSuccess action with the formData.
+*/
 export function addArticle(formData) {
   return (dispatch) => {
     console.log('Action: (addArticle)');
@@ -98,6 +107,15 @@ export function addArticle(formData) {
 
 // ----------------------------------------------------------------------
 
+/*
+- Is dispatched when the article ID to be removed passed validation.
+- Creates a new array (allIDs) with all article IDs, exluding the one to delete.
+- Creates a new object (byID) containing all articles matching the IDs in allIDs.
+- Creates an updatedArticles state update object, containing the data of previous
+articles, minus the one removed.
+- Dispatches articlesStateUpdate action with the updatedArticles object, which is
+then caught by the articlesReducer (ARTICLES_STATE_UPDATE) to update the state.
+*/
 function articleDeleteSuccess(id) {
   return (dispatch, getState) => {
     console.log('Action: (articleDeleteSuccess)');
@@ -119,6 +137,15 @@ function articleDeleteSuccess(id) {
   };
 }
 
+/*
+- Called by <List> component to remove an article by ID.
+- Validates the ID of the article to be removed (exists or not).
+- Creates a validationResult object.
+- Dispatches articleValidationResult action with the validationResult object.
+- The validationResult action dispatches a UI state update to show a success
+or error notification in the <Status> UI component.
+- If the validation passes, dispatches the articleDeleteSuccess action with the ID value.
+*/
 export function deleteArticle(id) {
   return (dispatch, getState) => {
     console.log('Action: (deleteArticle)');
@@ -127,7 +154,6 @@ export function deleteArticle(id) {
 
     const { articles } = getState().articlesState;
 
-    // Validation - Checks if the article ID exists before it can be deleted.
     const exists = articles.allIDs.includes(id);
 
     if (!exists) {
@@ -147,13 +173,9 @@ export function deleteArticle(id) {
         message: 'Successfully deleted the article!',
         error: null,
       };
-      // The ID exists. The article can be deleted. Dispatch articleDeleteSuccess.
       dispatch(articleDeleteSuccess(id));
     }
 
-    // Dispatch articleValidationResult with the validation result data.
-    // articleValidationResult will dispatch a UI state update to show a success
-    // or error notification to the user.
     dispatch(articleValidationResult(validationResult));
   };
 }

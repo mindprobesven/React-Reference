@@ -4,15 +4,18 @@
 
 articlesReducer
 
-- Updates the top-level state (articlesState), defined in the rootReducer
-- In this example, the actions which handle adding and removing an article, will
-all provide an already prepared and updated state object (updatedArticles) to
-the articlesReducer in the payload, when dispatching ARTICLES_STATE_UPDATE.
-This minimzed the work the reducer has to do and keeps it lean and fast.
-- articlesReducer does not set its own initial state. Instead, createStore() in
-configureStore.js sets the initial state of articlesState via a preloadedState.
-The preloadedState makes it possible to hydrate initial data coming from the
-browser's localStorage or from server-side rendering.
+- Updates the top-level state object (articlesState), defined in the rootReducer with;
+
+articles: {
+  byID: {},
+  allIDs: [],
+},
+
+- When all article actions related to add and delete successfully process, the reducer
+catches the ARTICLES_STATE_UPDATE action with the updatedArticles object and updates the state.
+- Initial state is set by createStore() using a preloadedState. This preloadedState
+data could potentialy come from the browser's localStorage or via server-side rendering
+to hydate the initial state with data.
 
 ----------------------------------------------------------------------------------
 */
@@ -20,8 +23,6 @@ import { ARTICLES_STATE_UPDATE } from '../constants/articles';
 
 export default function articlesReducer(state = {}, action) {
   switch (action.type) {
-  // This action receives an already prepared and updated 'updatedArticles'
-  // state object in its payload to keep the reducer lean and fast.
   case ARTICLES_STATE_UPDATE: {
     console.log('articlesReducer: (ARTICLES_STATE_UPDATE)');
 
