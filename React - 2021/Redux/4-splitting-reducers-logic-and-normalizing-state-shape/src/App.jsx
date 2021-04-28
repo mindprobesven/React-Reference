@@ -2,11 +2,14 @@
 // import { hot } from 'react-hot-loader/root';
 /*
 ----------------------------------------------------------------------------------
-Refactoring and best practices
 
-In 3_redux-thunk all the Redux code is inside /redux/store.js; constants, action creators, reducer, etc.
-Now it is time to apply some best practices to create a file structure, split reducer logic, normalize
-the state shape and initializing the states.
+Best Pratices
+
+Splitting reducer logic, normalizing the state shape and configuring the store.
+
+In 3_redux-thunk all the Redux related code is inside /redux/store.js; constants, action creators, reducer, etc.
+Now it's time to apply some best practices to create a scalable file structure, split reducer logic, normalize
+the state shape and methods to initialize the reducer states.
 
 1. Defining an app's state shape:
 Most aplications deal with multiple types of data which can be broadly divided into three categories;
@@ -31,6 +34,8 @@ The basic concepts of normalizing data are:
   and the items themselves as the values.
 - Any 'references' to individual items should be done by storing the item's ID.
 - Arrays of IDs should be used to indicate ordering.
+
+Example
 
 {
     posts : {
@@ -100,10 +105,10 @@ The basic concepts of normalizing data are:
 }
 
 3. Splitting reducer logic
-The state management is split into two reducers, which are combined in a rootReducer.
+In this example, the state management is split into two reducers, which are combined in a rootReducer.
 
-- articlesReducer: Articles data, adding and deleting articles.
-- UIReducer: Manages visibility of a status UI component with SUCCESS and ERROR notifications.
+- articlesReducer: Manages the state of the articles data (articlesState)
+- UIReducer: Manages the state of React components (uiState)
 
 4. Configuring the store
 All the logic related to configuring the store - including initial state, importing reducers,
