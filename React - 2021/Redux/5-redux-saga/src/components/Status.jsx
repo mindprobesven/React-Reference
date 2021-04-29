@@ -3,20 +3,17 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-const Status = ({ validationType, statusBar }) => {
-  // console.log('Status');
-  // console.log(JSON.stringify(statusBar));
-
+const Status = ({ statusBar }) => {
   const {
     isShowing,
     status,
     message,
     error,
-  } = statusBar[validationType];
+  } = statusBar;
 
-  /* useEffect(() => {
-    console.log('Status updated');
-  }); */
+  useEffect(() => {
+    console.log('<Status> mounted');
+  }, []);
 
   if (!isShowing) {
     return null;
@@ -25,7 +22,7 @@ const Status = ({ validationType, statusBar }) => {
   if (status === 'ERROR') {
     return (
       <div className="status status--red">
-        <p>{`Error: ${error.type} - ${error.message}`}</p>
+        <p>{`${error.name}: ${error.message}`}</p>
       </div>
     );
   }

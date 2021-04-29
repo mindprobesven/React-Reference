@@ -5,4 +5,8 @@
   background: $blue-50;
   border: none;
   cursor: pointer;
+
+  &:first-child {
+    margin: 0;
+  }
 }

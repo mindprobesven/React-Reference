@@ -20,14 +20,6 @@ const App = () => (
     <div className="app">
       <ErrorBoundary>
         <div className="body">
-          <div className="double-column">
-            <div className="double-column__container" style={{ width: '20%' }}>
-              {/* <Counter /> */}
-            </div>
-            <div className="double-column__container" style={{ width: '80%' }}>
-              {/* <Form /> */}
-            </div>
-          </div>
           <div className="single-column">
             <List categoryId="posts" />
           </div>

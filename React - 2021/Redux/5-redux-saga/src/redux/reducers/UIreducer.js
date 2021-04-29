@@ -41,21 +41,10 @@ import { UI_STATUS_STATE_UPDATE } from '../constants/ui';
 const initialState = {
   components: {
     statusBar: {
-      add: {
-        isShowing: false,
-        status: null,
-        message: null,
-        error: null,
-      },
-      delete: {
-        isShowing: false,
-        status: null,
-        message: null,
-        error: null,
-      },
-    },
-    someBox: {
-      title: 'Foo',
+      isShowing: false,
+      status: null,
+      message: null,
+      error: null,
     },
   },
 };
