@@ -1,7 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable import/prefer-default-export */
 import axios from 'axios';
 
-import { UPDATE_REMOTE_DATA_STATE } from '../constants/remoteData';
+import {
+  API_GET_REQUEST,
+  UPDATE_REMOTE_DATA_STATE,
+} from '../constants/remoteData';
 
 import { postsUpdateFromRemoteData } from './posts';
 import { uiStatusUpdate } from './ui';
@@ -10,16 +14,11 @@ function updateRemoteDataState(categoryId, postsData) {
   return { type: UPDATE_REMOTE_DATA_STATE, payload: { categoryId, postsData } };
 }
 
-/*
-- Is dispatched after a successful API call.
-- Dispatches updateRemoteDataState action to add or update the fetched posts data
-in the remoteDataState.
-- Dispatches postsUpdateFromRemoteData action. This action will retrieve the posts
-data by category ID from the remoteDataState, then normalize the state shape of the data
-and store it in postsDataState. The postsDataState is the final prepared data used by the
-<List> component.
-*/
-function apiGetSuccess(categoryId, postsData) {
+function apiGetRequest(categoryId) {
+  return { type: API_GET_REQUEST, payload: { categoryId } };
+}
+
+export function apiGetSuccess(categoryId, postsData) {
   return async (dispatch) => {
     console.log('Action: (apiGetSuccess)');
 
@@ -28,11 +27,7 @@ function apiGetSuccess(categoryId, postsData) {
   };
 }
 
-/*
-- Dispatches uiStatusUpdate which handles the success and error notifications of the
-<Status> UI component.
-*/
-function apiResponseResult({ response = null, error = null }) {
+export function apiResponseResult({ response = null, error = null }) {
   return async (dispatch) => {
     console.log('Action: (apiResult)');
 
@@ -96,22 +91,19 @@ function apiResponseResult({ response = null, error = null }) {
     dispatch(uiStatusUpdate(result));
   };
 }
-/*
-- Is dispatched by the <List> component to request the posts data of a category by ID.
-- The posts data is retrieved from the API or re-used from state if it exists. Then
-passed on to the next actions in line.
-- The action apiResponseResult handles the success and error notifications of the <Status> UI component.
-*/
+
 export function callApi(categoryId) {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     console.log('Action: (callApi)');
 
     const cachedData = getState().remoteDataState[categoryId];
 
     if (typeof cachedData === 'undefined') {
       console.log('Loading category data from API');
-      try {
-        // The 'response' is the result of the server responding with a status code of 2xx
+
+      dispatch(apiGetRequest(categoryId));
+
+      /* try {
         const response = await axios({
           method: 'get',
           url: `https://jsonplaceholder.typicode.com/${categoryId}`,
@@ -123,7 +115,7 @@ export function callApi(categoryId) {
         }));
       } catch (error) {
         dispatch(apiResponseResult({ error }));
-      }
+      } */
     } else {
       console.log('Using category data from cache');
 

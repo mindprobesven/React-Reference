@@ -1,5 +1,8 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
+
+import apiWatcherSaga from './sagas/apiSaga';
 
 import rootReducer from './reducers/rootReducer';
 
@@ -15,16 +18,17 @@ const preLoadedState = {
 };
 
 export default function configureStore() {
-  const middlewares = [thunkMiddleware];
+  const sagaMiddleware = createSagaMiddleware();
+
+  const middlewares = [thunkMiddleware, sagaMiddleware];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 
   const enhancers = [middlewareEnhancer];
   const composedEnhancers = compose(...enhancers);
 
-  // Instead of passing 'undefined', we pass a preLoadedState which contains
-  // some posts from the 'todos' category. This data could be coming from the
-  // browser's localStorage or via server-side render.
   const store = createStore(rootReducer, preLoadedState, composedEnhancers);
+
+  sagaMiddleware.run(apiWatcherSaga);
 
   return store;
 }
