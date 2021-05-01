@@ -1,4 +1,13 @@
-/* eslint-disable no-unused-vars */
+/*
+----------------------------------------------------------------------------------
+
+Redux Saga
+
+This redux saga middleware is wired up to the redux store in configureStore.js
+
+----------------------------------------------------------------------------------
+*/
+
 import axios from 'axios';
 import { takeEvery, call, put } from 'redux-saga/effects';
 
@@ -13,6 +22,9 @@ function callApi(categoryId) {
   });
 }
 
+// ----------------------------------------------------------------------------------
+// Redux Saga - Worker function
+// ----------------------------------------------------------------------------------
 function* apiWorkerSaga(action) {
   try {
     console.log('Saga Worker: (apiWorkerSaga)');
@@ -20,6 +32,7 @@ function* apiWorkerSaga(action) {
     const { categoryId } = action.payload;
 
     // Option 1: Making the API call in a separate function using call()
+    // The function called by call() can be either a normal or a generator function.
     const response = yield call(callApi, categoryId);
 
     // Option 2: Making the API call directly in the worker
@@ -39,6 +52,10 @@ function* apiWorkerSaga(action) {
   }
 }
 
+// ----------------------------------------------------------------------------------
+// Redux Saga - Watcher function
+// Intercepts an action and then starts some Redux Saga worker function.
+// ----------------------------------------------------------------------------------
 export default function* apiWatcherSaga() {
   yield takeEvery(API_GET_REQUEST, apiWorkerSaga);
 }

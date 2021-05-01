@@ -1,9 +1,5 @@
 import { UPDATE_REMOTE_DATA_STATE } from '../constants/remoteData';
 
-/*
-The posts data fetched from the API is stored by categoryID in
-remoteDataState
-*/
 export default function remoteDataReducer(state = {}, action) {
   switch (action.type) {
   case UPDATE_REMOTE_DATA_STATE: {

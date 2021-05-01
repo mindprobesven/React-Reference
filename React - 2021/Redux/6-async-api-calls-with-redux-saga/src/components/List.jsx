@@ -14,18 +14,13 @@ const List = ({
   _callApi,
   _uiStatusHide,
 }) => {
-  // categoryID is passed as a prop to <List> to initialize the first API call.
   const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
 
   const posts = postsDataState[selectedCategoryId];
 
-  // This useEffect first runs on mount. After, it runs only when the selectedCategoryId's state changes.
-  // _callApi() only executes if the data of the selected category ID is not yet present in the Redux
-  // postsDataState table. If the data is present (was fetched before), it is loaded from state and re-used.
   useEffect(() => {
     console.log('<List> selectedCategoryId changed');
 
-    // Hide the <Status> component
     _uiStatusHide();
 
     if (typeof posts === 'undefined') {

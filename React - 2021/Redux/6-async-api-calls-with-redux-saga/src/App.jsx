@@ -1,21 +1,17 @@
 /*
 ----------------------------------------------------------------------------------
 
-Handling async API calls using Redux Thunk
+Handling async API calls using Redux Saga
 
-In this example, we have <List> component that can initiate API calls to load and show
-a list of posts from a selected category. We also have a <Status> component to show if
-API calls were successful or resulted in an error.
+In the example 5-async-api-calls-with-redux-thunk, the async API call logic was put
+directly inside the action creator callApi(). Although this works, a better approach
+is to have a clear separation between synchcronous and asynchcronous logic. To achieve
+this, there is redux-saga, a Redux middleware for managing side effects. With redux-saga
+you can have a separate thread in your application for dealing with impure actions: API
+calls, storage access, and more.
 
-API calls are handled in the Redux Thunk action callAPI() (actions/remoteData.js)
-
-This example has the logic to initially fetch the posts data of a category from an API and
-store it in (remoteDataState). Further requests to a category previously stored are then
-loaded from memory.
-
-This example also shows how to pass a pre-loaded state to the Redux Store in configureStore.js
-The posts data for category 'articles' is pre-loaded. When this category is selected in the
-<List> component, it will be loaded from cache and bypass the API call.
+In this example, we move the async API call logic from the Redux thunk callAPI() into a
+Redux saga (./redux/sagas/apiSaga.js)
 
 ----------------------------------------------------------------------------------
 */
@@ -39,7 +35,6 @@ const App = () => (
       <ErrorBoundary>
         <div className="body">
           <div className="single-column">
-            {/* The <List> receives an initial categoryId to fetch from the API */}
             <List categoryId="posts" />
           </div>
         </div>

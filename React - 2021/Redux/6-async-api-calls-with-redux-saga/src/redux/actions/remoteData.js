@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable import/prefer-default-export */
-import axios from 'axios';
-
 import {
   API_GET_REQUEST,
   UPDATE_REMOTE_DATA_STATE,
@@ -38,9 +34,7 @@ export function apiResponseResult({ response = null, error = null }) {
     };
 
     if (error) {
-      // Error handling
       if (error.response) {
-        // The request was made and the server responded with a status code != to 2xx
         result = {
           status: 'ERROR',
           message: null,
@@ -50,7 +44,6 @@ export function apiResponseResult({ response = null, error = null }) {
           },
         };
       } else if (error.request) {
-        // The request was made but no response was received
         result = {
           status: 'ERROR',
           message: null,
@@ -60,7 +53,6 @@ export function apiResponseResult({ response = null, error = null }) {
           },
         };
       } else {
-        // Other error
         result = {
           status: 'ERROR',
           message: null,
@@ -101,9 +93,15 @@ export function callApi(categoryId) {
     if (typeof cachedData === 'undefined') {
       console.log('Loading category data from API');
 
+      // ----------------------------------------------------------------------------------
+      // The async API call logic is now handled by a Redux Saga middleware (./redux/sagas/apiSaga.js).
+      // When the apiGetRequest action is dispatched, it is caught by a 'Watcher Saga' (apiWatcherSaga).
+      // The watcher then calls the matching 'Worker Saga' (apiWorkerSaga), which does the async
+      // API call and then dispatches further actions.
       dispatch(apiGetRequest(categoryId));
 
-      /* try {
+      /*
+      try {
         const response = await axios({
           method: 'get',
           url: `https://jsonplaceholder.typicode.com/${categoryId}`,
@@ -115,7 +113,10 @@ export function callApi(categoryId) {
         }));
       } catch (error) {
         dispatch(apiResponseResult({ error }));
-      } */
+      }
+      */
+
+      // ----------------------------------------------------------------------------------
     } else {
       console.log('Using category data from cache');
 
