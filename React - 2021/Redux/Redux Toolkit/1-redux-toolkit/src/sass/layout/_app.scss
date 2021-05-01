@@ -1,0 +1,16 @@
+html {
+  font-family: Arial;
+  font-size: 14px;
+}
+
+body {
+  height: 100%;
+  min-width: 320px;
+  background: $grey-25;
+}
+
+.app {
+  width: 80%;
+  max-width: 640px;
+  margin: 4rem auto 0 auto;
+}
