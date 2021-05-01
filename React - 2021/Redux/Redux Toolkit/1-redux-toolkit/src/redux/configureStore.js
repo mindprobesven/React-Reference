@@ -7,9 +7,9 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 // import { applyMiddleware, compose, createStore } from 'redux';
 // import thunkMiddleware from 'redux-thunk';
-// import createSagaMiddleware from 'redux-saga';
+import createSagaMiddleware from 'redux-saga';
 
-// import apiWatcherSaga from './sagas/apiSaga';
+import apiWatcherSaga from './sagas/apiSaga';
 
 import rootReducer from './reducers/rootReducer';
 
@@ -25,8 +25,11 @@ const preloadedState = {
 };
 
 export default function initStore() {
+  const sagaMiddleware = createSagaMiddleware();
+
   const middleware = [
     ...getDefaultMiddleware(),
+    sagaMiddleware,
   ];
 
   const store = configureStore({
@@ -34,6 +37,8 @@ export default function initStore() {
     middleware,
     preloadedState,
   });
+
+  sagaMiddleware.run(apiWatcherSaga);
 
   return store;
 }

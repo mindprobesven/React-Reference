@@ -1,11 +1,13 @@
 // import { combineReducers } from 'redux';
 
 import remoteDataReducer from './remoteDataReducer';
-// import postsReducer from './postsReducer';
-// import UIReducer from './UIreducer';
+import postsReducer from './postsReducer';
+import UIReducer from './UIreducer';
 
 const rootReducer = {
   remoteDataState: remoteDataReducer,
+  postsDataState: postsReducer,
+  uiState: UIReducer,
 };
 
 /*

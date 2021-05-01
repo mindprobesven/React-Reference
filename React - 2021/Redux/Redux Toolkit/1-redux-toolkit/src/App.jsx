@@ -17,24 +17,24 @@ import './sass/main.scss';
 // import configureStore from './redux/configureStore';
 import initStore from './redux/configureStore';
 
-import { UPDATE_REMOTE_DATA_STATE } from './redux/constants/remoteData';
+// import { updateRemoteDataState } from './redux/actions/remoteData';
 
 import ErrorBoundary from './components/ErrorBoundary';
-// import List from './components/List';
+import List from './components/List';
 
 // const store = configureStore();
 const store = initStore();
-store.dispatch({ type: UPDATE_REMOTE_DATA_STATE });
-console.log(store.getState());
+// store.dispatch(updateRemoteDataState('articles'));
+// console.log(store.getState());
 
 const App = () => (
   <Provider store={store}>
     <div className="app">
       <ErrorBoundary>
         <div className="body">
-          {/* <div className="single-column">
+          <div className="single-column">
             <List categoryId="posts" />
-          </div> */}
+          </div>
         </div>
       </ErrorBoundary>
     </div>

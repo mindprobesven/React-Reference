@@ -1,21 +1,29 @@
+import { createAction } from '@reduxjs/toolkit';
+
 import {
   API_GET_REQUEST,
-  UPDATE_REMOTE_DATA_STATE,
+  // UPDATE_REMOTE_DATA_STATE,
 } from '../constants/remoteData';
 
 import { postsUpdateFromRemoteData } from './posts';
 import { uiStatusUpdate } from './ui';
 
-function updateRemoteDataState(categoryId, postsData) {
+export const updateRemoteDataState = createAction(
+  'UPDATE_REMOTE_DATA_STATE', (categoryId, postsData) => ({
+    payload: { categoryId, postsData },
+  }),
+);
+
+/* function updateRemoteDataState(categoryId, postsData) {
   return { type: UPDATE_REMOTE_DATA_STATE, payload: { categoryId, postsData } };
-}
+} */
 
 function apiGetRequest(categoryId) {
   return { type: API_GET_REQUEST, payload: { categoryId } };
 }
 
 export function apiGetSuccess(categoryId, postsData) {
-  return async (dispatch) => {
+  return (dispatch) => {
     console.log('Action: (apiGetSuccess)');
 
     dispatch(updateRemoteDataState(categoryId, postsData));
@@ -24,7 +32,7 @@ export function apiGetSuccess(categoryId, postsData) {
 }
 
 export function apiResponseResult({ response = null, error = null }) {
-  return async (dispatch) => {
+  return (dispatch) => {
     console.log('Action: (apiResult)');
 
     let result = {
