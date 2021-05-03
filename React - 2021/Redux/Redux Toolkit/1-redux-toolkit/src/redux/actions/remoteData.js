@@ -82,73 +82,31 @@ thunk function (dispatch, getState), as well as additional options:
 
 export const apiGetSuccess = createAsyncThunk(
   'remoteData/apiGetSuccess',
-  ({ categoryId, postsData }, { dispatch }) => {
+  ({ categoryId, response }, { dispatch }) => {
     console.log('Action: (remoteData/apiGetSuccess)');
 
-    dispatch(updateRemoteDataState({ categoryId, postsData }));
+    dispatch(updateRemoteDataState({ categoryId, postsData: response.data }));
     dispatch(postsUpdateFromRemoteData(categoryId));
+    dispatch(uiStatusUpdate({ response }));
   },
 );
 
-export const apiResponseResult = createAsyncThunk(
-  'remoteData/apiResponseResult',
-  ({ response = null, error = null }, { dispatch }) => {
-    console.log('Action: (remoteData/apiResponseResult)');
+export const apiGetFailure = createAsyncThunk(
+  'remoteData/apiGetFailure',
+  ({ error }, { dispatch }) => {
+    console.log('Action: (remoteData/apiGetFailure)');
 
-    let result = {
-      status: null,
-      message: null,
-      error: null,
-    };
+    dispatch(uiStatusUpdate({ error }));
+  },
+);
 
-    if (error) {
-      if (error.response) {
-        result = {
-          status: 'ERROR',
-          message: null,
-          error: {
-            name: 'Request Error',
-            message: `${error.response.status} - ${error.message}`,
-          },
-        };
-      } else if (error.request) {
-        result = {
-          status: 'ERROR',
-          message: null,
-          error: {
-            name: 'Network Error',
-            message: 'The server does not respond!',
-          },
-        };
-      } else {
-        result = {
-          status: 'ERROR',
-          message: null,
-          error: {
-            name: error.name,
-            message: error.message,
-          },
-        };
-      }
-    }
+export const loadCachedPostsByCategoryId = createAsyncThunk(
+  'remoteData/loadCachedPostsByCategoryId',
+  ({ categoryId }, { dispatch }) => {
+    console.log('Action: (remoteData/loadCachedPostsByCategoryId)');
 
-    if (response) {
-      if (response.fromApi) {
-        result = {
-          status: 'SUCCESS',
-          message: `Server response: ${response.status} OK`,
-          error: null,
-        };
-      } else {
-        result = {
-          status: 'SUCCESS',
-          message: 'Category data loaded from cache',
-          error: null,
-        };
-      }
-    }
-
-    dispatch(uiStatusUpdate(result));
+    dispatch(postsUpdateFromRemoteData(categoryId));
+    dispatch(uiStatusUpdate({ fromCache: true }));
   },
 );
 
@@ -160,14 +118,13 @@ export const callApi = createAsyncThunk(
     const cachedData = getState().remoteDataState[categoryId];
 
     if (typeof cachedData === 'undefined') {
-      console.log('Loading category data from API');
+      console.log('Load category posts data from API');
 
       dispatch(apiGetRequest({ categoryId }));
     } else {
-      console.log('Using category data from cache');
+      console.log('Load category posts data from cache');
 
-      dispatch(postsUpdateFromRemoteData(categoryId));
-      dispatch(apiResponseResult({ response: { fromApi: false } }));
+      dispatch(loadCachedPostsByCategoryId({ categoryId }));
     }
   },
 );

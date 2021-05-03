@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { takeEvery, call, put } from 'redux-saga/effects';
 
-// import { API_GET_REQUEST } from '../constants/remoteData';
-
 import {
   apiGetRequest,
   apiGetSuccess,
-  apiResponseResult,
+  apiGetFailure,
+  // apiResponseResult,
 } from '../actions/remoteData';
 
 function callApi(categoryId) {
@@ -24,18 +23,19 @@ function* apiWorkerSaga(action) {
 
     const response = yield call(callApi, categoryId);
 
-    yield put(apiGetSuccess({ categoryId, postsData: response.data }));
-    yield put(apiResponseResult({
+    yield put(apiGetSuccess({ categoryId, response }));
+    /* yield put(apiResponseResult({
       response: { ...response, fromApi: true },
-    }));
+    })); */
   } catch (error) {
-    yield put(apiResponseResult({ error }));
+    yield put(apiGetFailure({ error }));
+    // yield put(apiResponseResult({ error }));
   }
 }
 
 export default function* apiWatcherSaga() {
   // The action apiGetRequest was created with createAction().
   // The action function itself has toString() defined, so that it can be used in place of the type constant.
-  // Therefore, [apiGetRequest] === 'API_GET_REQUEST'
+  // Therefore, [apiGetRequest] === 'remoteData/apiGetRequest'
   yield takeEvery([apiGetRequest], apiWorkerSaga);
 }
