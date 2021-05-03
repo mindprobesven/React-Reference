@@ -1,39 +1,99 @@
-import { createAction } from '@reduxjs/toolkit';
+/* eslint-disable no-unused-vars */
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import {
-  API_GET_REQUEST,
-  // UPDATE_REMOTE_DATA_STATE,
-} from '../constants/remoteData';
-
+// Actions
 import { postsUpdateFromRemoteData } from './posts';
 import { uiStatusUpdate } from './ui';
 
-export const updateRemoteDataState = createAction(
-  'UPDATE_REMOTE_DATA_STATE', (categoryId, postsData) => ({
-    payload: { categoryId, postsData },
-  }),
-);
+// Reducer function actions
+import { updateRemoteDataState } from '../slices/remoteDataSlice';
 
-/* function updateRemoteDataState(categoryId, postsData) {
-  return { type: UPDATE_REMOTE_DATA_STATE, payload: { categoryId, postsData } };
-} */
+/*
+----------------------------------------------------------------------------------
+
+createAction()
+
+- The old way:
+
+The usual way to define an action in Redux is to separately declare an action type
+constant and an action creator function for constructing actions of that type.
+
+export const API_GET_REQUEST = 'API_GET_REQUEST';
 
 function apiGetRequest(categoryId) {
   return { type: API_GET_REQUEST, payload: { categoryId } };
 }
 
-export function apiGetSuccess(categoryId, postsData) {
-  return (dispatch) => {
-    console.log('Action: (apiGetSuccess)');
+- The Toolkit way:
 
-    dispatch(updateRemoteDataState(categoryId, postsData));
+The createAction helper combines these two declarations into one. It takes an action
+type and returns an action creator for that type. The action creator can be called
+either without arguments or with a payload to be attached to the action. Also, the
+action creator overrides toString() so that the action type becomes its string
+representation.
+
+[Option 1]
+The short form.
+Disadvantage: It is not clear what arguments this action takes.
+
+export const apiGetRequest = createAction('remoteData/apiGetRequest');
+
+[Option 2]
+The long form with a 'prepare callback'.
+Advantage: It is clear what arguments this action takes and the payload can be
+transformed. For example, values added like an ID or timestamp.
+
+export const apiGetRequest = createAction(
+  'remoteData/apiGetRequest', ({ categoryId }) => ({
+    payload: { categoryId },
+  }),
+);
+
+----------------------------------------------------------------------------------
+*/
+
+export const apiGetRequest = createAction(
+  'remoteData/apiGetRequest', ({ categoryId }) => ({
+    payload: { categoryId },
+  }),
+);
+
+/*
+----------------------------------------------------------------------------------
+
+createAsyncThunk()
+
+Accepts an action type string and a function that returns a promise,
+and generates a thunk that dispatches pending/fulfilled/rejected action types based on
+that promise. How to intercept these three actions in a slice is shown in (remoteDataSlice.js)
+
+createAsyncThunk() has a payload creator callback function. The payloadCreator function
+can contain whatever logic you need to calculate an appropriate result. The payloadCreator
+function will be called with two arguments:
+
+- arg: a single value, containing the first parameter that was passed to the thunk action
+creator when it was dispatched.
+
+- thunkAPI: an object containing all of the parameters that are normally passed to a Redux
+thunk function (dispatch, getState), as well as additional options:
+
+----------------------------------------------------------------------------------
+*/
+
+export const apiGetSuccess = createAsyncThunk(
+  'remoteData/apiGetSuccess',
+  ({ categoryId, postsData }, { dispatch }) => {
+    console.log('Action: (remoteData/apiGetSuccess)');
+
+    dispatch(updateRemoteDataState({ categoryId, postsData }));
     dispatch(postsUpdateFromRemoteData(categoryId));
-  };
-}
+  },
+);
 
-export function apiResponseResult({ response = null, error = null }) {
-  return (dispatch) => {
-    console.log('Action: (apiResult)');
+export const apiResponseResult = createAsyncThunk(
+  'remoteData/apiResponseResult',
+  ({ response = null, error = null }, { dispatch }) => {
+    console.log('Action: (remoteData/apiResponseResult)');
 
     let result = {
       status: null,
@@ -89,47 +149,25 @@ export function apiResponseResult({ response = null, error = null }) {
     }
 
     dispatch(uiStatusUpdate(result));
-  };
-}
+  },
+);
 
-export function callApi(categoryId) {
-  return (dispatch, getState) => {
-    console.log('Action: (callApi)');
+export const callApi = createAsyncThunk(
+  'remoteData/callApi',
+  (categoryId, { dispatch, getState }) => {
+    console.log('Action: (remoteData/callApi)');
 
     const cachedData = getState().remoteDataState[categoryId];
 
     if (typeof cachedData === 'undefined') {
       console.log('Loading category data from API');
 
-      // ----------------------------------------------------------------------------------
-      // The async API call logic is now handled by a Redux Saga middleware (./redux/sagas/apiSaga.js).
-      // When the apiGetRequest action is dispatched, it is caught by a 'Watcher Saga' (apiWatcherSaga).
-      // The watcher then calls the matching 'Worker Saga' (apiWorkerSaga), which does the async
-      // API call and then dispatches further actions.
-      dispatch(apiGetRequest(categoryId));
-
-      /*
-      try {
-        const response = await axios({
-          method: 'get',
-          url: `https://jsonplaceholder.typicode.com/${categoryId}`,
-        });
-
-        dispatch(apiGetSuccess(categoryId, response.data));
-        dispatch(apiResponseResult({
-          response: { ...response, fromApi: true },
-        }));
-      } catch (error) {
-        dispatch(apiResponseResult({ error }));
-      }
-      */
-
-      // ----------------------------------------------------------------------------------
+      dispatch(apiGetRequest({ categoryId }));
     } else {
       console.log('Using category data from cache');
 
       dispatch(postsUpdateFromRemoteData(categoryId));
       dispatch(apiResponseResult({ response: { fromApi: false } }));
     }
-  };
-}
+  },
+);

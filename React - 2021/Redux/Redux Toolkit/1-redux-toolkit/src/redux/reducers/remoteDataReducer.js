@@ -1,5 +1,13 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable import/prefer-default-export */
+/*
+----------------------------------------------------------------------------------
+
+The Toolkit way of creating a reducer with createReducer():
+
+createReducer(): that lets you supply a lookup table of action types to case reducer
+functions, rather than writing switch statements. In addition, it automatically uses
+the immer library to let you write simpler immutable updates with normal mutative code,
+like state.todos[3].completed = true.
+
 import { createReducer } from '@reduxjs/toolkit';
 
 import { updateRemoteDataState } from '../actions/remoteData';
@@ -16,8 +24,14 @@ const remoteDataReducer = createReducer(initialState, {
 });
 
 export default remoteDataReducer;
+----------------------------------------------------------------------------------
+*/
 
 /*
+----------------------------------------------------------------------------------
+
+The old way of creating a reducer:
+
 import { UPDATE_REMOTE_DATA_STATE } from '../constants/remoteData';
 
 export default function remoteDataReducer(state = {}, action) {
@@ -32,4 +46,5 @@ export default function remoteDataReducer(state = {}, action) {
     return state;
   }
 }
+----------------------------------------------------------------------------------
 */
