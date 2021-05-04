@@ -16,7 +16,7 @@ const initialState = {};
 
 const remoteDataReducer = createReducer(initialState, {
   [updateRemoteDataState]: (state, action) => {
-    console.log('remoteDataReducer: (UPDATE_REMOTE_DATA_STATE)');
+    console.log('remoteDataReducer: (updateRemoteDataState)');
 
     const { categoryId, postsData } = action.payload;
     state[categoryId] = postsData;

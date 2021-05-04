@@ -1,12 +1,11 @@
-/* eslint-disable no-unused-vars */
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Actions
-import { postsUpdateFromRemoteData } from './posts';
-import { uiStatusUpdate } from './ui';
-
 // Reducer function actions
-import { updateRemoteDataState } from '../slices/remoteDataSlice';
+import { remoteDataSetState } from '../slices/remoteDataSlice';
+
+// Actions
+import { postsLoadFromRemoteData } from './posts';
+import { uiStatusUpdate } from './ui';
 
 /*
 ----------------------------------------------------------------------------------
@@ -44,18 +43,16 @@ Advantage: It is clear what arguments this action takes and the payload can be
 transformed. For example, values added like an ID or timestamp.
 
 export const apiGetRequest = createAction(
-  'remoteData/apiGetRequest', ({ categoryId }) => ({
-    payload: { categoryId },
-  }),
+  'remoteData/apiGetRequest',
+  ({ categoryId }) => ({ payload: { categoryId } }),
 );
 
 ----------------------------------------------------------------------------------
 */
 
 export const apiGetRequest = createAction(
-  'remoteData/apiGetRequest', ({ categoryId }) => ({
-    payload: { categoryId },
-  }),
+  'remoteData/apiGetRequest',
+  ({ categoryId }) => ({ payload: { categoryId } }),
 );
 
 /*
@@ -75,7 +72,7 @@ function will be called with two arguments:
 creator when it was dispatched.
 
 - thunkAPI: an object containing all of the parameters that are normally passed to a Redux
-thunk function (dispatch, getState), as well as additional options:
+thunk function (dispatch, getState), as well as additional options.
 
 ----------------------------------------------------------------------------------
 */
@@ -85,8 +82,8 @@ export const apiGetSuccess = createAsyncThunk(
   ({ categoryId, response }, { dispatch }) => {
     console.log('Action: (remoteData/apiGetSuccess)');
 
-    dispatch(updateRemoteDataState({ categoryId, postsData: response.data }));
-    dispatch(postsUpdateFromRemoteData(categoryId));
+    dispatch(remoteDataSetState({ categoryId, postsData: response.data }));
+    dispatch(postsLoadFromRemoteData({ categoryId }));
     dispatch(uiStatusUpdate({ response }));
   },
 );
@@ -105,14 +102,14 @@ export const loadCachedPostsByCategoryId = createAsyncThunk(
   ({ categoryId }, { dispatch }) => {
     console.log('Action: (remoteData/loadCachedPostsByCategoryId)');
 
-    dispatch(postsUpdateFromRemoteData(categoryId));
+    dispatch(postsLoadFromRemoteData({ categoryId }));
     dispatch(uiStatusUpdate({ fromCache: true }));
   },
 );
 
 export const callApi = createAsyncThunk(
   'remoteData/callApi',
-  (categoryId, { dispatch, getState }) => {
+  ({ categoryId }, { dispatch, getState }) => {
     console.log('Action: (remoteData/callApi)');
 
     const cachedData = getState().remoteDataState[categoryId];

@@ -25,7 +25,7 @@ const List = ({
 
     if (typeof posts === 'undefined') {
       console.log('Data does not exist in postsDataState... calling API');
-      _callApi(selectedCategoryId);
+      _callApi({ categoryId: selectedCategoryId });
     }
   }, [selectedCategoryId]);
 

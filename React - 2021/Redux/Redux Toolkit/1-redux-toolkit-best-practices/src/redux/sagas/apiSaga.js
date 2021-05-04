@@ -1,11 +1,10 @@
-import axios from 'axios';
 import { takeEvery, call, put } from 'redux-saga/effects';
+import axios from 'axios';
 
 import {
   apiGetRequest,
   apiGetSuccess,
   apiGetFailure,
-  // apiResponseResult,
 } from '../actions/remoteData';
 
 function callApi(categoryId) {
@@ -24,12 +23,8 @@ function* apiWorkerSaga(action) {
     const response = yield call(callApi, categoryId);
 
     yield put(apiGetSuccess({ categoryId, response }));
-    /* yield put(apiResponseResult({
-      response: { ...response, fromApi: true },
-    })); */
   } catch (error) {
     yield put(apiGetFailure({ error }));
-    // yield put(apiResponseResult({ error }));
   }
 }
 

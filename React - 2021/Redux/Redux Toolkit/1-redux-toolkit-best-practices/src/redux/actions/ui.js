@@ -1,14 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { UI_STATUS_STATE_UPDATE } from '../constants/ui';
-
-function uiStatusStateUpdate(statusBar) {
-  return {
-    type: UI_STATUS_STATE_UPDATE,
-    payload: { statusBar },
-  };
-}
+// Reducer function actions
+import { uiStatusSetState } from '../slices/uiSlice';
 
 export const uiStatusUpdate = createAsyncThunk(
   'ui/uiStatusUpdate',
@@ -54,13 +48,14 @@ export const uiStatusUpdate = createAsyncThunk(
       statusBar.message = 'Category data loaded from cache';
     }
 
-    dispatch(uiStatusStateUpdate(statusBar));
+    dispatch(uiStatusSetState({ statusBar }));
   },
 );
 
-export function uiStatusHide() {
-  return (dispatch) => {
-    console.log('Action: (uiStatusHide)');
+export const uiStatusHide = createAsyncThunk(
+  'ui/uiStatusHide',
+  (args, { dispatch }) => {
+    console.log('Action: (ui/uiStatusHide)');
 
     const statusBar = {
       isShowing: false,
@@ -69,6 +64,6 @@ export function uiStatusHide() {
       error: null,
     };
 
-    dispatch(uiStatusStateUpdate(statusBar));
-  };
-}
+    dispatch(uiStatusSetState({ statusBar }));
+  },
+);

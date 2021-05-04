@@ -4,24 +4,19 @@
 
 configureStore()
 
-Wraps createStore to provide simplified configuration options and good defaults.
-It can automatically combine your slice reducers, adds whatever Redux middleware
-you supply, includes redux-thunk by default, and enables use of the Redux DevTools
-Extension.
-
 ----------------------------------------------------------------------------------
 */
 
 import { configureStore } from '@reduxjs/toolkit';
-// import { applyMiddleware, compose, createStore } from 'redux';
-// import thunkMiddleware from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 
+// The Redux Saga that handles async API calls
 import apiWatcherSaga from './sagas/apiSaga';
 
+// The automatically generated slice reducers
 import remoteDataReducer from './slices/remoteDataSlice';
-import postsReducer from './reducers/postsReducer';
-import UIReducer from './reducers/UIreducer';
+import postsReducer from './slices/postsSlice';
+import UIReducer from './slices/uiSlice';
 
 const preloadedState = {
   remoteDataState: {
@@ -38,7 +33,8 @@ export default function initStore() {
   const sagaMiddleware = createSagaMiddleware();
 
   const middleware = [sagaMiddleware];
-  // Here we could conditionally add more custom middleware for example ony in development mode.
+  // Here we could conditionally add more custom middlewares, for example middleware only
+  // to be used in development mode.
 
   const store = configureStore({
     reducer: {
@@ -63,7 +59,9 @@ export default function initStore() {
 
 /*
 ----------------------------------------------------------------------------------
-- The old way
+
+- The old way using createStore()
+
 Required use of createStore, applyMiddleware, compose, combineReducers, etc.
 
 export default function configureStore() {
