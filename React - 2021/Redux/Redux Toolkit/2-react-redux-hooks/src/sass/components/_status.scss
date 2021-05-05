@@ -1,0 +1,12 @@
+.status {
+  padding: 1rem;
+  color: $white;
+  
+  &--red {
+    background: $red-50;
+  }
+
+  &--green {
+    background: $green-50;
+  }
+}
