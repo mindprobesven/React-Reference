@@ -1,7 +1,15 @@
 /*
 ----------------------------------------------------------------------------------
 
-react-redux Hooks API
+react-redux - Hooks API
+
+useDispatch()
+- This hook returns a reference to the dispatch function from the Redux store.
+Explained in ./components/List.jsx
+
+useSelector()
+- Allows you to extract data from the Redux store state, using a 'selector function'.
+Explained in ./components/Status.jsx
 
 ----------------------------------------------------------------------------------
 */

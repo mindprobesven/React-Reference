@@ -1,23 +1,54 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
-/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useMemo } from 'react';
-import { connect, shallowEqual, useSelector } from 'react-redux';
+/*
+---------------------------------------------------------------------------------------------------
+useSelector()
 
-const makeSelectorFunction = () => (state, optionalComponentProp) => {
-  console.log('Selector updated');
-  console.log(optionalComponentProp);
+const result: any = useSelector(selector: Function, equalityFn?: Function)
 
-  return state.uiState.components.statusBar;
-};
+- Allows you to extract data from the Redux store state, using a 'selector function'.
+- Approximate equivalent to mapStateToProps.
+- useSelector() runs when a component renders and whenever an action is dispatched to
+the Redux store.
+- Whenever useSelector() runs, it calls the provided selector function. The result returned
+by the selector function is then 'compared' with the previous result. If the selector result
+appears to be different than the last result, useSelector() will force a re-render.
+- By default comparison is strict === reference comparison. To enable shallow equality check,
+Use the 'shallowEqual' function from react-redux as the equalityFn argument to useSelector().
+It compares two arbitrary values for shallow equality. Object values are compared based on
+their keys, i.e. they must have the same keys and for each key the value must be equal.
 
-// Instead of inlining the selector
-const selectorFunction = (state, optionalComponentProp) => {
-  console.log('Selector updated');
-  console.log(optionalComponentProp);
+[IMPORTANT]
+To avoid unnecessary re-renders when using useSelector(), use the following techniques;
+- Use a selector function reference, here selectorFunction()
+- The selector function must return a single field value to achieve optimal equality comparision
+between previous and next renders.
+- Use 'shallowEqual' as the equalityFn argument to useSelector() to enable shallow equality
+comparision, instead of the default strict === comparison.
 
-  /*
+[CAUTION]
+When using useSelector() with an inline selector function, a new instace of the selector
+is created whenever the component is rendered.
+
+Example: This inline selector function will create a new instance of the selector whenever the component
+is rendered. Not good!
+const statusBar = useSelector((state) => state.uiState.components.statusBar, shallowEqual);
+
+[SOLUTION]
+Use a selector function reference. A cached result may be returned by the hook without re-running the
+selector if it's the same function reference as on a previous render of the component.
+Example:
+const statusBar = useSelector(selectorFunction, shallowEqual);
+---------------------------------------------------------------------------------------------------
+*/
+import React, { useEffect, useMemo, memo } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
+
+// A maker function that returns a selector function.
+const makeSelectorFunction = () => (state, optionalComponentProp) => state.uiState.components.statusBar;
+
+/*
   Selector function
 
   ---------------------------------------------------------------------------------------------------
@@ -31,6 +62,7 @@ const selectorFunction = (state, optionalComponentProp) => {
   by default, not shallow equality.
 
   Therefore, this would force a re-render because a new object is returned every time.
+  Example
   return { state.uiState.components.statusBar };
 
   [SOLUTION]
@@ -42,51 +74,18 @@ const selectorFunction = (state, optionalComponentProp) => {
   It compares two arbitrary values for shallow equality. Object values are compared based on
   their keys, i.e. they must have the same keys and for each key the value must be equal
   ---------------------------------------------------------------------------------------------------
-  */
+*/
+const selectorFunction = (state, optionalComponentProp) => state.uiState.components.statusBar;
 
-  return state.uiState.components.statusBar;
-};
-
-const Status = () => {
+const Status = memo(() => {
   /*
-  useSelector() - Best practices for highest performance
+  [METHOD]
+  Passing additional data (for example component props) to the selector function.
 
-  - Approximate equivalent to mapStateToProps.
-  - Called with the entire Redux store state as its only argument.
-  - When an action is dispatched, useSelector() will do a reference comparison of the previous
-  selector function result value and the current result value. If they are different, the component will
-  be forced to re-render. If they are the same, the component will not re-render.
-  - Also subscribes to the Redux store and runs the selector whenever an action is dispatched.
-
-  [IMPORTANT]
-  To avoid unnecessary re-renders when using useSelector(), use the following techniques;
-  - Use a selector function reference, here selectorFunction()
-  - The selector function must return a single field value to achieve optimal equality comparision
-  between previous and next renders.
-  - Use 'shallowEqual' as the equalityFn argument to useSelector() to enable shallow equality
-  comparision, instead of the default strict === comparison.
-
-  ---------------------------------------------------------------------------------------------------
-  [CAUTION]
-  When using useSelector() with an inline selector function, a new instace of the selector
-  is created whenever the component is rendered. This inline selector function will create a new instance
-  of the selector whenever the component is rendered!
-  const statusBar = useSelector((state) => {
-    console.log('Selector updated');
-    return state.uiState.components.statusBar;
-  });
-
-  [SOLUTION]
-  Use a selector function reference. A cached result may be returned by the hook without re-running the
-  selector if it's the same function reference as on a previous render of the component.
-  const statusBar = useSelector(selectorFunction);
-  ---------------------------------------------------------------------------------------------------
+  When the selector is used in multiple component instances and depends on the component's props, you
+  need to ensure that each component instance gets its own selector instance using useMemo() and a maker
+  function that returns a selector function.
   */
-
-  // 'shallowEqual' is used here as the equalityFn argument to useSelector()
-  // const statusBar = useSelector(selectorFunction, shallowEqual);
-
-  // This would be the way to pass additional data to the selector function.
   const selectorFunctionWithMemo = useMemo(makeSelectorFunction, []);
   const statusBar = useSelector((state) => selectorFunctionWithMemo(state, 'optionalComponentProp'), shallowEqual);
 
@@ -97,14 +96,12 @@ const Status = () => {
     error,
   } = statusBar;
 
-  console.log(isShowing);
-
   useEffect(() => {
     console.log('<Status> mounted');
   }, []);
 
   useEffect(() => {
-    console.log('<Status> rendered -------------------------------->');
+    // console.log('<Status> rendered -------------------------------->');
   });
 
   if (!isShowing) {
@@ -126,6 +123,6 @@ const Status = () => {
     );
   }
   return null;
-};
+});
 
 export default Status;

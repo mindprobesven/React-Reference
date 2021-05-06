@@ -1,38 +1,54 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable max-len */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /*
 ----------------------------------------------------------------------------------
+useDispatch()
 
-react-redux Hooks API
+- This hook returns a reference to the dispatch function from the Redux store
 
 ----------------------------------------------------------------------------------
 */
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 
 import { callApi } from '../redux/actions/remoteData';
 import { uiStatusHide } from '../redux/actions/ui';
 
+import Menu from './Menu';
 import Status from './Status';
 
-const List = ({
-  categoryId,
-  postsDataState,
-  _callApi,
-  _uiStatusHide,
-}) => {
+const makeSelectorFunction = () => (state, categoryId) => state.postsDataState[categoryId];
+
+const List = ({ categoryId }) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId);
 
-  const posts = postsDataState[selectedCategoryId];
+  // Instantiate dispatch with useDispatch()
+  const dispatch = useDispatch();
+
+  const selectorFunctionWithMemo = useMemo(makeSelectorFunction, []);
+  const posts = useSelector((state) => selectorFunctionWithMemo(state, selectedCategoryId), shallowEqual);
+
+  useEffect(() => {
+    console.log('<List> mounted');
+  }, []);
+
+  useEffect(() => {
+    // console.log('<List> rendered -------------------------------->');
+  });
 
   useEffect(() => {
     console.log('<List> selectedCategoryId changed');
 
-    _uiStatusHide();
+    // Dispatching an action with useDispatch()
+    dispatch(uiStatusHide());
 
     if (typeof posts === 'undefined') {
       console.log('Data does not exist in postsDataState... calling API');
-      _callApi({ categoryId: selectedCategoryId });
+      // Dispatching an action with useDispatch()
+      dispatch(callApi({ categoryId: selectedCategoryId }));
     }
   }, [selectedCategoryId]);
 
@@ -40,42 +56,22 @@ const List = ({
     return ids.slice(from, to);
   }
 
-  function onSelectCategory(id) {
+  // Memoized with useCallback()
+  const onSelectCategory = useCallback((id) => {
     setSelectedCategoryId(id);
-  }
+  }, []);
 
   return (
     <div className="list">
-      <div className="list__item">
-        <button
-          className="button"
-          type="button"
-          onClick={() => onSelectCategory('posts')}
-        >
-          Posts (Default)
-        </button>
-        <button
-          className="button"
-          type="button"
-          onClick={() => onSelectCategory('todos')}
-        >
-          Todos
-        </button>
-        <button
-          className="button"
-          type="button"
-          onClick={() => onSelectCategory('articles')}
-        >
-          Articles (Cached)
-        </button>
-        <button
-          className="button"
-          type="button"
-          onClick={() => onSelectCategory('nomatch')}
-        >
-          Computers (404)
-        </button>
-      </div>
+      {/*
+      [OPTIMIZATION]
+      The <Menu> component is trying to optimize its render behavior using React.memo()
+      However, a callback (onSelectCategory) is being passed to this child component.
+      This is a problem, because whenever this parent component re-renders, a new callback
+      reference is passed to the child component, forcing it to re-render.
+      Therefore, it is important to memoize this callback with useCallback().
+      */}
+      <Menu selectCategory={onSelectCategory} />
       <Status />
       {
         !posts && (
@@ -103,10 +99,4 @@ const List = ({
   );
 };
 
-export default connect(
-  ({ postsDataState }) => ({ postsDataState }),
-  ({
-    _callApi: callApi,
-    _uiStatusHide: uiStatusHide,
-  }),
-)(List);
+export default List;

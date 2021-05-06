@@ -29,8 +29,5 @@ function* apiWorkerSaga(action) {
 }
 
 export default function* apiWatcherSaga() {
-  // The action apiGetRequest was created with createAction().
-  // The action function itself has toString() defined, so that it can be used in place of the type constant.
-  // Therefore, [apiGetRequest] === 'remoteData/apiGetRequest'
   yield takeEvery([apiGetRequest], apiWorkerSaga);
 }
