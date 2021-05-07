@@ -1,0 +1,26 @@
+.list {
+  height: 100%;
+  padding: 1rem;
+  background: $grey-25;
+  box-sizing: border-box;
+
+  &__item {
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 1rem;
+    margin-bottom: $container-padding;
+    background: $grey-50;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-grow: 1;
+    padding: 1rem;
+    align-items: center;
+    background: $grey-75;
+  }
+}
