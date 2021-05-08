@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-console.log('Test1');
+console.log('Test');
 
 const initialState = {
   components: {

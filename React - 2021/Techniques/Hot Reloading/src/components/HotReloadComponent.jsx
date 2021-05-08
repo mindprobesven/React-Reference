@@ -34,7 +34,7 @@ const HotReloadComponent = () => {
           type="button"
           onClick={onAdd}
         >
-          Add +1
+          Adds +1
         </button>
       </div>
     </div>

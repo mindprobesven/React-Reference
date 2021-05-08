@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import React, { useEffect, memo } from 'react';
 
@@ -7,7 +8,7 @@ const Menu = memo(({ selectCategory }) => {
   }, []);
 
   useEffect(() => {
-    // console.log('<Menu> rendered -------------------------------->');
+    console.log('<Menu> rendered -------------------------------->');
   });
 
   return (

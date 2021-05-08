@@ -30,7 +30,7 @@ const List = ({ categoryId }) => {
   }, []);
 
   useEffect(() => {
-    // console.log('<List> rendered -------------------------------->');
+    console.log('<List> rendered -------------------------------->');
   });
 
   useEffect(() => {

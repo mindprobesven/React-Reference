@@ -18,7 +18,7 @@ const render = (Component) => {
 render(App);
 
 if (process.env.NODE_ENV !== 'production' && module.hot) {
-  console.log('Hot');
+  // console.log('Hot');
   module.hot.accept('./App', () => {
     console.log('----------------> Caught in index');
     // store.replaceReducer(rootReducer);

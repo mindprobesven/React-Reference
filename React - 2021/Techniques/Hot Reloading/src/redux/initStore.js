@@ -26,7 +26,7 @@ const preloadedState = {
   },
 };
 
-export default function initStore() {
+const initStore = () => {
   const sagaMiddleware = createSagaMiddleware();
 
   const middleware = [sagaMiddleware];
@@ -41,9 +41,17 @@ export default function initStore() {
   sagaMiddleware.run(apiWatcherSaga);
 
   if (process.env.NODE_ENV !== 'production' && module.hot) {
-    module.hot.accept('./rootReducer', () => store.replaceReducer(rootReducer));
+    module.hot.accept('./rootReducer', () => {
+      console.log('----------------> Caught in initStore');
+      store.replaceReducer(rootReducer);
+      // store.replaceReducer(store.reducer);
+    });
     // module.hot.accept('../App', () => console.log('-----> HERE'));
   }
 
   return store;
-}
+};
+
+const store = initStore();
+
+export default store;

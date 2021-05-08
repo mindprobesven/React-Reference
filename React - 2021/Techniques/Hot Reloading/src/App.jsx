@@ -52,7 +52,7 @@ import { Provider } from 'react-redux';
 
 import './sass/main.scss';
 
-import initStore from './redux/initStore';
+import store from './redux/initStore';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import HotReloadComponent from './components/HotReloadComponent';
@@ -60,7 +60,7 @@ import List from './components/List';
 
 console.log('Test1');
 
-export const store = initStore();
+// export const store = initStore();
 
 const App = () => (
   <Provider store={store}>
