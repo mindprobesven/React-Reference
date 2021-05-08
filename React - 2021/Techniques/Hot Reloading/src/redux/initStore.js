@@ -4,9 +4,16 @@ import createSagaMiddleware from 'redux-saga';
 
 import apiWatcherSaga from './sagas/apiSaga';
 
-import remoteDataReducer from './slices/remoteDataSlice';
+import rootReducer from './rootReducer';
+/* import remoteDataReducer from './slices/remoteDataSlice';
 import postsReducer from './slices/postsSlice';
 import UIReducer from './slices/uiSlice';
+
+const rootReducer = {
+  remoteDataState: remoteDataReducer,
+  postsDataState: postsReducer,
+  uiState: UIReducer,
+}; */
 
 const preloadedState = {
   remoteDataState: {
@@ -25,17 +32,18 @@ export default function initStore() {
   const middleware = [sagaMiddleware];
 
   const store = configureStore({
-    reducer: {
-      remoteDataState: remoteDataReducer,
-      postsDataState: postsReducer,
-      uiState: UIReducer,
-    },
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
     preloadedState,
     devTools: process.env.NODE_ENV !== 'production',
   });
 
   sagaMiddleware.run(apiWatcherSaga);
+
+  if (process.env.NODE_ENV !== 'production' && module.hot) {
+    module.hot.accept('./rootReducer', () => store.replaceReducer(rootReducer));
+    // module.hot.accept('../App', () => console.log('-----> HERE'));
+  }
 
   return store;
 }

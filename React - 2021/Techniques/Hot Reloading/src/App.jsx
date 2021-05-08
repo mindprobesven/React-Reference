@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-unused-vars */
 /*
 ----------------------------------------------------------------------------------
 
@@ -54,9 +56,11 @@ import initStore from './redux/initStore';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import HotReloadComponent from './components/HotReloadComponent';
-// import List from './components/List';
+import List from './components/List';
 
-const store = initStore();
+console.log('Test1');
+
+export const store = initStore();
 
 const App = () => (
   <Provider store={store}>
@@ -65,7 +69,8 @@ const App = () => (
         <div className="body">
           <div className="single-column">
             <HotReloadComponent />
-            {/* <List categoryId="posts" /> */}
+            <HotReloadComponent />
+            <List categoryId="posts" />
           </div>
         </div>
       </ErrorBoundary>
@@ -73,5 +78,15 @@ const App = () => (
   </Provider>
 );
 
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+  // console.log('Hot2');
+  // module.hot.accept('./App', () => console.log('----------------> Caught in App'));
+  // module.hot.accept();
+  // module.hot.accept(() => console.log('----------------> Caught in App'));
+  // module.hot.accept('./App', () => console.log('----------------> Caught in App'));
+  // module.hot.accept('./rootReducer', () => store.replaceReducer(rootReducer));
+}
+
 // Mark root component as hot-exported
-export default hot(App);
+// export default hot(App);
+export default App;

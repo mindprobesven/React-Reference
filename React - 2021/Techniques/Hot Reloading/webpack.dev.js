@@ -10,6 +10,8 @@ module.exports = merge(common, {
     hot: true,
   },
   resolve: {
+    // This alias declaration replaces react-dom with the @hot-loader/react-dom
+    // package. Required for React Hooks hot-reloading support.
     alias: {
       'react-dom': '@hot-loader/react-dom',
     },

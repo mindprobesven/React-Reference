@@ -1,5 +1,11 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
+/*
+----------------------------------------------------------------------------------
+
+When hot-reloading is enabled, this component will preserve its state (count).
+
+----------------------------------------------------------------------------------
+*/
 import React, { useEffect, useState } from 'react';
 
 const HotReloadComponent = () => {

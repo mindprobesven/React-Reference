@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
+console.log('Test1');
+
 const initialState = {
   components: {
     statusBar: {
