@@ -8,8 +8,6 @@ const remoteDataSlice = createSlice({
   initialState,
   reducers: {
     remoteDataSetState(state, action) {
-      console.log('remoteDataSlice: (remoteDataSetState)');
-
       const { categoryId, postsData } = action.payload;
       state[categoryId] = postsData;
     },

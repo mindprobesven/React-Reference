@@ -2,7 +2,8 @@
 /*
 ----------------------------------------------------------------------------------
 
-When hot-reloading is enabled, this component will preserve its state (count).
+When HMR is enabled, this component will preserve its state (count) and the
+Redux state.
 
 ----------------------------------------------------------------------------------
 */
@@ -34,7 +35,7 @@ const HotReloadComponent = () => {
           type="button"
           onClick={onAdd}
         >
-          Adds +1
+          Add +1
         </button>
       </div>
     </div>

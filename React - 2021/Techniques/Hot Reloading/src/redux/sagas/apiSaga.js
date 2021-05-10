@@ -16,8 +16,6 @@ function callApi(categoryId) {
 
 function* apiWorkerSaga(action) {
   try {
-    console.log('Saga Worker: (apiWorkerSaga)');
-
     const { categoryId } = action.payload;
 
     const response = yield call(callApi, categoryId);

@@ -7,8 +7,6 @@ import { postsSetState } from '../slices/postsSlice';
 export const postsLoadFromRemoteData = createAsyncThunk(
   'posts/postsLoadFromRemoteData',
   ({ categoryId }, { dispatch, getState }) => {
-    console.log('Action: (posts/postsLoadFromRemoteData)');
-
     const { remoteDataState } = getState();
 
     const remoteCategoryPosts = remoteDataState[categoryId];

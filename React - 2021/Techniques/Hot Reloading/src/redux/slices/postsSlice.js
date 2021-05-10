@@ -8,8 +8,6 @@ const postsSlice = createSlice({
   initialState,
   reducers: {
     postsSetState(state, action) {
-      console.log('postsSlice: (postsSetState)');
-
       const { categoryId, postsData } = action.payload;
       state[categoryId] = postsData;
     },

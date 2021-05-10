@@ -7,8 +7,6 @@ import { uiStatusSetState } from '../slices/uiSlice';
 export const uiStatusUpdate = createAsyncThunk(
   'ui/uiStatusUpdate',
   ({ response = null, error = null, fromCache = false }, { dispatch }) => {
-    console.log('Action: (ui/uiStatusUpdate)');
-
     const statusBar = {
       isShowing: true,
       status: null,
@@ -55,8 +53,6 @@ export const uiStatusUpdate = createAsyncThunk(
 export const uiStatusHide = createAsyncThunk(
   'ui/uiStatusHide',
   (args, { dispatch }) => {
-    console.log('Action: (ui/uiStatusHide)');
-
     const statusBar = {
       isShowing: false,
       status: null,

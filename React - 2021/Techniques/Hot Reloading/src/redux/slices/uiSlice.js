@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -19,8 +21,6 @@ const uiSlice = createSlice({
   initialState,
   reducers: {
     uiStatusSetState(state, action) {
-      console.log('uiSlice: (uiStatusSetState)');
-
       const { statusBar } = action.payload;
       state.components.statusBar = statusBar;
     },

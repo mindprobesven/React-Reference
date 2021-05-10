@@ -5,15 +5,6 @@ import createSagaMiddleware from 'redux-saga';
 import apiWatcherSaga from './sagas/apiSaga';
 
 import rootReducer from './rootReducer';
-/* import remoteDataReducer from './slices/remoteDataSlice';
-import postsReducer from './slices/postsSlice';
-import UIReducer from './slices/uiSlice';
-
-const rootReducer = {
-  remoteDataState: remoteDataReducer,
-  postsDataState: postsReducer,
-  uiState: UIReducer,
-}; */
 
 const preloadedState = {
   remoteDataState: {
@@ -40,18 +31,26 @@ const initStore = () => {
 
   sagaMiddleware.run(apiWatcherSaga);
 
+  // ----------------------------------------------------------------------------------
+  // This preserves the Redux state during HMR when making changes to the rootReducer
+  // file. It only works when the rootReducer is created in a separate module and
+  // by using combineReducers(). Pretty much useless, because making changes to any of the
+  // other Redux modules (actions, slices, etc.) resets the Redux state.
+  // ----------------------------------------------------------------------------------
   if (process.env.NODE_ENV !== 'production' && module.hot) {
     module.hot.accept('./rootReducer', () => {
-      console.log('----------------> Caught in initStore');
       store.replaceReducer(rootReducer);
-      // store.replaceReducer(store.reducer);
     });
-    // module.hot.accept('../App', () => console.log('-----> HERE'));
   }
 
   return store;
 };
 
+// ----------------------------------------------------------------------------------
+// Running initStore() in App.jsx to get a store object would reset the Redux state
+// during every HMR. Instead, it is necessary to export a 'reference' to the store object
+// returned by initStore().
+// ----------------------------------------------------------------------------------
 const store = initStore();
 
 export default store;

@@ -1,12 +1,34 @@
-/* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
 /*
 ----------------------------------------------------------------------------------
 
-Hot Reloading
+Hot Module Reloading with react-hot-loader
 
-- React Hot Loader
-Tweak React components in real time
+This example explains:
+
+1. How to setup react-hot-loader to tweak React components in real time and preserve
+component and Redux state during HMR.
+
+Explained in:
+./App.jsx
+./components/HotReloadComponent.jsx
+./redux/initStore.js
+
+[OBSERVATIONS]
+- useState() is presevered
+- useEffect() updates during HMR
+- In React.memo() wrapped components useEffect() does not update and the component
+does not re-render when making modifications.
+
+2. How to preserve the Redux state during HMR when making changes to the rootReducer
+file. Pretty much useless, because making changes to any of the other Redux modules (actions,
+slices, etc.) resets the Redux state.
+
+Explained in:
+./redux/initStore.js
+
+----------------------------------------------------------------------------------
+
+Setup - react-hot-loader
 
 Package installation:
 npm install --save-dev react-hot-loader
@@ -34,7 +56,7 @@ npm install --save-dev @hot-loader/react-dom --force
 
 3. Configure your webpack development configuration to alias this package, instead of the
 real 'react-dom'
-// webpack.conf
+// webpack.dev.js
 ...
 resolve: {
     alias: {
@@ -44,8 +66,11 @@ resolve: {
 ----------------------------------------------------------------------------------
 */
 
+// ----------------------------------------------------------------------------------
 // import 'react-hot-loader' in main file (before React)
+// ----------------------------------------------------------------------------------
 import { hot } from 'react-hot-loader/root';
+import { setConfig } from 'react-hot-loader';
 
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -58,9 +83,27 @@ import ErrorBoundary from './components/ErrorBoundary';
 import HotReloadComponent from './components/HotReloadComponent';
 import List from './components/List';
 
-console.log('Test1');
+// ----------------------------------------------------------------------------------
+// It is possible to configure how hooks (useEffect, etc.) reload on react hot load (RHL).
+// ----------------------------------------------------------------------------------
+setConfig({
+  // [OPTION #1]
+  // This will reload ANY hook, including useEffect(, []) 'on mount only', making it possible
+  // to reflect modifications to components wrapped with React.memo
+  // reloadLifeCycleHooks: true,
+  // reloadHooks: true,
 
-// export const store = initStore();
+  // [OPTION #2]
+  // This will reload all hooks, not including useEffect(, []) 'on mount only'. It does not
+  // reflect modifications to components wrapped with React.memo
+  // reloadLifeCycleHooks: false,
+  // reloadHooks: true,
+
+  // [OPTION #3]
+  // This disables hooks reloading. It only reloads the hook useEffect(effect) in components
+  // which are not wrapped with React.memo
+  reloadHooks: false,
+});
 
 const App = () => (
   <Provider store={store}>
@@ -78,15 +121,7 @@ const App = () => (
   </Provider>
 );
 
-if (process.env.NODE_ENV !== 'production' && module.hot) {
-  // console.log('Hot2');
-  // module.hot.accept('./App', () => console.log('----------------> Caught in App'));
-  // module.hot.accept();
-  // module.hot.accept(() => console.log('----------------> Caught in App'));
-  // module.hot.accept('./App', () => console.log('----------------> Caught in App'));
-  // module.hot.accept('./rootReducer', () => store.replaceReducer(rootReducer));
-}
-
+// ----------------------------------------------------------------------------------
 // Mark root component as hot-exported
-// export default hot(App);
-export default App;
+// ----------------------------------------------------------------------------------
+export default hot(App);
