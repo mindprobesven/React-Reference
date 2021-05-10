@@ -32,7 +32,7 @@ const initStore = () => {
   sagaMiddleware.run(apiWatcherSaga);
 
   // ----------------------------------------------------------------------------------
-  // This preserves the Redux state during HMR when making changes to the rootReducer
+  // This preserves the Redux state during HMR when making changes to the 'rootReducer'
   // file. It only works when the rootReducer is created in a separate module and
   // by using combineReducers(). Pretty much useless, because making changes to any of the
   // other Redux modules (actions, slices, etc.) resets the Redux state.

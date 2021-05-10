@@ -90,8 +90,8 @@ setConfig({
   // [OPTION #1]
   // This will reload ANY hook, including useEffect(, []) 'on mount only', making it possible
   // to reflect modifications to components wrapped with React.memo
-  // reloadLifeCycleHooks: true,
-  // reloadHooks: true,
+  reloadLifeCycleHooks: true,
+  reloadHooks: true,
 
   // [OPTION #2]
   // This will reload all hooks, not including useEffect(, []) 'on mount only'. It does not
@@ -102,7 +102,7 @@ setConfig({
   // [OPTION #3]
   // This disables hooks reloading. It only reloads the hook useEffect(effect) in components
   // which are not wrapped with React.memo
-  reloadHooks: false,
+  // reloadHooks: false,
 });
 
 const App = () => (

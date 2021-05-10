@@ -1,7 +1,5 @@
-/* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useMemo, memo } from 'react';
+import React, { useEffect, memo } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 const selectorFunction = (state) => state.uiState.components.statusBar;
@@ -21,7 +19,7 @@ const Status = memo(() => {
   }, []);
 
   useEffect(() => {
-    // console.log('<Status> rendered -------------------------------->');
+    console.log('<Status> rendered -------------------------------->');
   });
 
   if (!isShowing) {

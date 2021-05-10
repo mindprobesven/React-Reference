@@ -1,9 +1,5 @@
-/* eslint-disable global-require */
-/* eslint-disable import/no-unresolved */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-
-console.log('Test');
 
 const initialState = {
   components: {
