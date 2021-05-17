@@ -10,7 +10,7 @@ const config = require('../webpack.dev.js');
 const compiler = webpack(config);
 
 const requestLogger = (req, res, next) => {
-  console.log(`[GET] - ${req.path}`);
+  console.log(`[ GET ] - ${req.url}`);
   next();
 };
 

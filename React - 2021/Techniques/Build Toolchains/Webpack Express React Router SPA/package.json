@@ -6,7 +6,8 @@
   "author": "Sven Kohn",
   "license": "ISC",
   "scripts": {
-    "server-dev": "nodemon ./servers/dev-server.js",
+    "server-dev": "nodemon ./servers/server-dev.js",
+    "server-prod": "nodemon ./servers/server-prod.js",
     "build": "webpack --config webpack.prod.js"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@hot-loader/react-dom": "^17.0.1",
     "babel-loader": "^8.2.2",
     "connect-history-api-fallback": "^1.6.0",
+    "copy-webpack-plugin": "^8.1.1",
     "css-loader": "^5.0.2",
     "css-minimizer-webpack-plugin": "^1.2.0",
     "eslint": "^7.18.0",
