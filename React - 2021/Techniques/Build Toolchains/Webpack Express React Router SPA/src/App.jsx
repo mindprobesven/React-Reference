@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
-/* import { hot } from 'react-hot-loader/root';
+import { hot } from 'react-hot-loader/root';
 import { setConfig } from 'react-hot-loader';
 
 import React from 'react';
@@ -93,9 +93,9 @@ const App = () => (
   </div>
 );
 
-export default hot(App); */
+export default hot(App);
 
-import React from 'react';
+/* import React from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const App = () => (
@@ -106,4 +106,4 @@ const App = () => (
   </div>
 );
 
-export default App;
+export default App; */

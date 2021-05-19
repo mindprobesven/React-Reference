@@ -8,11 +8,6 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Webpack Development Express Server',
-      filename: 'index.html',
-      template: path.join(path.resolve(__dirname, 'public'), 'index.html'),
-    }),
     new CopyPlugin({
       patterns: [
         {
@@ -23,6 +18,11 @@ module.exports = {
           to: path.resolve(__dirname, 'dist'),
         },
       ],
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Webpack Development Express Server',
+      filename: 'index.html',
+      template: path.join(path.resolve(__dirname, 'public'), 'index.html'),
     }),
   ],
   module: {

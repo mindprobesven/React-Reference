@@ -1,4 +1,4 @@
-/* import React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App';
@@ -7,9 +7,8 @@ ReactDOM.render(
   <App />,
   document.getElementById('root'),
 );
- */
 
-function component() {
+/* function component() {
   const element = document.createElement('div');
 
   element.innerHTML = 'Hello World!';
@@ -17,4 +16,4 @@ function component() {
   return element;
 }
 
-document.body.appendChild(component());
+document.body.appendChild(component()); */
