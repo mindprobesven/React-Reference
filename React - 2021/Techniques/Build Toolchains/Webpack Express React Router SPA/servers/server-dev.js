@@ -7,12 +7,9 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('../webpack.dev.js');
 
-const compiler = webpack(config);
+const requestLogger = require('./middleware/requestLogger');
 
-const requestLogger = (req, res, next) => {
-  console.log(`[ GET ] - ${req.url}`);
-  next();
-};
+const compiler = webpack(config);
 
 const app = express();
 const port = 3000;

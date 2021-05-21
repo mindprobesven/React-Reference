@@ -94,16 +94,3 @@ const App = () => (
 );
 
 export default hot(App);
-
-/* import React from 'react';
-import ErrorBoundary from './components/ErrorBoundary';
-
-const App = () => (
-  <div>
-    <ErrorBoundary>
-      <h1>Hello World1!</h1>
-    </ErrorBoundary>
-  </div>
-);
-
-export default App; */
