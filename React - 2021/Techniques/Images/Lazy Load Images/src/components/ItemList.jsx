@@ -1,5 +1,5 @@
-/* eslint-disable max-len */
 import React, { useEffect } from 'react';
+import getFakeCategoryData from '../utils/getFakeCategoryData';
 
 import Item from './Item';
 
@@ -8,11 +8,18 @@ const ItemList = () => {
     console.log('<ItemList> Mounted');
   }, []);
 
+  const { electronics } = getFakeCategoryData();
+
   return (
     <div className="items">
-      <Item />
-      <Item />
-      <Item />
+      {
+        electronics.allIDs.map((id) => (
+          <Item
+            key={id}
+            data={electronics.byIDs[id]}
+          />
+        ))
+      }
     </div>
   );
 };

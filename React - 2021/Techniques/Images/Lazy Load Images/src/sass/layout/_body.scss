@@ -1,5 +1,6 @@
 .body {
-  width: 100%;
+  display: flex;
+  flex-grow: 1;
   max-width: 640px;
   margin: 0 auto;
 }

@@ -1,7 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 import React, { useEffect } from 'react';
 
-const Item = () => {
+const Item = ({ data }) => {
+  const {
+    id,
+    slugName,
+    title,
+    description,
+    price,
+    discountPercent,
+    images,
+  } = data;
+
   useEffect(() => {
     console.log('<Item> Mounted');
   }, []);
@@ -11,17 +23,17 @@ const Item = () => {
       <div className="items__image-container">
         <img
           className="items__image"
-          src={`https://picsum.photos/200/200?random=${Math.floor(Math.random() * 100)}`}
+          src={images[0]}
           width="200"
           height="200"
           alt=""
         />
       </div>
       <div className="items__content-container">
-        <div className="items__id-text">ID: 454365-4366546-4363</div>
-        <a className="items__link-text" href="/">ASUS Tabled 10&quot; IPS</a>
-        <div className="items__price-text">45€ (-65%)</div>
-        <div className="items__body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris volutpat quam ligula, nec posuere justo luctus sed. Cras suscipit aliquet elementum. Ut commodo lacinia erat et tincidunt. </div>
+        <div className="items__id-text">{`ID: ${id}`}</div>
+        <a className="items__link-text" href={`/${slugName}`}>{title}</a>
+        <div className="items__price-text">{`${price}€ (${discountPercent})`}</div>
+        <div className="items__body-text">{description}</div>
       </div>
     </div>
   );

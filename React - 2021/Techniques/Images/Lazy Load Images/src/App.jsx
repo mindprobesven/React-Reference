@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { hot } from 'react-hot-loader/root';
 import { setConfig } from 'react-hot-loader';
 
