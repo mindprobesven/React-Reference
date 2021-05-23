@@ -1,17 +1,8 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const Image = ({ images }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    console.log('<Image> Mounted');
-  }, []);
-
-  const onImageLoaded = () => {
-    console.log('Image loaded!');
-    setIsLoaded(true);
-  };
 
   return (
     <>
@@ -26,7 +17,7 @@ const Image = ({ images }) => {
         style={{ opacity: isLoaded ? 1 : 0 }}
         src={images.full}
         alt=""
-        onLoad={onImageLoaded}
+        onLoad={() => setIsLoaded(true)}
       />
     </>
   );

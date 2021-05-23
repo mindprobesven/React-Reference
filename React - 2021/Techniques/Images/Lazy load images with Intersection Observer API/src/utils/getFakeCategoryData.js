@@ -5,7 +5,7 @@ const getFakeCategoryData = () => {
   console.log('Creating fake data set...');
 
   const categories = ['electronics', 'kids'];
-  const count = 10;
+  const count = 100;
   const itemsData = {};
 
   categories.forEach((category) => {

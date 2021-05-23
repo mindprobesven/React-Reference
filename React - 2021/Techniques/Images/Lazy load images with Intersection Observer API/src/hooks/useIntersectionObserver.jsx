@@ -6,8 +6,7 @@ const useIntersectionObserver = (target) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    console.log('[useIntersectionObserver] Mounted');
-    console.log(target.current);
+    const element = target.current;
 
     const onHandleIntersect = (entries, observer) => {
       // Each entry describes an intersection change for one observed target element:
@@ -42,14 +41,18 @@ const useIntersectionObserver = (target) => {
       threshold: 0.1,
     };
 
+    // Intersection Observer API
+    // ----------------------------------------------------------------------------------------
+    // The Intersection Observer API provides a way to asynchronously observe changes in the
+    // intersection of a target element with an ancestor element or with a top-level document's
+    // viewport.
+    // https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
     const observer = new IntersectionObserver(onHandleIntersect, options);
 
-    observer.observe(target.current);
+    observer.observe(element);
 
     return () => {
-      console.log('[useIntersectionObserver] Unmount');
-
-      observer.unobserve(target.current);
+      observer.unobserve(element);
     };
   }, []);
 

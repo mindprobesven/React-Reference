@@ -1,22 +1,26 @@
-import React, { useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import getFakeCategoryData from '../utils/getFakeCategoryData';
 
 import Item from './Item';
 
 const ItemList = () => {
+  const [categoryData, setCategoryData] = useState();
+
   useEffect(() => {
     console.log('<ItemList> Mounted');
-  }, []);
 
-  const { electronics } = getFakeCategoryData();
+    const { electronics } = getFakeCategoryData();
+    setCategoryData(electronics);
+  }, []);
 
   return (
     <div className="items">
       {
-        electronics.allIDs.map((id) => (
+        categoryData && categoryData.allIDs.map((id) => (
           <Item
             key={id}
-            data={electronics.byIDs[id]}
+            data={categoryData.byIDs[id]}
           />
         ))
       }
