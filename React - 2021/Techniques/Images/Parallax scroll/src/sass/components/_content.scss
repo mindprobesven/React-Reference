@@ -1,0 +1,19 @@
+.content {
+  align-self: center;
+  width: 100%;
+  max-width: 640px;
+  padding: 2rem;
+  background: $content-bg-color;
+  box-sizing: border-box;
+
+  h1 {
+    color: $text-headline-color;
+    padding-bottom: 1rem;
+  }
+
+  p {
+    color: $text-base-color;
+    padding-bottom: 1rem;
+    line-height: 1.5rem;
+  }
+}
