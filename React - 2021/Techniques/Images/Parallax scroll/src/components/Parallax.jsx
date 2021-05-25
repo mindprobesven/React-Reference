@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, {
   useEffect,
@@ -6,7 +7,7 @@ import React, {
 } from 'react';
 
 const imageData = {
-  src: 'https://picsum.photos/1920/1920',
+  src: 'https://picsum.photos/id/1026/1920/1920',
   width: 1920,
   height: 1920,
 };
@@ -14,24 +15,72 @@ const imageData = {
 const Parallax = () => {
   const parallaxRef = useRef();
   const imageRef = useRef();
-  const prevScrollY = useRef();
-  const [posY, setPosY] = useState();
-  const [parallaxHeight, setParallaxHeight] = useState();
+
+  const [parallaxState, setParallaxState] = useState({
+    aspectRatio: 0,
+    top: 0,
+    bottom: 0,
+    height: 0,
+  });
+
+  const [imageState, setImageState] = useState({
+    top: 0,
+    bottom: 0,
+    height: 0,
+    translateY: 0,
+  });
+
+  const [scrollState, setScrollState] = useState({
+    initialScrollPosY: 0,
+    currentScrollPosY: 0,
+    scrollRemaining: 0,
+  });
+
+  const [imagePosY, setImagePosY] = useState(0);
 
   useEffect(() => {
     console.log('<Parallax> Mounted');
 
     let scrollAnimationFrame;
-    let parallaxScrollSpeed;
-    const scrollUpOffset = 10;
 
     const parallaxElement = parallaxRef.current;
     const imageElement = imageRef.current;
 
-    prevScrollY.current = window.pageYOffset;
+    const updateDimensions = () => {
+      const {
+        top: parallaxTop,
+        bottom: parallaxBottom,
+        height: parallaxHeight,
+      } = parallaxElement.getBoundingClientRect();
 
-    const updateParallaxContainerHeight = () => {
-      let parallaxContainerHeight;
+      setParallaxState((prevState) => ({
+        ...prevState,
+        top: parallaxTop,
+        bottom: parallaxBottom,
+        height: parallaxHeight,
+      }));
+
+      const {
+        top: imageTop,
+        bottom: imageBottom,
+        height: imageHeight,
+      } = imageElement.getBoundingClientRect();
+
+      setImageState((prevState) => ({
+        ...prevState,
+        top: imageTop,
+        bottom: imageBottom,
+        height: imageHeight,
+      }));
+
+      setScrollState((prevState) => ({
+        ...prevState,
+        scrollRemaining: imageHeight - parallaxHeight - window.scrollY,
+      }));
+    };
+
+    const configureParallaxContainer = () => {
+      let height = 0;
 
       const aspectRatio = Math.floor(
         (imageData.height / imageData.width) * 100,
@@ -39,75 +88,27 @@ const Parallax = () => {
 
       if (window.innerWidth > window.innerHeight) {
         // Landscape orientation
-        // The parallax container height is half the image aspect ratio
-        parallaxContainerHeight = Math.floor(aspectRatio / 2);
-        parallaxScrollSpeed = 1.25;
+        height = Math.floor(aspectRatio / 2);
       } else {
         // Portrait orientation
-        // The parallax container height is slightly smaller than the image aspect ratio
-        parallaxContainerHeight = Math.floor(aspectRatio / 1.5);
-        parallaxScrollSpeed = 0.5;
+        height = Math.floor(aspectRatio / 2);
       }
 
-      setParallaxHeight(parallaxContainerHeight);
+      setParallaxState((prevState) => ({
+        ...prevState,
+        aspectRatio: height,
+      }));
 
-      const {
-        top: parallaxTop,
-        bottom: parallaxBottom,
-        // height: parallaxHeight,
-      } = parallaxElement.getBoundingClientRect();
-      const {
-        top: imageTop,
-        bottom: imageBottom,
-        height: imageHeight,
-      } = imageElement.getBoundingClientRect();
-
-      const differenceBottom = imageBottom - parallaxBottom;
-
-      if (differenceBottom < scrollUpOffset) {
-        // console.log('Misaligned');
-        // console.log(parallaxBottom);
-        // console.log(imageHeight);
-        setPosY(0 - imageHeight + parallaxHeight + scrollUpOffset);
-      }
+      updateDimensions();
     };
 
     const scrollHandler = () => {
-      const {
-        top: parallaxTop,
-        bottom: parallaxBottom,
-        // height: parallaxHeight,
-      } = parallaxElement.getBoundingClientRect();
-      const {
-        top: imageTop,
-        bottom: imageBottom,
-        height: imageHeight,
-      } = imageElement.getBoundingClientRect();
+      setScrollState((prevState) => ({
+        ...prevState,
+        currentScrollPosY: window.scrollY,
+      }));
 
-      const differenceBottom = imageBottom - parallaxBottom;
-      const differenceTop = imageTop - parallaxTop;
-      // console.log(`D: ${differenceTop}`);
-      // console.log(`I: ${0 - imageHeight + parallaxHeight}`);
-
-      // console.log(`P: ${prevScrollY.current}`);
-      // console.log(`C: ${window.scrollY}`);
-
-      if (window.scrollY < prevScrollY.current) {
-        // console.log('UP');
-        if (imageTop < parallaxTop) {
-          // console.log(`P: ${parallaxTop}`);
-          // console.log(`I: ${imageTop}`);
-          setPosY(-window.scrollY * parallaxScrollSpeed);
-        }
-      } else if (window.scrollY > prevScrollY.current) {
-        // console.log('DOWN');
-        if (imageBottom > parallaxBottom
-          && differenceBottom > scrollUpOffset) {
-          // console.log(`P: ${parallaxBottom}`);
-          // console.log(`I: ${imageBottom}`);
-          setPosY(-window.scrollY * parallaxScrollSpeed);
-        }
-      }
+      updateDimensions();
     };
 
     const onScroll = () => {
@@ -115,8 +116,16 @@ const Parallax = () => {
     };
 
     const handleResize = (entries, observer) => {
-      updateParallaxContainerHeight();
+      configureParallaxContainer();
     };
+
+    // ---------------------------------------------------------------------
+
+    setScrollState((prevState) => ({
+      ...prevState,
+      initialScrollPosY: window.scrollY,
+      currentScrollPosY: window.scrollY,
+    }));
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(parallaxElement);
@@ -125,30 +134,129 @@ const Parallax = () => {
 
     return () => {
       console.log('<Parallax> Unmounted');
+      resizeObserver.unobserve(parallaxElement);
       window.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(scrollAnimationFrame);
-      resizeObserver.unobserve(parallaxElement);
     };
   }, []);
 
+  // ---------------------------------------------------------------------
+
   useEffect(() => {
-    // console.log('<Parallax> rendered');
-    prevScrollY.current = window.pageYOffset;
-  });
+    // console.log('<Parallax> rendered! [ scrollState ]');
+    // console.log(scrollState.currentScrollPosY);
+    // console.log(scrollState.scrollRemaining);
+
+    /* if (scrollState.scrollRemaining > 0) {
+      console.log(parallaxState.height);
+      setImageState((prevState) => ({
+        ...prevState,
+        translateY: scrollState.currentScrollPosY,
+      }));
+    } */
+
+    setImageState((prevState) => ({
+      ...prevState,
+      translateY: (scrollState.scrollRemaining > 0)
+        ? scrollState.currentScrollPosY
+        : imageState.height - parallaxState.height,
+    }));
+  }, [scrollState]);
+
+  /* useEffect(() => {
+    console.log('<Parallax> rendered! [ parallaxState ]');
+  }, [parallaxState]); */
 
   return (
     <div
       ref={parallaxRef}
       className="parallax"
-      style={{ paddingBottom: `${parallaxHeight}%` }}
+      style={{ paddingBottom: `${parallaxState.aspectRatio}%` }}
     >
+      <div className="stats">
+        <div className="stats__column">
+          <div className="stats__left"><p>[ PARALLAX ]</p></div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Aspect ratio:</p></div>
+          <div className="stats__right">
+            <p>{`${parallaxState.aspectRatio}%`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Top:</p></div>
+          <div className="stats__right">
+            <p>{`${parallaxState.top}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Bottom:</p></div>
+          <div className="stats__right">
+            <p>{`${parallaxState.bottom.toFixed(1)}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Height:</p></div>
+          <div className="stats__right">
+            <p>{`${parallaxState.height.toFixed(1)}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>[ IMAGE ]</p></div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Trans Y:</p></div>
+          <div className="stats__right">
+            <p>{`${imageState.translateY}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Top:</p></div>
+          <div className="stats__right">
+            <p>{`${imageState.top}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Bottom:</p></div>
+          <div className="stats__right">
+            <p>{`${imageState.bottom.toFixed(1)}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Height:</p></div>
+          <div className="stats__right">
+            <p>{`${imageState.height.toFixed(1)}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>[ SCROLL ]</p></div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Init Y:</p></div>
+          <div className="stats__right">
+            <p>{`${scrollState.initialScrollPosY}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Current Y:</p></div>
+          <div className="stats__right">
+            <p>{`${scrollState.currentScrollPosY}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Remain:</p></div>
+          <div className="stats__right">
+            <p>{`${scrollState.scrollRemaining}`}</p>
+          </div>
+        </div>
+      </div>
       {/* <div className="parallax__content-container">
         <h1>PARALLAX</h1>
       </div> */}
       <img
         ref={imageRef}
         className="parallax__image"
-        style={{ transform: `translateY(${posY}px)` }}
+        style={{ transform: `translateY(${-imageState.translateY}px)` }}
         src={imageData.src}
         width={imageData.width}
         height={imageData.height}

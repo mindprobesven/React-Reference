@@ -1,7 +1,5 @@
 .parallax {
   position: relative;
-  // height: 10vh;
-  // padding-bottom: 15rem;
   background: $parallax-bg-color;
   overflow: hidden;
 
@@ -9,7 +7,6 @@
     position: absolute;
     width: 100%;
     height: auto;
-    // z-index: 0;
   }
 
   &__content-container {
@@ -25,5 +22,41 @@
   h1 {
     color: $parallax-text-color;
     font-size: 3rem;
+  }
+}
+
+.stats {
+  position: absolute;
+  display: flex;
+  flex-flow: column nowrap;
+  width: 15%;
+  padding: 1rem;
+  background: $stats-bg-color;
+  opacity: 0.75;
+  z-index: 2;
+
+  &__column {
+    display: flex;
+    flex-flow: row nowrap;
+    padding-bottom: 0.5rem;
+
+    &:last-child {
+      padding: 0;
+    }
+  }
+
+  &__left {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  &__right {
+    display: flex;
+    justify-content: flex-end; 
+  }
+
+  p {
+    font-size: 1rem;
+    color: $stats-text-color;
   }
 }
