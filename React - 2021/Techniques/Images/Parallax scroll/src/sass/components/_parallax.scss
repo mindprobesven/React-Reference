@@ -29,7 +29,8 @@
   position: absolute;
   display: flex;
   flex-flow: column nowrap;
-  width: 15%;
+  width: 10%;
+  min-width: 9rem;
   padding: 1rem;
   background: $stats-bg-color;
   opacity: 0.75;
@@ -56,7 +57,7 @@
   }
 
   p {
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: $stats-text-color;
   }
 }

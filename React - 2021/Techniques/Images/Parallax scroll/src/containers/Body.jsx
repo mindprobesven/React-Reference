@@ -12,7 +12,7 @@ const Body = () => {
 
   return (
     <div className="body">
-      <Intro />
+      {/* <Intro /> */}
       <Parallax />
       <Content />
     </div>

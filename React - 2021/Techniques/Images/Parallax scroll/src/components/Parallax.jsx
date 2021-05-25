@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, {
@@ -34,6 +35,9 @@ const Parallax = () => {
     initialScrollPosY: 0,
     currentScrollPosY: 0,
     scrollRemaining: 0,
+    scrollLimit: 0,
+    imageScrollSpeed: 0,
+    imageOffset: 0,
   });
 
   const [imagePosY, setImagePosY] = useState(0);
@@ -45,6 +49,9 @@ const Parallax = () => {
 
     const parallaxElement = parallaxRef.current;
     const imageElement = imageRef.current;
+
+    let imageScrollSpeed;
+    let imageOffset;
 
     const updateDimensions = () => {
       const {
@@ -75,7 +82,10 @@ const Parallax = () => {
 
       setScrollState((prevState) => ({
         ...prevState,
-        scrollRemaining: imageHeight - parallaxHeight - window.scrollY,
+        scrollRemaining: imageHeight - parallaxHeight - (window.scrollY * imageScrollSpeed + imageOffset),
+        scrollLimit: imageHeight - parallaxHeight,
+        imageScrollSpeed,
+        imageOffset,
       }));
     };
 
@@ -88,10 +98,24 @@ const Parallax = () => {
 
       if (window.innerWidth > window.innerHeight) {
         // Landscape orientation
-        height = Math.floor(aspectRatio / 2);
+        if (window.innerWidth >= 1300 && window.innerWidth < 1600) {
+          height = Math.floor(aspectRatio / 3.5);
+          imageScrollSpeed = 0.25;
+          imageOffset = 460;
+        } else if (window.innerWidth >= 1600) {
+          height = Math.floor(aspectRatio / 4);
+          imageScrollSpeed = 0.35;
+          imageOffset = 600;
+        } else {
+          height = Math.floor(aspectRatio / 2.5);
+          imageScrollSpeed = 0.25;
+          imageOffset = 370;
+        }
       } else {
         // Portrait orientation
-        height = Math.floor(aspectRatio / 2);
+        height = Math.floor(aspectRatio / 1.25);
+        imageScrollSpeed = 0.25;
+        imageOffset = 0;
       }
 
       setParallaxState((prevState) => ({
@@ -144,28 +168,14 @@ const Parallax = () => {
 
   useEffect(() => {
     // console.log('<Parallax> rendered! [ scrollState ]');
-    // console.log(scrollState.currentScrollPosY);
-    // console.log(scrollState.scrollRemaining);
-
-    /* if (scrollState.scrollRemaining > 0) {
-      console.log(parallaxState.height);
-      setImageState((prevState) => ({
-        ...prevState,
-        translateY: scrollState.currentScrollPosY,
-      }));
-    } */
 
     setImageState((prevState) => ({
       ...prevState,
       translateY: (scrollState.scrollRemaining > 0)
-        ? scrollState.currentScrollPosY
-        : imageState.height - parallaxState.height,
+        ? scrollState.currentScrollPosY * scrollState.imageScrollSpeed + scrollState.imageOffset
+        : Math.floor(scrollState.scrollLimit),
     }));
   }, [scrollState]);
-
-  /* useEffect(() => {
-    console.log('<Parallax> rendered! [ parallaxState ]');
-  }, [parallaxState]); */
 
   return (
     <div
@@ -207,13 +217,13 @@ const Parallax = () => {
         <div className="stats__column">
           <div className="stats__left"><p>Trans Y:</p></div>
           <div className="stats__right">
-            <p>{`${imageState.translateY}`}</p>
+            <p>{`${imageState.translateY.toFixed(1)}`}</p>
           </div>
         </div>
         <div className="stats__column">
           <div className="stats__left"><p>Top:</p></div>
           <div className="stats__right">
-            <p>{`${imageState.top}`}</p>
+            <p>{`${imageState.top.toFixed(1)}`}</p>
           </div>
         </div>
         <div className="stats__column">
@@ -244,9 +254,27 @@ const Parallax = () => {
           </div>
         </div>
         <div className="stats__column">
+          <div className="stats__left"><p>Limit:</p></div>
+          <div className="stats__right">
+            <p>{`${scrollState.scrollLimit.toFixed(1)}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Image Offset:</p></div>
+          <div className="stats__right">
+            <p>{`${scrollState.imageOffset}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
           <div className="stats__left"><p>Remain:</p></div>
           <div className="stats__right">
-            <p>{`${scrollState.scrollRemaining}`}</p>
+            <p>{`${scrollState.scrollRemaining.toFixed(1)}`}</p>
+          </div>
+        </div>
+        <div className="stats__column">
+          <div className="stats__left"><p>Speed:</p></div>
+          <div className="stats__right">
+            <p>{`${scrollState.imageScrollSpeed * 100}%`}</p>
           </div>
         </div>
       </div>
