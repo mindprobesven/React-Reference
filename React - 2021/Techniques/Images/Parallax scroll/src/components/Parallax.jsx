@@ -7,6 +7,8 @@ import React, {
   useState,
 } from 'react';
 
+import Stats from './Stats';
+
 const imageData = {
   src: 'https://picsum.photos/id/1026/1920/1920',
   width: 1920,
@@ -19,20 +21,15 @@ const Parallax = () => {
 
   const [parallaxState, setParallaxState] = useState({
     aspectRatio: 0,
-    top: 0,
-    bottom: 0,
     height: 0,
   });
 
   const [imageState, setImageState] = useState({
-    top: 0,
-    bottom: 0,
     height: 0,
     translateY: 0,
   });
 
   const [scrollState, setScrollState] = useState({
-    initialScrollPosY: 0,
     currentScrollPosY: 0,
     scrollRemaining: 0,
     scrollLimit: 0,
@@ -42,41 +39,32 @@ const Parallax = () => {
 
   const [imagePosY, setImagePosY] = useState(0);
 
+  // ---------------------------------------------------------------------
+  //
+  // Setup event listeners on mount
+  //
+  // ---------------------------------------------------------------------
   useEffect(() => {
     console.log('<Parallax> Mounted');
-
-    let scrollAnimationFrame;
 
     const parallaxElement = parallaxRef.current;
     const imageElement = imageRef.current;
 
+    let scrollAnimationFrame;
     let imageScrollSpeed;
     let imageOffset;
 
     const updateDimensions = () => {
-      const {
-        top: parallaxTop,
-        bottom: parallaxBottom,
-        height: parallaxHeight,
-      } = parallaxElement.getBoundingClientRect();
+      const parallaxHeight = parallaxElement.getBoundingClientRect().height;
+      const imageHeight = imageElement.getBoundingClientRect().height;
 
       setParallaxState((prevState) => ({
         ...prevState,
-        top: parallaxTop,
-        bottom: parallaxBottom,
         height: parallaxHeight,
       }));
 
-      const {
-        top: imageTop,
-        bottom: imageBottom,
-        height: imageHeight,
-      } = imageElement.getBoundingClientRect();
-
       setImageState((prevState) => ({
         ...prevState,
-        top: imageTop,
-        bottom: imageBottom,
         height: imageHeight,
       }));
 
@@ -90,7 +78,7 @@ const Parallax = () => {
     };
 
     const configureParallaxContainer = () => {
-      let height = 0;
+      let height;
 
       const aspectRatio = Math.floor(
         (imageData.height / imageData.width) * 100,
@@ -126,6 +114,10 @@ const Parallax = () => {
       updateDimensions();
     };
 
+    const handleResize = (entries, observer) => {
+      configureParallaxContainer();
+    };
+
     const scrollHandler = () => {
       setScrollState((prevState) => ({
         ...prevState,
@@ -139,18 +131,6 @@ const Parallax = () => {
       scrollAnimationFrame = requestAnimationFrame(scrollHandler);
     };
 
-    const handleResize = (entries, observer) => {
-      configureParallaxContainer();
-    };
-
-    // ---------------------------------------------------------------------
-
-    setScrollState((prevState) => ({
-      ...prevState,
-      initialScrollPosY: window.scrollY,
-      currentScrollPosY: window.scrollY,
-    }));
-
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(parallaxElement);
 
@@ -159,13 +139,17 @@ const Parallax = () => {
     return () => {
       console.log('<Parallax> Unmounted');
       resizeObserver.unobserve(parallaxElement);
+
       window.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(scrollAnimationFrame);
     };
   }, []);
 
   // ---------------------------------------------------------------------
-
+  //
+  // Processes on scroll state change
+  //
+  // ---------------------------------------------------------------------
   useEffect(() => {
     // console.log('<Parallax> rendered! [ scrollState ]');
 
@@ -183,104 +167,16 @@ const Parallax = () => {
       className="parallax"
       style={{ paddingBottom: `${parallaxState.aspectRatio}%` }}
     >
-      <div className="stats">
-        <div className="stats__column">
-          <div className="stats__left"><p>[ PARALLAX ]</p></div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Aspect ratio:</p></div>
-          <div className="stats__right">
-            <p>{`${parallaxState.aspectRatio}%`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Top:</p></div>
-          <div className="stats__right">
-            <p>{`${parallaxState.top}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Bottom:</p></div>
-          <div className="stats__right">
-            <p>{`${parallaxState.bottom.toFixed(1)}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Height:</p></div>
-          <div className="stats__right">
-            <p>{`${parallaxState.height.toFixed(1)}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>[ IMAGE ]</p></div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Trans Y:</p></div>
-          <div className="stats__right">
-            <p>{`${imageState.translateY.toFixed(1)}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Top:</p></div>
-          <div className="stats__right">
-            <p>{`${imageState.top.toFixed(1)}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Bottom:</p></div>
-          <div className="stats__right">
-            <p>{`${imageState.bottom.toFixed(1)}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Height:</p></div>
-          <div className="stats__right">
-            <p>{`${imageState.height.toFixed(1)}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>[ SCROLL ]</p></div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Init Y:</p></div>
-          <div className="stats__right">
-            <p>{`${scrollState.initialScrollPosY}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Current Y:</p></div>
-          <div className="stats__right">
-            <p>{`${scrollState.currentScrollPosY}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Limit:</p></div>
-          <div className="stats__right">
-            <p>{`${scrollState.scrollLimit.toFixed(1)}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Image Offset:</p></div>
-          <div className="stats__right">
-            <p>{`${scrollState.imageOffset}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Remain:</p></div>
-          <div className="stats__right">
-            <p>{`${scrollState.scrollRemaining.toFixed(1)}`}</p>
-          </div>
-        </div>
-        <div className="stats__column">
-          <div className="stats__left"><p>Speed:</p></div>
-          <div className="stats__right">
-            <p>{`${scrollState.imageScrollSpeed * 100}%`}</p>
-          </div>
+      <div className="parallax__content-container">
+        <div className="parallax__headline">
+          <h1>PARALLAX</h1>
         </div>
       </div>
-      {/* <div className="parallax__content-container">
-        <h1>PARALLAX</h1>
-      </div> */}
+      <Stats
+        parallaxState={parallaxState}
+        imageState={imageState}
+        scrollState={scrollState}
+      />
       <img
         ref={imageRef}
         className="parallax__image"

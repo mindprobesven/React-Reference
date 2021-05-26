@@ -19,45 +19,15 @@
     z-index: 1;
   }
 
-  h1 {
-    color: $parallax-text-color;
-    font-size: 3rem;
-  }
-}
+  &__headline {
+    padding: 1rem 3rem;
+    background: $parallax-headline-bg-color;
+    opacity: 0.5;
 
-.stats {
-  position: absolute;
-  display: flex;
-  flex-flow: column nowrap;
-  width: 10%;
-  min-width: 9rem;
-  padding: 1rem;
-  background: $stats-bg-color;
-  opacity: 0.75;
-  z-index: 2;
-
-  &__column {
-    display: flex;
-    flex-flow: row nowrap;
-    padding-bottom: 0.5rem;
-
-    &:last-child {
-      padding: 0;
+    h1 {
+      color: $parallax-text-color;
+      font-size: 3rem;
     }
   }
 
-  &__left {
-    display: flex;
-    flex-grow: 1;
-  }
-
-  &__right {
-    display: flex;
-    justify-content: flex-end; 
-  }
-
-  p {
-    font-size: 0.8rem;
-    color: $stats-text-color;
-  }
 }

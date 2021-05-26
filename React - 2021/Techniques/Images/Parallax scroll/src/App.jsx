@@ -1,4 +1,16 @@
 /* eslint-disable no-unused-vars */
+/*
+---------------------------------------------------------------------------------------------
+
+Responsive parallax hero image scroller
+
+Features:
+- Smooth resizing and setting breakpoints for landscape and portrait orientation.
+
+- Ability to set the image height, initial offset and scroll speed for each breakpoint.
+
+---------------------------------------------------------------------------------------------
+*/
 import { hot } from 'react-hot-loader/root';
 import { setConfig } from 'react-hot-loader';
 
