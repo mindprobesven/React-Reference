@@ -1,0 +1,16 @@
+.navigation {
+  display: flex;
+
+  &__link-container {
+    padding: 2rem 1rem;
+
+    &:first-child {
+      margin-left: 1rem;
+    }
+  }
+
+  &__link-text {
+    color: $link-base-color;
+    font-weight: 700;
+  }
+}

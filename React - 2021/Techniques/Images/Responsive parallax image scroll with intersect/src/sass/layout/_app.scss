@@ -1,0 +1,22 @@
+html {
+  font-family: Arial;
+  font-size: 14px;
+  height: 100%;
+}
+
+body {
+  // display: flex;
+  min-width: 320px;
+  height: 100%;
+  background: $body-bg-color;
+}
+
+#root {
+  // width: 100%;
+}
+
+.app {
+  // display: flex;
+  // flex-flow: column nowrap;
+  // height: 100%;
+}
