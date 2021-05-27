@@ -13,9 +13,9 @@ const Stats = ({ parallaxState, imageState, scrollState }) => (
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Window Pos Y:</p></div>
+      <div className="stats__left"><p>Window Top:</p></div>
       <div className="stats__right">
-        <p>{`${parallaxState.windowPosY.toFixed(1)}`}</p>
+        <p>{`${parallaxState.windowTop.toFixed(1)}`}</p>
       </div>
     </div>
     <div className="stats__column">
@@ -28,9 +28,9 @@ const Stats = ({ parallaxState, imageState, scrollState }) => (
       <div className="stats__left"><p>[ IMAGE ]</p></div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Trans Y:</p></div>
+      <div className="stats__left"><p>TranslateY:</p></div>
       <div className="stats__right">
-        <p>{`${imageState.translateY.toFixed(1)}`}</p>
+        <p>{`${-imageState.translateY.toFixed(1)}`}</p>
       </div>
     </div>
     <div className="stats__column">
@@ -43,27 +43,39 @@ const Stats = ({ parallaxState, imageState, scrollState }) => (
       <div className="stats__left"><p>[ SCROLL ]</p></div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Current Y:</p></div>
+      <div className="stats__left"><p>Intersecting:</p></div>
       <div className="stats__right">
-        <p>{`${scrollState.currentScrollPosY}`}</p>
+        <p>{`${scrollState.isParallaxIntersecting}`}</p>
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Limit:</p></div>
+      <div className="stats__left"><p>Real Scroll Y:</p></div>
       <div className="stats__right">
-        <p>{`${scrollState.scrollLimit.toFixed(1)}`}</p>
+        <p>{`${scrollState.realWindowScrollY}`}</p>
+      </div>
+    </div>
+    <div className="stats__column">
+      <div className="stats__left"><p>Computed Scroll Y:</p></div>
+      <div className="stats__right">
+        <p>{`${scrollState.computedWindowScrollY}`}</p>
+      </div>
+    </div>
+    <div className="stats__column">
+      <div className="stats__left"><p>Scrollable Total:</p></div>
+      <div className="stats__right">
+        <p>{`${scrollState.scrollableTotal.toFixed(1)}`}</p>
+      </div>
+    </div>
+    <div className="stats__column">
+      <div className="stats__left"><p>Scrollable Remain:</p></div>
+      <div className="stats__right">
+        <p>{`${scrollState.scrollableRemain.toFixed(1)}`}</p>
       </div>
     </div>
     <div className="stats__column">
       <div className="stats__left"><p>Image Offset:</p></div>
       <div className="stats__right">
         <p>{`${scrollState.imageOffset}`}</p>
-      </div>
-    </div>
-    <div className="stats__column">
-      <div className="stats__left"><p>Remain:</p></div>
-      <div className="stats__right">
-        <p>{`${scrollState.scrollRemaining.toFixed(1)}`}</p>
       </div>
     </div>
     <div className="stats__column">

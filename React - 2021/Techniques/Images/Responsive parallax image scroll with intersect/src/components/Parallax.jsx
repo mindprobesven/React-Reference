@@ -15,13 +15,15 @@ const imageData = {
   height: 1920,
 };
 
+const initializeParallaxEvent = new Event('initializeParallax');
+
 const Parallax = () => {
   const parallaxRef = useRef();
   const imageRef = useRef();
 
   const [parallaxState, setParallaxState] = useState({
     aspectRatio: 0,
-    windowPosY: 0,
+    windowTop: 0,
     height: 0,
   });
 
@@ -31,14 +33,16 @@ const Parallax = () => {
   });
 
   const [scrollState, setScrollState] = useState({
-    currentScrollPosY: 0,
-    scrollRemaining: 0,
-    scrollLimit: 0,
+    isParallaxIntersecting: false,
+    realWindowScrollY: 0,
+    computedWindowScrollY: 0,
+    scrollableTotal: 0,
+    scrollableRemain: 0,
     imageScrollSpeed: 0,
     imageOffset: 0,
   });
 
-  const [imagePosY, setImagePosY] = useState(0);
+  const [isIntersecting, setIsIntersecting] = useState(false);
 
   // ---------------------------------------------------------------------
   //
@@ -49,42 +53,63 @@ const Parallax = () => {
     console.log('<Parallax> Mounted');
 
     const parallaxElement = parallaxRef.current;
-    const imageElement = imageRef.current;
+    // const imageElement = imageRef.current;
+    let imageElement;
 
     let scrollAnimationFrame;
+
     let height;
     let imageScrollSpeed;
     let imageOffset;
-    let isParallaxIntersecting = false;
-    let parallaxWindowPosY;
 
-    const updateDimensions = () => {
+    const isParallaxIntersecting = false;
+
+    const updateAllCoordinates = () => {
       const {
         top: parallaxTop,
         height: parallaxHeight,
       } = parallaxElement.getBoundingClientRect();
 
-      parallaxWindowPosY = parallaxTop + window.scrollY;
-
       const imageHeight = imageElement.getBoundingClientRect().height;
+
+      const realWindowScrollY = window.scrollY;
+      const parallaxWindowTop = parallaxTop + realWindowScrollY;
+      const scrollableTotal = imageHeight - parallaxHeight;
+      // const computedWindowScrollY = realWindowScrollY - parallaxWindowTop + window.innerHeight;
+      const computedWindowScrollY = realWindowScrollY - parallaxWindowTop + (window.innerHeight * 0.5);
+      const scrollableRemain = scrollableTotal - (computedWindowScrollY * imageScrollSpeed + imageOffset);
+
+      const computeTranslateYWithBoundaries = () => {
+        if (computedWindowScrollY < 0) {
+          return 0;
+        }
+
+        if (scrollableRemain > 0) {
+          return computedWindowScrollY * imageScrollSpeed + imageOffset;
+        }
+        return Math.floor(scrollableTotal);
+      };
 
       setParallaxState((prevState) => ({
         ...prevState,
         aspectRatio: height,
-        windowPosY: parallaxWindowPosY,
+        windowTop: parallaxWindowTop,
         height: parallaxHeight,
       }));
 
       setImageState((prevState) => ({
         ...prevState,
         height: imageHeight,
+        translateY: computeTranslateYWithBoundaries(),
       }));
 
-      // console.log(isParallaxIntersecting);
       setScrollState((prevState) => ({
         ...prevState,
-        scrollRemaining: imageHeight - parallaxHeight - ((window.scrollY - parallaxWindowPosY + window.innerHeight) * imageScrollSpeed + imageOffset),
-        scrollLimit: imageHeight - parallaxHeight,
+        isParallaxIntersecting,
+        realWindowScrollY,
+        computedWindowScrollY,
+        scrollableTotal,
+        scrollableRemain,
         imageScrollSpeed,
         imageOffset,
       }));
@@ -118,56 +143,44 @@ const Parallax = () => {
         imageScrollSpeed = 0.25;
         imageOffset = 0;
       }
+    };
 
-      /* setParallaxState((prevState) => ({
-        ...prevState,
-        aspectRatio: height,
-      })); */
-
-      updateDimensions();
+    const handleInitializeParallax = () => {
+      console.log('[ handleInitializeParallax ]');
+      window.removeEventListener('initializeParallaxEvent', handleInitializeParallax);
+      console.log(imageRef.current);
+      imageElement = imageRef.current;
+      configureParallaxContainer();
+      updateAllCoordinates();
     };
 
     const handleResize = (entries, observer) => {
-      configureParallaxContainer();
+      // configureParallaxContainer();
+      // updateAllCoordinates();
     };
-
-    const scrollHandler = () => {
-      setScrollState((prevState) => ({
-        ...prevState,
-        currentScrollPosY: window.scrollY - parallaxWindowPosY + window.innerHeight,
-      }));
-
-      updateDimensions();
-    };
-
-    // ------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------
 
     const handleIntersect = (entries, observer) => {
-      const [{ isIntersecting }] = entries;
+      const [{ isIntersecting: isIntersect }] = entries;
 
-      if (isIntersecting) {
-        console.log('-------------- Intersecting');
+      if (isIntersect) {
         observer.unobserve(parallaxElement);
-        isParallaxIntersecting = true;
-
-        updateDimensions();
+        setIsIntersecting(true);
       }
     };
 
-    // ------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------
-
-    const onScroll = () => {
-      scrollAnimationFrame = requestAnimationFrame(scrollHandler);
+    const handleScroll = () => {
+      // updateAllCoordinates();
     };
 
-    configureParallaxContainer();
+    const onScroll = () => {
+      scrollAnimationFrame = requestAnimationFrame(handleScroll);
+    };
 
-    // Force initial scroll event on mount
-    onScroll();
+    // ------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------
+
+    window.addEventListener('initializeParallax', handleInitializeParallax);
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(parallaxElement);
@@ -185,6 +198,8 @@ const Parallax = () => {
 
     return () => {
       console.log('<Parallax> Unmounted');
+      window.removeEventListener('initializeParallaxEvent', handleInitializeParallax);
+
       resizeObserver.unobserve(parallaxElement);
       intersectObserver.unobserve(parallaxElement);
 
@@ -195,19 +210,16 @@ const Parallax = () => {
 
   // ---------------------------------------------------------------------
   //
-  // Processes on scroll state change
+  // Processes parallax intersect
   //
   // ---------------------------------------------------------------------
   useEffect(() => {
-    // console.log('<Parallax> rendered! [ scrollState ]');
-
-    setImageState((prevState) => ({
-      ...prevState,
-      translateY: (scrollState.scrollRemaining > 0)
-        ? scrollState.currentScrollPosY * scrollState.imageScrollSpeed + scrollState.imageOffset
-        : Math.floor(scrollState.scrollLimit),
-    }));
-  }, [scrollState]);
+    console.log(`-------------- Intersecting: ${isIntersecting}`);
+    if (isIntersecting) {
+      window.dispatchEvent(initializeParallaxEvent);
+      // isReady.current = true;
+    }
+  }, [isIntersecting]);
 
   return (
     <div
@@ -225,16 +237,20 @@ const Parallax = () => {
         imageState={imageState}
         scrollState={scrollState}
       />
-      <img
-        ref={imageRef}
-        className="parallax__image"
-        style={{ transform: `translateY(${-imageState.translateY}px)` }}
-        src={imageData.src}
-        width={imageData.width}
-        height={imageData.height}
-        alt=""
-        onLoad={() => console.log('Image loaded')}
-      />
+      {
+        isIntersecting && (
+          <img
+            ref={imageRef}
+            className="parallax__image"
+            style={{ transform: `translateY(${-imageState.translateY}px)` }}
+            src={imageData.src}
+            width={imageData.width}
+            height={imageData.height}
+            alt=""
+            onLoad={() => console.log('Image loaded')}
+          />
+        )
+      }
     </div>
   );
 };
