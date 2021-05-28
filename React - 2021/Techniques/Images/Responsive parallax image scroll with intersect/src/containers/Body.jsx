@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 import Content from '../components/Content';
 import Intro from '../components/Intro';
-import Parallax from '../components/Parallax';
+import Parallax from '../components/parallax/Parallax';
 
 const Body = () => {
   useEffect(() => {

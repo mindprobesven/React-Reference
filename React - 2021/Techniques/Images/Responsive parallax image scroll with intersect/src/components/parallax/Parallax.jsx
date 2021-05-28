@@ -7,10 +7,15 @@ import React, {
   useState,
 } from 'react';
 
+import Image from './Image';
+import Content from './Content';
 import Stats from './Stats';
 
 const imageData = {
-  src: 'https://picsum.photos/id/1026/1920/1920',
+  images: {
+    thumb: 'https://picsum.photos/id/1026/100/100',
+    full: 'https://picsum.photos/id/1026/4000/4000',
+  },
   width: 1920,
   height: 1920,
 };
@@ -25,6 +30,7 @@ const Parallax = () => {
     aspectRatio: 0,
     windowTop: 0,
     height: 0,
+    viewportBot: 0,
   });
 
   const [imageState, setImageState] = useState({
@@ -33,11 +39,11 @@ const Parallax = () => {
   });
 
   const [scrollState, setScrollState] = useState({
-    isParallaxIntersecting: false,
     realWindowScrollY: 0,
     computedWindowScrollY: 0,
     scrollableTotal: 0,
     scrollableRemain: 0,
+    scrolledPercent: 0,
     imageScrollSpeed: 0,
     imageOffset: 0,
   });
@@ -53,16 +59,13 @@ const Parallax = () => {
     console.log('<Parallax> Mounted');
 
     const parallaxElement = parallaxRef.current;
-    // const imageElement = imageRef.current;
     let imageElement;
 
     let scrollAnimationFrame;
 
-    let height;
+    let imageAspectRatio;
     let imageScrollSpeed;
     let imageOffset;
-
-    const isParallaxIntersecting = false;
 
     const updateAllCoordinates = () => {
       const {
@@ -74,10 +77,16 @@ const Parallax = () => {
 
       const realWindowScrollY = window.scrollY;
       const parallaxWindowTop = parallaxTop + realWindowScrollY;
+      const parallaxWindowBottom = parallaxWindowTop + parallaxHeight;
       const scrollableTotal = imageHeight - parallaxHeight;
-      // const computedWindowScrollY = realWindowScrollY - parallaxWindowTop + window.innerHeight;
-      const computedWindowScrollY = realWindowScrollY - parallaxWindowTop + (window.innerHeight * 0.5);
+      const viewportHeight = window.innerHeight;
+      // The percentage value of the viewport position from the top (1.0 = 100% = bottom of viewport)
+      // from which to start the image scroll
+      const viewportStartScrollPos = viewportHeight * 1.0;
+      const computedWindowScrollY = realWindowScrollY - parallaxWindowTop + viewportStartScrollPos;
       const scrollableRemain = scrollableTotal - (computedWindowScrollY * imageScrollSpeed + imageOffset);
+      const scrolledPercent = Math.round((((scrollableTotal - scrollableRemain) / scrollableTotal) * 100) * 100) / 100;
+      const parallaxViewportBottom = (realWindowScrollY + viewportHeight) - parallaxWindowBottom;
 
       const computeTranslateYWithBoundaries = () => {
         if (computedWindowScrollY < 0) {
@@ -92,9 +101,10 @@ const Parallax = () => {
 
       setParallaxState((prevState) => ({
         ...prevState,
-        aspectRatio: height,
+        aspectRatio: imageAspectRatio,
         windowTop: parallaxWindowTop,
         height: parallaxHeight,
+        viewportBot: parallaxViewportBottom,
       }));
 
       setImageState((prevState) => ({
@@ -105,58 +115,45 @@ const Parallax = () => {
 
       setScrollState((prevState) => ({
         ...prevState,
-        isParallaxIntersecting,
         realWindowScrollY,
         computedWindowScrollY,
         scrollableTotal,
         scrollableRemain,
+        scrolledPercent,
         imageScrollSpeed,
         imageOffset,
       }));
     };
 
     const configureParallaxContainer = () => {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
       const aspectRatio = Math.floor(
         (imageData.height / imageData.width) * 100,
       );
 
-      if (window.innerWidth > window.innerHeight) {
+      if (viewportWidth > viewportHeight) {
         // Landscape orientation
-        if (window.innerWidth >= 1300 && window.innerWidth < 1600) {
-          height = Math.floor(aspectRatio / 3.5);
-          imageScrollSpeed = 0.25;
-          imageOffset = 460;
-        } else if (window.innerWidth >= 1600) {
-          height = Math.floor(aspectRatio / 4);
+        if (viewportWidth >= 1300 && viewportWidth < 1600) {
+          imageAspectRatio = Math.floor(aspectRatio / 3.5);
+          imageScrollSpeed = 0.75;
+          imageOffset = 0;
+        } else if (viewportWidth >= 1600) {
+          imageAspectRatio = Math.floor(aspectRatio / 4);
           imageScrollSpeed = 0.35;
           imageOffset = 600;
         } else {
-          height = Math.floor(aspectRatio / 2.5);
-          // imageScrollSpeed = 0.25;
-          imageScrollSpeed = 1;
-          // imageOffset = 370;
+          imageAspectRatio = Math.floor(aspectRatio / 2.5);
+          imageScrollSpeed = 0.75;
           imageOffset = 0;
         }
       } else {
         // Portrait orientation
-        height = Math.floor(aspectRatio / 1.25);
-        imageScrollSpeed = 0.25;
+        imageAspectRatio = Math.floor(aspectRatio / 1.25);
+        imageScrollSpeed = 0.1;
         imageOffset = 0;
       }
-    };
-
-    const handleInitializeParallax = () => {
-      console.log('[ handleInitializeParallax ]');
-      window.removeEventListener('initializeParallaxEvent', handleInitializeParallax);
-      console.log(imageRef.current);
-      imageElement = imageRef.current;
-      configureParallaxContainer();
-      updateAllCoordinates();
-    };
-
-    const handleResize = (entries, observer) => {
-      // configureParallaxContainer();
-      // updateAllCoordinates();
     };
 
     const handleIntersect = (entries, observer) => {
@@ -168,8 +165,27 @@ const Parallax = () => {
       }
     };
 
+    const handleInitializeParallax = () => {
+      console.log('[ handleInitializeParallax ]');
+      window.removeEventListener('initializeParallax', handleInitializeParallax);
+
+      imageElement = imageRef.current;
+
+      configureParallaxContainer();
+      updateAllCoordinates();
+    };
+
+    const handleResize = (entries, observer) => {
+      if (typeof imageElement !== 'undefined') {
+        configureParallaxContainer();
+        updateAllCoordinates();
+      }
+    };
+
     const handleScroll = () => {
-      // updateAllCoordinates();
+      if (typeof imageElement !== 'undefined') {
+        updateAllCoordinates();
+      }
     };
 
     const onScroll = () => {
@@ -180,28 +196,30 @@ const Parallax = () => {
     // ------------------------------------------------------------------------------------------
     // ------------------------------------------------------------------------------------------
 
-    window.addEventListener('initializeParallax', handleInitializeParallax);
-
-    const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(parallaxElement);
-
     const options = {
       root: null,
-      rootMargin: '0px',
+      // Detect the intersection 250 pixel above the parallax container
+      rootMargin: '250px',
       threshold: 0,
     };
 
     const intersectObserver = new IntersectionObserver(handleIntersect, options);
     intersectObserver.observe(parallaxElement);
 
+    window.addEventListener('initializeParallax', handleInitializeParallax);
+
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(parallaxElement);
+
     window.addEventListener('scroll', onScroll);
 
     return () => {
       console.log('<Parallax> Unmounted');
-      window.removeEventListener('initializeParallaxEvent', handleInitializeParallax);
+      intersectObserver.unobserve(parallaxElement);
+
+      window.removeEventListener('initializeParallax', handleInitializeParallax);
 
       resizeObserver.unobserve(parallaxElement);
-      intersectObserver.unobserve(parallaxElement);
 
       window.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(scrollAnimationFrame);
@@ -214,10 +232,9 @@ const Parallax = () => {
   //
   // ---------------------------------------------------------------------
   useEffect(() => {
-    console.log(`-------------- Intersecting: ${isIntersecting}`);
+    console.log(`<Parallax> Updated [isIntersecting]: ${isIntersecting}`);
     if (isIntersecting) {
       window.dispatchEvent(initializeParallaxEvent);
-      // isReady.current = true;
     }
   }, [isIntersecting]);
 
@@ -227,11 +244,6 @@ const Parallax = () => {
       className="parallax"
       style={{ paddingBottom: `${parallaxState.aspectRatio}%` }}
     >
-      <div className="parallax__content-container">
-        <div className="parallax__headline">
-          <h1>PARALLAX</h1>
-        </div>
-      </div>
       <Stats
         parallaxState={parallaxState}
         imageState={imageState}
@@ -239,16 +251,14 @@ const Parallax = () => {
       />
       {
         isIntersecting && (
-          <img
-            ref={imageRef}
-            className="parallax__image"
-            style={{ transform: `translateY(${-imageState.translateY}px)` }}
-            src={imageData.src}
-            width={imageData.width}
-            height={imageData.height}
-            alt=""
-            onLoad={() => console.log('Image loaded')}
-          />
+          <>
+            <Image
+              ref={imageRef}
+              data={imageData}
+              translateY={imageState.translateY}
+            />
+            <Content scrolled={scrollState.scrolledPercent} />
+          </>
         )
       }
     </div>
