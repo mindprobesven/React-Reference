@@ -20,6 +20,9 @@ const imageData = {
   height: 1920,
 };
 
+let imageElement;
+
+const initializeImageEvent = new Event('initializeImage');
 const initializeParallaxEvent = new Event('initializeParallax');
 
 const Parallax = () => {
@@ -31,6 +34,7 @@ const Parallax = () => {
     windowTop: 0,
     height: 0,
     viewportBot: 0,
+    contentScrollPercent: 0,
   });
 
   const [imageState, setImageState] = useState({
@@ -43,12 +47,12 @@ const Parallax = () => {
     computedWindowScrollY: 0,
     scrollableTotal: 0,
     scrollableRemain: 0,
-    scrolledPercent: 0,
     imageScrollSpeed: 0,
     imageOffset: 0,
   });
 
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const [isImageInitialized, setIsImageInitialized] = useState(false);
 
   // ---------------------------------------------------------------------
   //
@@ -59,7 +63,6 @@ const Parallax = () => {
     console.log('<Parallax> Mounted');
 
     const parallaxElement = parallaxRef.current;
-    let imageElement;
 
     let scrollAnimationFrame;
 
@@ -85,8 +88,11 @@ const Parallax = () => {
       const viewportStartScrollPos = viewportHeight * 1.0;
       const computedWindowScrollY = realWindowScrollY - parallaxWindowTop + viewportStartScrollPos;
       const scrollableRemain = scrollableTotal - (computedWindowScrollY * imageScrollSpeed + imageOffset);
-      const scrolledPercent = Math.round((((scrollableTotal - scrollableRemain) / scrollableTotal) * 100) * 100) / 100;
       const parallaxViewportBottom = (realWindowScrollY + viewportHeight) - parallaxWindowBottom;
+
+      // 0% = The parallax container is fully visible above the viewport bottom
+      // 100% = The parallax container is visible and has scrolled up 100% of its height
+      const parallaxContentScrollPercent = Math.round(((parallaxViewportBottom / parallaxHeight) * 100) * 100) / 100;
 
       const computeTranslateYWithBoundaries = () => {
         if (computedWindowScrollY < 0) {
@@ -105,6 +111,7 @@ const Parallax = () => {
         windowTop: parallaxWindowTop,
         height: parallaxHeight,
         viewportBot: parallaxViewportBottom,
+        contentScrollPercent: parallaxContentScrollPercent,
       }));
 
       setImageState((prevState) => ({
@@ -119,7 +126,6 @@ const Parallax = () => {
         computedWindowScrollY,
         scrollableTotal,
         scrollableRemain,
-        scrolledPercent,
         imageScrollSpeed,
         imageOffset,
       }));
@@ -165,11 +171,21 @@ const Parallax = () => {
       }
     };
 
+    const handleInitializeImage = () => {
+      console.log('[ handleInitializeImage ]');
+      window.removeEventListener('initializeImage', handleInitializeImage);
+
+      imageElement = imageRef.current;
+
+      configureParallaxContainer();
+      updateAllCoordinates();
+
+      setIsImageInitialized(true);
+    };
+
     const handleInitializeParallax = () => {
       console.log('[ handleInitializeParallax ]');
       window.removeEventListener('initializeParallax', handleInitializeParallax);
-
-      imageElement = imageRef.current;
 
       configureParallaxContainer();
       updateAllCoordinates();
@@ -206,6 +222,7 @@ const Parallax = () => {
     const intersectObserver = new IntersectionObserver(handleIntersect, options);
     intersectObserver.observe(parallaxElement);
 
+    window.addEventListener('initializeImage', handleInitializeImage);
     window.addEventListener('initializeParallax', handleInitializeParallax);
 
     const resizeObserver = new ResizeObserver(handleResize);
@@ -217,6 +234,7 @@ const Parallax = () => {
       console.log('<Parallax> Unmounted');
       intersectObserver.unobserve(parallaxElement);
 
+      window.removeEventListener('initializeImage', handleInitializeImage);
       window.removeEventListener('initializeParallax', handleInitializeParallax);
 
       resizeObserver.unobserve(parallaxElement);
@@ -234,9 +252,16 @@ const Parallax = () => {
   useEffect(() => {
     console.log(`<Parallax> Updated [isIntersecting]: ${isIntersecting}`);
     if (isIntersecting) {
-      window.dispatchEvent(initializeParallaxEvent);
+      window.dispatchEvent(initializeImageEvent);
     }
   }, [isIntersecting]);
+
+  useEffect(() => {
+    console.log(`<Parallax> Updated [isImageInitialized]: ${isImageInitialized}`);
+    if (isImageInitialized) {
+      window.dispatchEvent(initializeParallaxEvent);
+    }
+  }, [isImageInitialized]);
 
   return (
     <div
@@ -257,7 +282,7 @@ const Parallax = () => {
               data={imageData}
               translateY={imageState.translateY}
             />
-            <Content scrolled={scrollState.scrolledPercent} />
+            <Content contentScrollPercent={parallaxState.contentScrollPercent} />
           </>
         )
       }

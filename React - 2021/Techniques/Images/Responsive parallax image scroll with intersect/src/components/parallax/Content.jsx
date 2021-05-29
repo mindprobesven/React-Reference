@@ -3,21 +3,13 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 
-const Content = ({ scrolled }) => {
+const Content = ({ contentScrollPercent }) => {
   useEffect(() => {
     console.log('<Content> Mounted!');
   }, []);
 
-  useEffect(() => {
-    // console.log('<Content> Updated!');
-  }, [scrolled]);
-
   const computeTranslateXWithBoundaries = () => {
-    const startScrollPercent = 60;
-    const speed = 5;
-
-    const translateX = (startScrollPercent * speed) + (100 - (scrolled * speed));
-    // console.log(translateX);
+    const translateX = 100 - contentScrollPercent;
 
     if (translateX > 100) {
       return 100;
@@ -31,7 +23,12 @@ const Content = ({ scrolled }) => {
 
   return (
     <div className="parallax__content-container">
-      <div className="parallax__animation">
+      <div
+        className="parallax__animation"
+        style={{
+          opacity: ((100 + -computeTranslateXWithBoundaries()) / 100),
+        }}
+      >
         <div
           className="parallax__headline"
           style={{

@@ -35,7 +35,7 @@
     align-items: flex-end;
     justify-content: flex-end;
     width: 100%;
-    // background: $parallax-animation-bg-color;
+    opacity: 90%;
   }
 
   &__headline {
@@ -44,12 +44,10 @@
     padding: 1rem 2rem 1rem 10rem;
     background: $parallax-headline-bg-color;
     box-sizing: border-box;
-    // transform: translateX(100%);
 
     h1 {
       color: $parallax-text-color;
       font-size: 3rem;
-      opacity: 1;
     }
   }
 

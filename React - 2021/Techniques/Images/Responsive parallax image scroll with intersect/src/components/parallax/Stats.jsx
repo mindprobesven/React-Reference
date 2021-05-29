@@ -31,6 +31,12 @@ const Stats = ({ parallaxState, imageState, scrollState }) => (
       </div>
     </div>
     <div className="stats__column">
+      <div className="stats__left"><p>Content Scroll:</p></div>
+      <div className="stats__right">
+        <p>{`${parallaxState.contentScrollPercent}%`}</p>
+      </div>
+    </div>
+    <div className="stats__column">
       <div className="stats__left"><p>[ IMAGE ]</p></div>
     </div>
     <div className="stats__column">
@@ -70,12 +76,6 @@ const Stats = ({ parallaxState, imageState, scrollState }) => (
       <div className="stats__left"><p>Scrollable Remain:</p></div>
       <div className="stats__right">
         <p>{`${scrollState.scrollableRemain.toFixed(1)}`}</p>
-      </div>
-    </div>
-    <div className="stats__column">
-      <div className="stats__left"><p>Scrolled %:</p></div>
-      <div className="stats__right">
-        <p>{`${scrollState.scrolledPercent}`}</p>
       </div>
     </div>
     <div className="stats__column">
