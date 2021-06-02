@@ -1,8 +1,11 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-multi-spaces */
 /* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -11,21 +14,21 @@ import Image from './Image';
 import Content from './Content';
 import Stats from './Stats';
 
-const imageData = {
+/* const imageData = {
   images: {
-    thumb: 'https://picsum.photos/id/1026/100/100',
-    full: 'https://picsum.photos/id/1026/4000/4000',
+    thumb: 'https://picsum.photos/id/127/100/100',
+    full: 'https://picsum.photos/id/127/4000/4000',
   },
   width: 1920,
   height: 1920,
-};
+}; */
 
-let imageElement;
+let parallaxElement;
 
 const initializeImageEvent = new Event('initializeImage');
 const initializeParallaxEvent = new Event('initializeParallax');
 
-const Parallax = () => {
+const Parallax = ({ data }) => {
   const parallaxRef = useRef();
   const imageRef = useRef();
 
@@ -51,18 +54,19 @@ const Parallax = () => {
     imageOffset: 0,
   });
 
-  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [isParallaxIntersecting, setIsParallaxIntersecting] = useState(false);
   const [isImageInitialized, setIsImageInitialized] = useState(false);
 
   // ---------------------------------------------------------------------
   //
-  // Setup event listeners on mount
+  // Component mounted
   //
   // ---------------------------------------------------------------------
-  useEffect(() => {
-    console.log('<Parallax> Mounted');
+  useLayoutEffect(() => {
+    console.log(`<Parallax> [ ${data.id} ] Mounted`);
 
-    const parallaxElement = parallaxRef.current;
+    parallaxElement = parallaxRef.current;
+    let imageElement;
 
     let scrollAnimationFrame;
 
@@ -136,12 +140,16 @@ const Parallax = () => {
       const viewportHeight = window.innerHeight;
 
       const aspectRatio = Math.floor(
-        (imageData.height / imageData.width) * 100,
+        (data.images.height / data.images.width) * 100,
       );
 
       if (viewportWidth > viewportHeight) {
         // Landscape orientation
-        if (viewportWidth >= 1300 && viewportWidth < 1600) {
+        if (viewportWidth < 1300) {
+          imageAspectRatio = Math.floor(aspectRatio / 2);
+          imageScrollSpeed = 0.75;
+          imageOffset = 0;
+        } else if (viewportWidth >= 1300 && viewportWidth < 1600) {
           imageAspectRatio = Math.floor(aspectRatio / 3.5);
           imageScrollSpeed = 0.75;
           imageOffset = 0;
@@ -149,10 +157,6 @@ const Parallax = () => {
           imageAspectRatio = Math.floor(aspectRatio / 4);
           imageScrollSpeed = 0.35;
           imageOffset = 600;
-        } else {
-          imageAspectRatio = Math.floor(aspectRatio / 2.5);
-          imageScrollSpeed = 0.75;
-          imageOffset = 0;
         }
       } else {
         // Portrait orientation
@@ -162,15 +166,21 @@ const Parallax = () => {
       }
     };
 
-    const handleIntersect = (entries, observer) => {
-      const [{ isIntersecting: isIntersect }] = entries;
+    // When Parallax intersection occurs, the isParallaxIntersecting state is updated.
+    // This causes a re-render, which adds the Parallax's children components (<Image> and <Content>).
+    const handleParallaxIntersect = (entries, observer) => {
+      const [{ isIntersecting }] = entries;
 
-      if (isIntersect) {
+      if (isIntersecting) {
         observer.unobserve(parallaxElement);
-        setIsIntersecting(true);
+        setIsParallaxIntersecting(true);
       }
     };
 
+    // We store the "ref" of the now rendered image in imageElement. We need the "ref" to configure
+    // the parallax container dimensions and to update all coordinates.
+    // To get the newly computed dimensions of the parallax container, we need to force a re-render by
+    // updating the setIsImageInitialized state.
     const handleInitializeImage = () => {
       console.log('[ handleInitializeImage ]');
       window.removeEventListener('initializeImage', handleInitializeImage);
@@ -183,6 +193,8 @@ const Parallax = () => {
       setIsImageInitialized(true);
     };
 
+    // At this point, the parallax container rendered its children and has obtained computed dimensions.
+    // Now we can update all coordinates one last time.
     const handleInitializeParallax = () => {
       console.log('[ handleInitializeParallax ]');
       window.removeEventListener('initializeParallax', handleInitializeParallax);
@@ -191,6 +203,9 @@ const Parallax = () => {
       updateAllCoordinates();
     };
 
+    // Resizing the parallax container will update its configuration and all coordinates for full
+    // responsiveness. Updates are triggered only when the parallax container intersected and its
+    // <Image> child component was rendered.
     const handleResize = (entries, observer) => {
       if (typeof imageElement !== 'undefined') {
         configureParallaxContainer();
@@ -198,6 +213,8 @@ const Parallax = () => {
       }
     };
 
+    // Scrolling updates all coordinates. Updates are triggered only when the parallax container
+    // intersected and its <Image> child component was rendered.
     const handleScroll = () => {
       if (typeof imageElement !== 'undefined') {
         updateAllCoordinates();
@@ -208,34 +225,42 @@ const Parallax = () => {
       scrollAnimationFrame = requestAnimationFrame(handleScroll);
     };
 
-    // ------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    //
+    // Mount - Create event listeners and observers
+    //
+    // ---------------------------------------------------------------------
 
-    const options = {
+    // An intersection observer is created for the Parallax div container.
+    // The Parallax's children components (<Image> and <Content>) are not
+    // rendered until intersection is observed.
+    const intersectObserver = new IntersectionObserver(handleParallaxIntersect, {
       root: null,
-      // Detect the intersection 250 pixel above the parallax container
-      rootMargin: '250px',
+      rootMargin: '250px',  // Detect intersection 250 pixels above the parallax div
       threshold: 0,
-    };
-
-    const intersectObserver = new IntersectionObserver(handleIntersect, options);
+    });
     intersectObserver.observe(parallaxElement);
 
-    window.addEventListener('initializeImage', handleInitializeImage);
-    window.addEventListener('initializeParallax', handleInitializeParallax);
+    parallaxElement.addEventListener('initializeImage', handleInitializeImage);
+    parallaxElement.addEventListener('initializeParallax', handleInitializeParallax);
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(parallaxElement);
 
     window.addEventListener('scroll', onScroll);
 
+    // ---------------------------------------------------------------------
+    //
+    // Unmount - Remove event listeners and observers
+    //
+    // ---------------------------------------------------------------------
+
     return () => {
-      console.log('<Parallax> Unmounted');
+      console.log(`<Parallax> [ ${data.id} ] Unmounted`);
       intersectObserver.unobserve(parallaxElement);
 
-      window.removeEventListener('initializeImage', handleInitializeImage);
-      window.removeEventListener('initializeParallax', handleInitializeParallax);
+      parallaxElement.removeEventListener('initializeImage', handleInitializeImage);
+      parallaxElement.removeEventListener('initializeParallax', handleInitializeParallax);
 
       resizeObserver.unobserve(parallaxElement);
 
@@ -246,20 +271,25 @@ const Parallax = () => {
 
   // ---------------------------------------------------------------------
   //
-  // Processes parallax intersect
+  // Component updated - useEffects
   //
   // ---------------------------------------------------------------------
-  useEffect(() => {
-    console.log(`<Parallax> Updated [isIntersecting]: ${isIntersecting}`);
-    if (isIntersecting) {
-      window.dispatchEvent(initializeImageEvent);
-    }
-  }, [isIntersecting]);
 
-  useEffect(() => {
-    console.log(`<Parallax> Updated [isImageInitialized]: ${isImageInitialized}`);
+  // At this point, the Parallax children component <Image> is rendered. We now
+  // need a "ref" to the image, so we dispatch the initializeImageEvent which handles this.
+  useLayoutEffect(() => {
+    console.log(`<Parallax> [ ${data.id} ] Updated [isParallaxIntersecting]: ${isParallaxIntersecting}`);
+    if (isParallaxIntersecting) {
+      parallaxElement.dispatchEvent(initializeImageEvent);
+    }
+  }, [isParallaxIntersecting]);
+
+  // The parallax container has now rendered with its computed dimensions and we dispatch
+  // initializeParallaxEvent to update all coordinates.
+  useLayoutEffect(() => {
+    console.log(`<Parallax> [ ${data.id} ] Updated [isImageInitialized]: ${isImageInitialized}`);
     if (isImageInitialized) {
-      window.dispatchEvent(initializeParallaxEvent);
+      parallaxElement.dispatchEvent(initializeParallaxEvent);
     }
   }, [isImageInitialized]);
 
@@ -275,11 +305,11 @@ const Parallax = () => {
         scrollState={scrollState}
       />
       {
-        isIntersecting && (
+        isParallaxIntersecting && (
           <>
             <Image
               ref={imageRef}
-              data={imageData}
+              data={data.images}
               translateY={imageState.translateY}
             />
             <Content contentScrollPercent={parallaxState.contentScrollPercent} />

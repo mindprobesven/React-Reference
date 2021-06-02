@@ -1,8 +1,12 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Image = React.forwardRef(({ data, translateY }, ref) => {
   const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    console.log('<Image> Mounted!');
+  }, []);
 
   return (
     <>
@@ -13,7 +17,7 @@ const Image = React.forwardRef(({ data, translateY }, ref) => {
           transform: `translateY(${-translateY}px)`,
           visibility: isLoaded ? 'hidden' : 'visible',
         }}
-        src={data.images.thumb}
+        src={data.thumb}
         width={data.width}
         height={data.height}
         alt=""
@@ -24,7 +28,7 @@ const Image = React.forwardRef(({ data, translateY }, ref) => {
           transform: `translateY(${-translateY}px)`,
           opacity: isLoaded ? 1 : 0,
         }}
-        src={data.images.full}
+        src={data.full}
         width={data.width}
         height={data.height}
         alt=""
