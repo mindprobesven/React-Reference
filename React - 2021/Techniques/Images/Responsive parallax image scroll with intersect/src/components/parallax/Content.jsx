@@ -3,7 +3,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 
-const Content = ({ contentScrollPercent }) => {
+const Content = ({ data, contentScrollPercent }) => {
   useEffect(() => {
     console.log('<Content> Mounted!');
   }, []);
@@ -35,7 +35,7 @@ const Content = ({ contentScrollPercent }) => {
             transform: `translateX(${computeTranslateXWithBoundaries()}%)`,
           }}
         >
-          <h1>PARALLAX</h1>
+          <h1>{data.headline}</h1>
         </div>
         <div
           className="parallax__decoration-box"

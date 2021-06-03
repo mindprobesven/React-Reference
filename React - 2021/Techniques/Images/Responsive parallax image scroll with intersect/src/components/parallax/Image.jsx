@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 
-const Image = React.forwardRef(({ data, translateY }, ref) => {
+const Image = React.forwardRef(({ imageID, data, translateY }, ref) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -11,6 +11,8 @@ const Image = React.forwardRef(({ data, translateY }, ref) => {
   return (
     <>
       <img
+        key={imageID}
+        id={imageID}
         ref={ref}
         className="parallax__image parallax__image--thumb"
         style={{

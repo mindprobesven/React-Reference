@@ -9,9 +9,79 @@ const parallaxMiddleData = {
   id: 'middle',
   images: {
     thumb: 'https://picsum.photos/id/127/100/100',
-    full: 'https://picsum.photos/id/127/4000/4000',
-    width: 4000,
-    height: 4000,
+    full: 'https://picsum.photos/id/127/1920/1920',
+    width: 1920,
+    height: 1920,
+  },
+  content: {
+    headline: 'PARALLAX MIDDLE',
+    scrollSpeed: 2.0,
+  },
+  options: {
+    landscape: {
+      small: {
+        heightImageRatio: 0.5,
+        imageScrollSpeed: 0.5,
+        imageOffset: 0,
+      },
+      medium: {
+        heightImageRatio: 0.5,
+        imageScrollSpeed: 0.75,
+        imageOffset: 0,
+      },
+      large: {
+        heightImageRatio: 0.5,
+        imageScrollSpeed: 0.75,
+        imageOffset: 0,
+      },
+    },
+    portrait: {
+      heightImageRatio: 0.75,
+      imageScrollSpeed: 0.75,
+      imageOffset: 0,
+    },
+    intersectAbove: 250,
+    viewportStartScrollPos: 1.0,
+  },
+};
+
+const parallaxBottomData = {
+  id: 'bottom',
+  images: {
+    thumb: 'https://picsum.photos/id/883/100/100',
+    full: 'https://picsum.photos/id/883/1920/1920',
+    width: 1920,
+    height: 1920,
+  },
+  content: {
+    headline: 'PARALLAX BOTTOM',
+    scrollSpeed: 2.0,
+  },
+  options: {
+    landscape: {
+      small: {
+        heightImageRatio: 0.5,
+        imageScrollSpeed: 0.5,
+        imageOffset: 0,
+      },
+      medium: {
+        heightImageRatio: 0.5,
+        imageScrollSpeed: 0.75,
+        imageOffset: 0,
+      },
+      large: {
+        heightImageRatio: 0.5,
+        imageScrollSpeed: 0.75,
+        imageOffset: 0,
+      },
+    },
+    portrait: {
+      heightImageRatio: 0.75,
+      imageScrollSpeed: 0.75,
+      imageOffset: 0,
+    },
+    intersectAbove: 250,
+    viewportStartScrollPos: 1.0,
   },
 };
 
@@ -25,8 +95,9 @@ const Body = () => {
       {/* <Intro /> */}
       <Content />
       <Content />
-      <Parallax data={parallaxMiddleData} />
+      <Parallax key="middle" data={parallaxMiddleData} />
       <Content />
+      {/* <Parallax key="bottom" data={parallaxBottomData} /> */}
     </div>
   );
 };
