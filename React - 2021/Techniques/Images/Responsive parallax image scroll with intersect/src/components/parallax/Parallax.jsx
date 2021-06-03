@@ -13,11 +13,8 @@ import Image from './Image';
 import Content from './Content';
 import Stats from './Stats';
 
-console.log('HELLO');
-let counter = 0;
-
-/* const initializeImageEvent = new Event('initializeImage');
-const initializeParallaxEvent = new Event('initializeParallax'); */
+const initializeImageEvent = new Event('initializeImage');
+const initializeParallaxEvent = new Event('initializeParallax');
 
 const Parallax = ({ data }) => {
   const parallaxRef = useRef();
@@ -48,10 +45,6 @@ const Parallax = ({ data }) => {
   const [isParallaxIntersecting, setIsParallaxIntersecting] = useState(false);
   const [isImageInitialized, setIsImageInitialized] = useState(false);
 
-  let parallaxElement;
-  let initializeImageEvent;
-  let initializeParallaxEvent;
-
   // ---------------------------------------------------------------------
   //
   // Component mounted
@@ -59,13 +52,8 @@ const Parallax = ({ data }) => {
   // ---------------------------------------------------------------------
   useLayoutEffect(() => {
     console.log(`<Parallax> [ ${data.id} ] Mounted`);
-    counter += 1;
-    console.log(counter);
 
-    initializeImageEvent = new Event('initializeImage');
-    initializeParallaxEvent = new Event('initializeParallax');
-
-    parallaxElement = parallaxRef.current;
+    const parallaxElement = parallaxRef.current;
     let imageElement;
 
     let scrollAnimationFrame;
@@ -316,7 +304,7 @@ const Parallax = ({ data }) => {
   useLayoutEffect(() => {
     console.log(`<Parallax> [ ${data.id} ] Updated [isParallaxIntersecting]: ${isParallaxIntersecting}`);
     if (isParallaxIntersecting) {
-      console.log(parallaxElement);
+      const parallaxElement = parallaxRef.current;
       parallaxElement.dispatchEvent(initializeImageEvent);
     }
   }, [isParallaxIntersecting]);
@@ -326,14 +314,13 @@ const Parallax = ({ data }) => {
   useLayoutEffect(() => {
     console.log(`<Parallax> [ ${data.id} ] Updated [isImageInitialized]: ${isImageInitialized}`);
     if (isImageInitialized) {
+      const parallaxElement = parallaxRef.current;
       parallaxElement.dispatchEvent(initializeParallaxEvent);
     }
   }, [isImageInitialized]);
 
   return (
     <div
-      key={data.id}
-      id={data.id}
       ref={parallaxRef}
       className="parallax"
       style={{ paddingBottom: `${parallaxState.aspectRatio}%` }}
@@ -347,9 +334,6 @@ const Parallax = ({ data }) => {
         isParallaxIntersecting && (
           <>
             <Image
-              key={data.id}
-              id={data.id}
-              imageID={data.id}
               ref={imageRef}
               data={data.images}
               translateY={imageState.translateY}
