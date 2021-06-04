@@ -1,0 +1,30 @@
+@mixin theme($theme-name, $theme-map) {
+  .#{$theme-name} {
+    &.box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      background: map-get($theme-map, color-dark);
+  
+      &__label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 50%;
+        padding: 1rem;
+        background: map-get($theme-map, color-base);
+        box-sizing: border-box;
+      
+        h1 {
+          color: map-get($theme-map, color-light);
+        }
+      }
+    }
+  }
+}
+
+@each $name, $map in $themes {
+  @include theme($name, $map);
+}

@@ -1,0 +1,15 @@
+{
+  "parser": "@babel/eslint-parser",
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "rules": {
+    "max-len": ["warn", 80, 2, {"ignoreComments": true}],
+    "indent": ["error", 2],
+    "semi": ["error", "always"],
+    "no-console":  ["error", { "allow": ["warn", "error", "log"] }],
+    "import/no-extraneous-dependencies": "off"
+  },
+  "extends": ["airbnb", "airbnb/hooks"]
+}
