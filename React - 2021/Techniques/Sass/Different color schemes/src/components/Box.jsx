@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 import React, { useEffect } from 'react';
@@ -7,9 +8,11 @@ const Box = ({ theme, label }) => {
     console.log('<Box> Mounted');
   }, []);
 
+  const withTheme = (classNames) => classNames.join(' ').trim();
+
   return (
-    <div className={`${theme} box`}>
-      <div className={`${theme} box__label`}>
+    <div className={withTheme([theme, 'box'])}>
+      <div className={withTheme([theme, 'box__label'])}>
         <h1>{label}</h1>
       </div>
     </div>

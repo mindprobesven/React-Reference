@@ -2,15 +2,45 @@
 // Themes
 // ----------------------------------------------------------
 $theme-blue: (
-  color-light: rgb(205, 233, 255),
-  color-base: rgb(0, 140, 255),
-  color-dark: rgb(0, 35, 63)
+  // Theme scope
+
+  color-primary-light: rgb(205, 233, 255),
+  color-primary-base: rgb(0, 140, 255),
+  color-primary-dark: rgb(0, 35, 63),
+  color-secondary-light: rgb(211, 211, 211),
+  color-secondary-base: rgb(129, 129, 129),
+  color-secondary-dark: rgb(43, 43, 43),
+
+  // Theme component scope for fine-grain control
+
+  // Box component
+  // ./components/Box.jsx
+  // ./sass/components/_box.scss
+  // ----------------------------------------------------------
+  box-color-bg: rgb(0, 35, 63),
+  box-label-color-bg: rgb(0, 140, 255),
+  box-text-color: rgb(205, 233, 255),
 );
 
 $theme-pink: (
-  color-light: rgb(255, 203, 231),
-  color-base: rgb(255, 0, 140),
-  color-dark: rgb(61, 0, 34)
+  // Theme scope
+
+  color-primary-light: rgb(255, 203, 231),
+  color-primary-base: rgb(255, 0, 140),
+  color-primary-dark: rgb(61, 0, 34),
+  color-secondary-light: rgb(211, 211, 211),
+  color-secondary-base: rgb(129, 129, 129),
+  color-secondary-dark: rgb(43, 43, 43),
+
+  // Theme component scope for fine-grain control
+
+  // Box component
+  // ./components/Box.jsx
+  // ./sass/components/_box.scss
+  // ----------------------------------------------------------
+  box-color-bg: rgb(61, 0, 34),
+  box-label-color-bg: rgb(255, 0, 140),
+  box-text-color: rgb(255, 203, 231),
 );
 
 $themes: (
@@ -19,11 +49,21 @@ $themes: (
 );
 
 // ----------------------------------------------------------
-// Text
+// Global scope
 // ----------------------------------------------------------
-$text-base-color: rgb(205, 233, 255);
+$color-primary-light: rgb(211, 211, 211);
+$color-primary-base: rgb(129, 129, 129);
+$color-primary-dark: rgb(43, 43, 43);
 
-// ----------------------------------------------------------
-// Layout
-// ----------------------------------------------------------
+$text-base-color: rgb(205, 233, 255);
 $body-bg-color: rgb(24, 24, 24);
+
+// Gobal component scope for fine-grain control if no theme is used
+
+// Box component
+// ./components/Box.jsx
+// ./sass/components/_box.scss
+// ----------------------------------------------------------
+$box-color-bg: rgb(43, 43, 43);
+$box-label-color-bg: rgb(129, 129, 129);
+$box-text-color: rgb(211, 211, 211);

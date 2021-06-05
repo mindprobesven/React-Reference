@@ -26,6 +26,7 @@ const App = () => (
     <ErrorBoundary>
       <Box theme="theme-blue" label="BLUE THEME" />
       <Box theme="theme-pink" label="PINK THEME" />
+      <Box label="DEFAULT THEME" />
     </ErrorBoundary>
   </div>
 );
