@@ -1,13 +1,13 @@
 @mixin theme($theme-name, $theme-map) {
   .#{$theme-name} {
     &.box {
-      background: map-get($theme-map, box-color-bg);
+      background: map-get($theme-map, 'box-color-bg');
   
       &__label {
-        background: map-get($theme-map, box-label-color-bg);
+        background: map-get($theme-map, 'box-label-color-bg');
       
         h1 {
-          color: map-get($theme-map, box-text-color);
+          color: map-get($theme-map, 'box-text-color');
         }
       }
     }

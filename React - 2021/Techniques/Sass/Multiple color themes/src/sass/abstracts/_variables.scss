@@ -1,22 +1,23 @@
 // ----------------------------------------------------------
 // Global scope
 // ----------------------------------------------------------
+// Font
 $font-weight-normal: 400;
 $font-weight-bold: 700;
 
-$color-primary-light: rgb(211, 211, 211);
-$color-primary-base: rgb(129, 129, 129);
-$color-primary-dark: rgb(43, 43, 43);
-$color-primary-darker: rgb(24, 24, 24);
+// Default theme
+$color-primary-light: $color-grey-light;
+$color-primary-base: $color-grey-base;
+$color-primary-dark: $color-grey-dark;
 
-$text-color-primary-light: rgb(211, 211, 211);
-$text-color-primary-base: rgb(129, 129, 129);
-$text-color-primary-dark: rgb(43, 43, 43);
+$text-color-primary-light: $color-grey-light;
+$text-color-primary-base: $color-grey-base;
+$text-color-primary-dark: $color-grey-dark;
 
-$bg-color-primary-light: rgb(211, 211, 211);
-$bg-color-primary-base: rgb(129, 129, 129);
-$bg-color-primary-dark: rgb(43, 43, 43);
-$bg-color-primary-darker: rgb(24, 24, 24);
+$bg-color-primary-light: $color-grey-light;
+$bg-color-primary-base: $color-grey-base;
+$bg-color-primary-dark: $color-grey-dark;
+$bg-color-primary-darker: $color-grey-darker;
 
 // Gobal component scope for fine-grain control if no theme is used
 
@@ -24,6 +25,6 @@ $bg-color-primary-darker: rgb(24, 24, 24);
 // ./components/Box.jsx
 // ./sass/components/_box.scss
 // ----------------------------------------------------------
-$box-color-bg: rgb(43, 43, 43);
-$box-label-color-bg: rgb(129, 129, 129);
-$box-text-color: rgb(211, 211, 211);
+$box-color-bg: $color-grey-dark;
+$box-label-color-bg: $color-grey-base;
+$box-text-color: $color-grey-light;

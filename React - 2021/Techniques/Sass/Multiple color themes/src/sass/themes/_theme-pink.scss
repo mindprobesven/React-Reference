@@ -1,26 +1,26 @@
 $theme-pink: (
   // Theme scope
 
-  color-primary-light: rgb(255, 203, 231),
-  color-primary-base: rgb(255, 0, 140),
-  color-primary-dark: rgb(61, 0, 34),
-  color-secondary-light: rgb(211, 211, 211),
-  color-secondary-base: rgb(129, 129, 129),
-  color-secondary-dark: rgb(43, 43, 43),
+  'color-primary-light': $color-pink-light,
+  'color-primary-base': $color-pink-base,
+  'color-primary-dark': $color-pink-dark,
+  'color-secondary-light': $color-grey-light,
+  'color-secondary-base': $color-grey-base,
+  'color-secondary-dark': $color-grey-dark,
 
-  text-color-primary-light: rgb(255, 203, 231),
-  text-color-primary-base: rgb(255, 0, 140),
-  text-color-primary-dark: rgb(61, 0, 34),
-  text-color-secondary-light: rgb(211, 211, 211),
-  text-color-secondary-base: rgb(129, 129, 129),
-  text-color-secondary-dark: rgb(43, 43, 43),
+  'text-color-primary-light': $color-pink-light,
+  'text-color-primary-base': $color-pink-base,
+  'text-color-primary-dark': $color-pink-dark,
+  'text-color-secondary-light': $color-grey-light,
+  'text-color-secondary-base': $color-grey-base,
+  'text-color-secondary-dark': $color-grey-dark,
   
-  bg-color-primary-light: rgb(255, 203, 231),
-  bg-color-primary-base: rgb(255, 0, 140),
-  bg-color-primary-dark: rgb(61, 0, 34),
-  bg-color-secondary-light: rgb(211, 211, 211),
-  bg-color-secondary-base: rgb(129, 129, 129),
-  bg-color-secondary-dark: rgb(43, 43, 43),
+  'bg-color-primary-light': $color-pink-light,
+  'bg-color-primary-base': $color-pink-base,
+  'bg-color-primary-dark': $color-pink-dark,
+  'bg-color-secondary-light': $color-grey-light,
+  'bg-color-secondary-base': $color-grey-base,
+  'bg-color-secondary-dark': $color-grey-dark,
 
   // Theme component scope for fine-grain control
 
@@ -28,7 +28,7 @@ $theme-pink: (
   // ./components/Box.jsx
   // ./sass/components/_box.scss
   // ----------------------------------------------------------
-  box-color-bg: rgb(61, 0, 34),
-  box-label-color-bg: rgb(255, 0, 140),
-  box-text-color: rgb(255, 203, 231),
+  'box-color-bg': $color-pink-dark,
+  'box-label-color-bg': $color-pink-base,
+  'box-text-color': $color-pink-light,
 );

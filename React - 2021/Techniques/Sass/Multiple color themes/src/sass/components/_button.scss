@@ -2,13 +2,13 @@
   .#{$theme-name} {
     .button {
       &--normal{
-        background: map-get($theme-map, bg-color-primary-base);
-        color: map-get($theme-map, text-color-primary-light);
+        background: map-get($theme-map, 'bg-color-primary-base');
+        color: map-get($theme-map, 'text-color-primary-light');
       }
 
       &--selected{
-        background: map-get($theme-map, bg-color-primary-light);
-        color: map-get($theme-map, text-color-primary-base);
+        background: map-get($theme-map, 'bg-color-primary-light');
+        color: map-get($theme-map, 'text-color-primary-base');
       }
     }
   }
