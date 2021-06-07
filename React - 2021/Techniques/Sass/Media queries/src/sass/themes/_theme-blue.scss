@@ -1,0 +1,34 @@
+$theme-blue: (
+  // Theme scope
+
+  'color-primary-light': $color-blue-light,
+  'color-primary-base': $color-blue-base,
+  'color-primary-dark': $color-blue-dark,
+  'color-secondary-light': $color-grey-light,
+  'color-secondary-base': $color-grey-base,
+  'color-secondary-dark': $color-grey-dark,
+
+  'text-color-primary-light': $color-blue-light,
+  'text-color-primary-base': $color-blue-base,
+  'text-color-primary-dark': $color-blue-dark,
+  'text-color-secondary-light': $color-grey-light,
+  'text-color-secondary-base': $color-grey-base,
+  'text-color-secondary-dark': $color-grey-dark,
+  
+  'bg-color-primary-light': $color-blue-light,
+  'bg-color-primary-base': $color-blue-base,
+  'bg-color-primary-dark': $color-blue-dark,
+  'bg-color-secondary-light': $color-grey-light,
+  'bg-color-secondary-base': $color-grey-base,
+  'bg-color-secondary-dark': $color-grey-dark,
+
+  // Theme component scope for fine-grain control
+
+  // Box component
+  // ./components/Box.jsx
+  // ./sass/components/_box.scss
+  // ----------------------------------------------------------
+  'box-color-bg': $color-blue-dark,
+  'box-label-color-bg': $color-blue-base,
+  'box-text-color': $color-blue-light,
+);

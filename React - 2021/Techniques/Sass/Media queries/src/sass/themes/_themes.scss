@@ -1,0 +1,10 @@
+// ----------------------------------------------------------
+// Themes
+// ----------------------------------------------------------
+@import 'theme-blue';
+@import 'theme-pink';
+
+$themes: (
+  'theme-blue': $theme-blue,
+  'theme-pink': $theme-pink,
+);

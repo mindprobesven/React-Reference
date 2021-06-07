@@ -1,0 +1,66 @@
+@mixin theme($theme-name, $theme-map) {
+  .#{$theme-name} {
+    &.box {
+      background: map-get($theme-map, 'box-color-bg');
+  
+      &__label {
+        background: map-get($theme-map, 'box-label-color-bg');
+      
+        h1 {
+          color: map-get($theme-map, 'box-text-color');
+        }
+      }
+    }
+  }
+}
+
+@each $theme-name, $theme-map in $themes {
+  @include theme($theme-name, $theme-map);
+}
+
+.box {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: $box-color-bg;
+  margin-bottom: 1rem;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 50%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: $box-label-color-bg;
+    box-sizing: border-box;
+
+    h1 {
+      font-size: 1rem;
+      color: $box-text-color;
+    }
+  }
+}
+
+@include respond-to('small') {
+  .box {
+    &__label {
+      h1 {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+@include respond-to('medium') {
+  .box {
+    &__label {
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  }
+}
