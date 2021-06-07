@@ -1,0 +1,34 @@
+$theme-blue: (
+  // Theme scope
+
+  color-primary-light: rgb(205, 233, 255),
+  color-primary-base: rgb(0, 140, 255),
+  color-primary-dark: rgb(0, 35, 63),
+  color-secondary-light: rgb(211, 211, 211),
+  color-secondary-base: rgb(129, 129, 129),
+  color-secondary-dark: rgb(43, 43, 43),
+
+  text-color-primary-light: rgb(205, 233, 255),
+  text-color-primary-base: rgb(0, 140, 255),
+  text-color-primary-dark: rgb(0, 35, 63),
+  text-color-secondary-light: rgb(211, 211, 211),
+  text-color-secondary-base: rgb(129, 129, 129),
+  text-color-secondary-dark: rgb(43, 43, 43),
+  
+  bg-color-primary-light: rgb(205, 233, 255),
+  bg-color-primary-base: rgb(0, 140, 255),
+  bg-color-primary-dark: rgb(0, 35, 63),
+  bg-color-secondary-light: rgb(211, 211, 211),
+  bg-color-secondary-base: rgb(129, 129, 129),
+  bg-color-secondary-dark: rgb(43, 43, 43),
+
+  // Theme component scope for fine-grain control
+
+  // Box component
+  // ./components/Box.jsx
+  // ./sass/components/_box.scss
+  // ----------------------------------------------------------
+  box-color-bg: rgb(0, 35, 63),
+  box-label-color-bg: rgb(0, 140, 255),
+  box-text-color: rgb(205, 233, 255),
+);

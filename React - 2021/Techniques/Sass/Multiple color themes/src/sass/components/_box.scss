@@ -20,10 +20,12 @@
 
 .box {
   display: flex;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
   height: 200px;
   background: $box-color-bg;
+  margin-bottom: 1rem;
 
   &__label {
     display: flex;
@@ -32,6 +34,7 @@
     text-align: center;
     width: 50%;
     padding: 1rem;
+    margin-bottom: 1rem;
     background: $box-label-color-bg;
     box-sizing: border-box;
 

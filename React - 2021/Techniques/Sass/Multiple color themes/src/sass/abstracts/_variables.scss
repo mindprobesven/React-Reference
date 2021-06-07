@@ -1,0 +1,29 @@
+// ----------------------------------------------------------
+// Global scope
+// ----------------------------------------------------------
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+$color-primary-light: rgb(211, 211, 211);
+$color-primary-base: rgb(129, 129, 129);
+$color-primary-dark: rgb(43, 43, 43);
+$color-primary-darker: rgb(24, 24, 24);
+
+$text-color-primary-light: rgb(211, 211, 211);
+$text-color-primary-base: rgb(129, 129, 129);
+$text-color-primary-dark: rgb(43, 43, 43);
+
+$bg-color-primary-light: rgb(211, 211, 211);
+$bg-color-primary-base: rgb(129, 129, 129);
+$bg-color-primary-dark: rgb(43, 43, 43);
+$bg-color-primary-darker: rgb(24, 24, 24);
+
+// Gobal component scope for fine-grain control if no theme is used
+
+// Box component
+// ./components/Box.jsx
+// ./sass/components/_box.scss
+// ----------------------------------------------------------
+$box-color-bg: rgb(43, 43, 43);
+$box-label-color-bg: rgb(129, 129, 129);
+$box-text-color: rgb(211, 211, 211);

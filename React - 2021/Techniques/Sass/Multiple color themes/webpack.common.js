@@ -20,7 +20,7 @@ module.exports = {
       ],
     }),
     new HtmlWebpackPlugin({
-      title: 'Webpack Development Express Server',
+      title: 'Multiple color themes with Sass',
       filename: 'index.html',
       template: path.join(path.resolve(__dirname, 'public'), 'index.html'),
     }),

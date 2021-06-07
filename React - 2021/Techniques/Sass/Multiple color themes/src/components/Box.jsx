@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-/* eslint-disable max-len */
 import React, { useEffect } from 'react';
 
-const Box = ({ theme, label }) => {
+import Button from './Button';
+
+const Box = ({ theme = undefined, label }) => {
   useEffect(() => {
     console.log('<Box> Mounted');
   }, []);
@@ -15,6 +16,7 @@ const Box = ({ theme, label }) => {
       <div className={withTheme([theme, 'box__label'])}>
         <h1>{label}</h1>
       </div>
+      <Button theme={theme} />
     </div>
   );
 };

@@ -1,0 +1,36 @@
+@mixin theme($theme-name, $theme-map) {
+  .#{$theme-name} {
+    .button {
+      &--normal{
+        background: map-get($theme-map, bg-color-primary-base);
+        color: map-get($theme-map, text-color-primary-light);
+      }
+
+      &--selected{
+        background: map-get($theme-map, bg-color-primary-light);
+        color: map-get($theme-map, text-color-primary-base);
+      }
+    }
+  }
+}
+
+@each $theme-name, $theme-map in $themes {
+  @include theme($theme-name, $theme-map);
+}
+
+.button {
+  font-weight: $font-weight-bold;
+  border: 0;
+  padding: 1rem; 
+  cursor: pointer;
+
+  &--normal {
+    background: $bg-color-primary-base;
+    color: $text-color-primary-light;
+  }
+
+  &--selected {
+    background: $bg-color-primary-light;
+    color: $text-color-primary-base;
+  }
+}
