@@ -19,9 +19,9 @@
 }
 
 .button {
+  font-size: $font-size-base;
   font-weight: $font-weight-bold;
-  border: 0;
-  padding: 1rem; 
+  border: none;
   cursor: pointer;
 
   &--normal {
@@ -32,5 +32,26 @@
   &--selected {
     background: $bg-color-primary-light;
     color: $text-color-primary-base;
+  }
+
+  &__label {
+    display: flex;
+    padding: 1em;
+  }
+}
+
+@include mq('phone-small') {
+  .button {
+    &__label {
+      font-size: 1em;
+    }
+  }
+}
+
+@include mq('tablet-small') {
+  .button {
+    &__label {
+      font-size: 1.25em;
+    }
   }
 }

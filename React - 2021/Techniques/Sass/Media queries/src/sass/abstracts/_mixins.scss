@@ -1,15 +1,23 @@
 $breakpoints: (
-  'small': (min-width: 350px),
-  'medium': (min-width: 1000px),
+  'phone-small': (min-width: 315px),
+  'phone-medium': (min-width: 355px),
+  'tablet-small': (min-width: 750px),
+  'computer-small': (min-width: 1200px),
 );
 
-@mixin respond-to($breakpoint) {
+@mixin mq($breakpoint) {
   $raw-query: map-get($breakpoints, $breakpoint);
 
+  // Check if $raw-query is a string or a map
   @if $raw-query {
     $query: if(
+      // if condition
       type-of($raw-query) == 'string',
+      // true return
       unquote($raw-query),
+      // else return
+      // In this case $raw-query is of type 'map', so we convert
+      // the map to a string representation using inspect()
       inspect($raw-query)
     );
 

@@ -23,43 +23,41 @@
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  font-size: $font-size-base;
+  padding: 1em;
   background: $box-color-bg;
-  margin-bottom: 1rem;
+  margin-bottom: 1em;
 
   &__label {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    width: 50%;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    padding: 1em;
+    margin-bottom: 1em;
     background: $box-label-color-bg;
-    box-sizing: border-box;
 
     h1 {
-      font-size: 1rem;
+      font-size: 1em;
       color: $box-text-color;
     }
   }
 }
 
-@include respond-to('small') {
+@include mq('phone-small') {
   .box {
     &__label {
       h1 {
-        font-size: 1.25rem;
+        font-size: 1em;
       }
     }
   }
 }
 
-@include respond-to('medium') {
+@include mq('tablet-small') {
   .box {
     &__label {
       h1 {
-        font-size: 2rem;
+        font-size: 1.75em;
       }
     }
   }

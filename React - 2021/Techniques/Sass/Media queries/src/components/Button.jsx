@@ -23,7 +23,7 @@ const Button = ({ theme = undefined }) => {
       type="button"
       onClick={handleClick}
     >
-      BUTTON
+      <div className="button__label">BUTTON</div>
     </button>
   );
 };
