@@ -1,0 +1,16 @@
+.app {
+  width: 90%;
+  margin: 0 auto;
+}
+
+@include mq('phone-l-sm') {
+  .app {
+    max-width: 425px;
+  }
+}
+
+@include mq('tablet-sm') {
+  .app {
+    max-width: 575px;
+  }
+}

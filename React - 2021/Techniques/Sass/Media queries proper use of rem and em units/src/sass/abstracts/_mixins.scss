@@ -1,9 +1,21 @@
-$breakpoints: (
-  'phone-small': (min-width: 315px),
-  'phone-medium': (min-width: 355px),
-  'tablet-small': (min-width: 750px),
-  'computer-small': (min-width: 1200px),
-);
+// ----------------------------------------------------------
+//
+// Media query mixin
+//
+// This mixin is included in components to define media query
+// breakpoints.
+//
+// The breakpoints 'map' is specified in _variables.scss
+// 
+// Usage example:
+//
+// @include mq('phone-l-sm') {
+//   .element {
+//     ...
+//   }
+// }
+//
+// ----------------------------------------------------------
 
 @mixin mq($breakpoint) {
   $raw-query: map-get($breakpoints, $breakpoint);

@@ -20,7 +20,7 @@ module.exports = {
       ],
     }),
     new HtmlWebpackPlugin({
-      title: 'Multiple color themes with Sass',
+      title: 'Media queries with Sass',
       filename: 'index.html',
       template: path.join(path.resolve(__dirname, 'public'), 'index.html'),
     }),

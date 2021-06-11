@@ -1,7 +1,7 @@
 {
-  "name": "multiplecolorthemes",
+  "name": "mediaquerysass",
   "version": "1.0.0",
-  "description": "Multiple color themes with Sass",
+  "description": "Media queries with Sass",
   "private": true,
   "author": "Sven Kohn",
   "license": "ISC",

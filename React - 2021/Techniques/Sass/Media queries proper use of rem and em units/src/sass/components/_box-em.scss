@@ -1,0 +1,53 @@
+// ----------------------------------------------------------
+//
+// Box "em"
+//
+// This component controls its own font-size, but it does use
+// the "rem" unit for padding and margins.
+//
+// The "rem" unit is controlled by the font-size specified in
+// the html class (_base.scss).
+//
+// ----------------------------------------------------------
+.box-em {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  color: $text-color-primary-light;
+  background: $bg-color-primary-dark;
+
+  &__text {
+    font-size: 1.7em;
+  }
+
+  &__text-one-em {
+    font-size: 1em;
+  }
+
+  &__text-one-rem {
+    font-size: 1rem;
+  }
+}
+
+@include mq('phone-l-sm') {
+  .box-em {
+    font-size: $font-size-base + 5px;
+
+    &__text {
+      font-size: 2.05em;
+    }
+  }
+}
+
+@include mq('tablet-sm') {
+  .box-em {
+    &__text {
+      font-size: 2.755em;
+    }
+  }
+}

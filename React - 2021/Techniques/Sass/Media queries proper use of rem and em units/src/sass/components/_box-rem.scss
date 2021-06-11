@@ -1,0 +1,48 @@
+// ----------------------------------------------------------
+//
+// Box "rem"
+//
+// This component does not control its own font-size.
+// Both "em" and "rem" units are controlled by the font-size
+// specified in the html class (_base.scss).
+//
+// ----------------------------------------------------------
+.box-rem {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  font-weight: $font-weight-bold;
+  color: $text-color-primary-light;
+  background: $bg-color-primary-dark;
+
+  &__text {
+    font-size: 2.2rem;
+  }
+  
+  &__text-one-em {
+    font-size: 1em;
+  }
+
+  &__text-one-rem {
+    font-size: 1rem;
+  }
+}
+
+@include mq('phone-l-sm') {
+  .box-rem {
+    &__text {
+      font-size: 3.3rem;
+    }
+  }
+}
+
+@include mq('tablet-sm') {
+  .box-rem {
+    &__text {
+      font-size: 4.45rem;
+    }
+  }
+}
