@@ -35,6 +35,7 @@ const App = () => (
       <Body />
       <Footer />
     </ErrorBoundary>
+    <div className="background" />
   </div>
 );
 
