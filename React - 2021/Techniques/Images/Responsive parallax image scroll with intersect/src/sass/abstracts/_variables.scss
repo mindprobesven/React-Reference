@@ -1,4 +1,38 @@
 // ----------------------------------------------------------
+// Global scope
+// ----------------------------------------------------------
+
+// Media query breakpoints
+$breakpoints: (
+  'phone-p-sm': (min-width: 315px),
+  'phone-p-m': (min-width: 355px),
+  'phone-p-l': (min-width: 370px),
+  'phone-p-xl': (min-width: 405px),
+  'phone-l-sm': (min-width: 550px),
+  'phone-l-m': (min-width: 660px),
+  'tablet-sm': (min-width: 750px),
+  'computer-m': (min-width: 1300px),
+);
+
+// Font
+$font-size-base: 16px;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+// Default theme
+$text-color-primary-base: $color-white;
+
+$bg-color-primary-base: $color-red-base;
+$bg-color-primary-dark: $color-red-dark;
+
+$bg-color-secondary-base: $color-blue-base;
+$bg-color-secondary-dark: $color-black;
+
+
+
+
+
+// ----------------------------------------------------------
 // Text
 // ----------------------------------------------------------
 $text-base-color: rgb(49, 49, 49);

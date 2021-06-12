@@ -1,16 +1,37 @@
 .navigation {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  font-size: $font-size-base;
 
   &__link-container {
-    padding: 2rem 1rem;
+    margin-right: 0.75rem;
 
-    &:first-child {
-      margin-left: 1rem;
+    &:last-child {
+      margin-right: 0;
     }
   }
 
-  &__link-text {
-    color: $link-base-color;
-    font-weight: 700;
+  &__link {
+    font-size: 0.9em;
+    font-weight: $font-weight-bold;
+    color: $text-color-primary-base;
+    text-decoration: none;
+  }
+}
+
+@include mq('tablet-sm') {
+  .navigation {
+    justify-content: flex-end;
+    font-size: $font-size-base + 5px;
+
+    &__link-container {
+      margin-right: 1.5rem;
+
+      &:last-child {
+        margin-right: 2rem;
+      }
+    }
   }
 }
