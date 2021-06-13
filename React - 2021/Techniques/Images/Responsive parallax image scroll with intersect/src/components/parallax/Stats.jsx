@@ -4,90 +4,90 @@ import React from 'react';
 const Stats = ({ parallaxState, imageState, scrollState }) => (
   <div className="stats">
     <div className="stats__column">
-      <div className="stats__left"><p>[ PARALLAX ]</p></div>
+      <div className="stats__left">[ PARALLAX ]</div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Aspect ratio:</p></div>
+      <div className="stats__left">Aspect ratio:</div>
       <div className="stats__right">
-        <p>{`${parallaxState.aspectRatio}%`}</p>
+        {`${parallaxState.aspectRatio}%`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Window Top:</p></div>
+      <div className="stats__left">Window Top:</div>
       <div className="stats__right">
-        <p>{`${parallaxState.windowTop.toFixed(1)}`}</p>
+        {`${parallaxState.windowTop.toFixed(1)}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Height:</p></div>
+      <div className="stats__left">Height:</div>
       <div className="stats__right">
-        <p>{`${parallaxState.height.toFixed(1)}`}</p>
+        {`${parallaxState.height.toFixed(1)}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Viewport Bot:</p></div>
+      <div className="stats__left">Viewport Bot:</div>
       <div className="stats__right">
-        <p>{`${parallaxState.viewportBot.toFixed(1)}`}</p>
+        {`${parallaxState.viewportBot.toFixed(1)}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Content Scroll:</p></div>
+      <div className="stats__left">Content Scroll:</div>
       <div className="stats__right">
-        <p>{`${parallaxState.contentScrollPercent}%`}</p>
+        {`${parallaxState.contentScrollPercent}%`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>[ IMAGE ]</p></div>
+      <div className="stats__left">[ IMAGE ]</div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>TranslateY:</p></div>
+      <div className="stats__left">TranslateY:</div>
       <div className="stats__right">
-        <p>{`${-imageState.translateY.toFixed(1)}`}</p>
+        {`${-imageState.translateY.toFixed(1)}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Height:</p></div>
+      <div className="stats__left">Height:</div>
       <div className="stats__right">
-        <p>{`${imageState.height.toFixed(1)}`}</p>
+        {`${imageState.height.toFixed(1)}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>[ SCROLL ]</p></div>
+      <div className="stats__left">[ SCROLL ]</div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Real Scroll Y:</p></div>
+      <div className="stats__left">Real Scroll Y:</div>
       <div className="stats__right">
-        <p>{`${scrollState.realWindowScrollY}`}</p>
+        {`${scrollState.realWindowScrollY}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Computed Scroll Y:</p></div>
+      <div className="stats__left">Computed Scroll Y:</div>
       <div className="stats__right">
-        <p>{`${scrollState.computedWindowScrollY}`}</p>
+        {`${scrollState.computedWindowScrollY.toFixed(1)}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Scrollable Total:</p></div>
+      <div className="stats__left">Scrollable Total:</div>
       <div className="stats__right">
-        <p>{`${scrollState.scrollableTotal.toFixed(1)}`}</p>
+        {`${scrollState.scrollableTotal.toFixed(1)}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Scrollable Remain:</p></div>
+      <div className="stats__left">Scrollable Remain:</div>
       <div className="stats__right">
-        <p>{`${scrollState.scrollableRemain.toFixed(1)}`}</p>
+        {`${scrollState.scrollableRemain.toFixed(1)}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Image Offset:</p></div>
+      <div className="stats__left">Image Offset:</div>
       <div className="stats__right">
-        <p>{`${scrollState.imageOffset}`}</p>
+        {`${scrollState.imageOffset}`}
       </div>
     </div>
     <div className="stats__column">
-      <div className="stats__left"><p>Speed:</p></div>
+      <div className="stats__left">Speed:</div>
       <div className="stats__right">
-        <p>{`${scrollState.imageScrollSpeed * 100}%`}</p>
+        {`${scrollState.imageScrollSpeed * 100}%`}
       </div>
     </div>
   </div>

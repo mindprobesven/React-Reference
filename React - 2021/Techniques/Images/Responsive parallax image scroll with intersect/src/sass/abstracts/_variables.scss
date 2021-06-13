@@ -28,6 +28,16 @@ $bg-color-primary-dark: $color-red-dark;
 $bg-color-secondary-base: $color-blue-base;
 $bg-color-secondary-dark: $color-black;
 
+// Parallax component
+// ./components/_parallax.scss
+// ----------------------------------------------------------
+$parallax-text-color-primary-base: $color-white;
+
+$parallax-bg-color-primary-base: $color-red-base;
+$parallax-bg-color-secondary-base: $color-blue-base;
+$parallax-bg-color-secondary-dark: $color-black;
+
+
 
 
 
@@ -48,13 +58,7 @@ $header-bg-color: rgb(0, 140, 255);
 $body-bg-color: rgb(24, 24, 24);
 $footer-bg-color: rgb(12, 12, 12);
 
-// ----------------------------------------------------------
-// Parallax
-// ----------------------------------------------------------
-$parallax-bg-color: rgb(12, 12, 12);
-$parallax-headline-bg-color: rgb(27, 27, 27, 0.75);
-$parallax-text-color: rgb(255, 255, 255);
-$parallax-decoration-box-bg-color: rgb(0, 140, 255, 0.75);
+
 
 // ----------------------------------------------------------
 // Stats

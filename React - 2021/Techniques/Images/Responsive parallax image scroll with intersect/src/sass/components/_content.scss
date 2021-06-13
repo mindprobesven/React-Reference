@@ -8,21 +8,21 @@
 
   &__divider {
     width: 100%;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1em;
     border: 1px dashed white;
 }
 
   h1 {
-    font-size: 1.75em;
+    font-size: 1.25em;
     color: $text-color-secondary-base;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5em;
   }
 
   p {
     font-size: 0.85em;
     color: $text-color-primary-base;
-    margin-bottom: 1rem;
-    line-height: 1.2rem;
+    margin-bottom: 1em;
+    line-height: 1.3em;
   }
 }
 
@@ -33,8 +33,7 @@
     padding: 3rem;
 
     p {
-      margin-bottom: 1.5rem;
-      line-height: 1.4rem;
+      line-height: 1.4em;
     }
   }
 }

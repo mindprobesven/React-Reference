@@ -2,34 +2,43 @@
   position: absolute;
   display: flex;
   flex-flow: column nowrap;
-  min-width: 11rem;
-  padding: 1rem;
-  background: $stats-bg-color;
-  opacity: 0.75;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  color: rgb(218, 218, 218);
+  padding: 0.5rem;
+  background: rgba(27, 27, 27, 0.75);
   z-index: 1000;
 
   &__column {
     display: flex;
     flex-flow: row nowrap;
-    padding-bottom: 0.5rem;
+    font-size: 0.55em;
+    margin-bottom: 0.35em;
 
     &:last-child {
-      padding: 0;
+      margin: 0;
     }
   }
 
   &__left {
     display: flex;
     flex-grow: 1;
+    margin-right: 1em;
   }
 
   &__right {
     display: flex;
     justify-content: flex-end; 
   }
+}
 
-  p {
-    font-size: 0.8rem;
-    color: $stats-text-color;
+@include mq('tablet-sm') {
+  .stats {
+    font-size: $font-size-base + 3px;
+    padding: 1rem;
+
+    &__column {
+      margin-bottom: 0.5em;
+    }
   }
 }

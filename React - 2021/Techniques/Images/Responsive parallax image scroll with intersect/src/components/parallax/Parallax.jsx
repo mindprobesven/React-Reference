@@ -97,7 +97,7 @@ const Parallax = ({ data }) => {
       };
 
       const computeTranslateYWithBoundaries = () => {
-        if (computedWindowScrollY < 0) {
+        if (computedWindowScrollY < 0 && imageOffset === 0) {
           return 0;
         }
 

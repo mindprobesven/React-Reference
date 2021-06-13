@@ -22,15 +22,15 @@ const Content = ({ data, contentScrollPercent }) => {
   };
 
   return (
-    <div className="parallax__content-container">
+    <div className="parallax__content">
       <div
-        className="parallax__animation"
+        className="parallax__content-container"
         style={{
           opacity: ((100 + -computeTranslateXWithBoundaries()) / 100),
         }}
       >
         <div
-          className="parallax__headline"
+          className="parallax__text-box"
           style={{
             transform: `translateX(${computeTranslateXWithBoundaries()}%)`,
           }}
@@ -38,7 +38,7 @@ const Content = ({ data, contentScrollPercent }) => {
           <h1>{data.headline}</h1>
         </div>
         <div
-          className="parallax__decoration-box"
+          className="parallax__deco-box"
           style={{
             transform: `translateX(${-computeTranslateXWithBoundaries()}%)`,
           }}

@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 
 import Content from '../components/Content';
-import Intro from '../components/Intro';
 import Parallax from '../components/parallax/Parallax';
 
 const parallaxTopData = {
@@ -15,33 +14,33 @@ const parallaxTopData = {
   },
   content: {
     headline: 'PARALLAX TOP',
-    scrollSpeed: 2.0,
+    scrollSpeed: 10.0,
   },
   options: {
     landscape: {
       small: {
-        heightImageRatio: 0.5,
-        imageScrollSpeed: 0.5,
-        imageOffset: 0,
+        heightImageRatio: 0.4,
+        imageScrollSpeed: 0.75,
+        imageOffset: 180,
       },
       medium: {
-        heightImageRatio: 0.5,
-        imageScrollSpeed: 0.5,
-        imageOffset: 0,
+        heightImageRatio: 0.4,
+        imageScrollSpeed: 0.75,
+        imageOffset: 200,
       },
       large: {
-        heightImageRatio: 0.25,
+        heightImageRatio: 0.35,
         imageScrollSpeed: 0.75,
-        imageOffset: 0,
+        imageOffset: 250,
       },
     },
     portrait: {
       heightImageRatio: 0.75,
-      imageScrollSpeed: 0.75,
+      imageScrollSpeed: 0.35,
       imageOffset: 0,
     },
     intersectAbove: 250,
-    viewportStartScrollPos: 1.0,
+    viewportStartScrollPos: 0,
   },
 };
 
@@ -132,14 +131,9 @@ const Body = () => {
 
   return (
     <div className="body">
-      {/* <Intro /> */}
-      <Content />
-      <Content />
       <Parallax data={parallaxTopData} />
       <Content />
-      <Content />
       <Parallax data={parallaxMiddleData} />
-      <Content />
       <Content />
       <Parallax data={parallaxBottomData} />
     </div>
