@@ -1,7 +1,7 @@
 {
-  "name": "webpackdevelopmentserver",
+  "name": "responsiveparallax",
   "version": "1.0.0",
-  "description": "Webpack development express server",
+  "description": "Responsive Parallax",
   "private": true,
   "author": "Sven Kohn",
   "license": "ISC",

@@ -1,15 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-const Footer = () => {
-  useEffect(() => {
-    // console.log('<Footer> Mounted');
-  }, []);
-
-  return (
-    <div className="footer">
-      <h1>Footer</h1>
+const Footer = () => (
+  <div className="footer">
+    <div className="footer__text">
+      © 2021 by Sven Kohn. All Rights Reserved!
     </div>
-  );
-};
+  </div>
+);
 
 export default Footer;

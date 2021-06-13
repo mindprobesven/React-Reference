@@ -1,4 +1,25 @@
-.error-container {
+.app-error {
+  font-size: $font-size-base;
+  color: $text-color-primary-base;
+  width: 90%;
   padding: 1rem;
-  background-color: $text-base-color;
+  margin: 0 auto;
+  background-color: $bg-color-secondary-base;
+  box-sizing: border-box;
+
+  h1 {
+    font-size: 1.25em;
+  }
+
+  p {
+    font-size: 0.85em;
+    line-height: 1.4em;
+  }
+}
+
+@include mq('tablet-sm') {
+  .app-error {
+    font-size: $font-size-base + 3px;
+    padding: 3rem;
+  }
 }

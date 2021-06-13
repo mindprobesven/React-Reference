@@ -325,11 +325,15 @@ const Parallax = ({ data }) => {
       className="parallax"
       style={{ paddingBottom: `${parallaxState.aspectRatio}%` }}
     >
-      <Stats
-        parallaxState={parallaxState}
-        imageState={imageState}
-        scrollState={scrollState}
-      />
+      {
+        data.options.showStats && (
+          <Stats
+            parallaxState={parallaxState}
+            imageState={imageState}
+            scrollState={scrollState}
+          />
+        )
+      }
       {
         isParallaxIntersecting && (
           <>

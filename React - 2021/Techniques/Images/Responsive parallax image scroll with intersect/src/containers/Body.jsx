@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import Content from '../components/Content';
 import Parallax from '../components/parallax/Parallax';
@@ -14,6 +13,8 @@ const parallaxTopData = {
   },
   content: {
     headline: 'PARALLAX TOP',
+    // The content should already be in its final position when a parallax is used as a top hero gfx.
+    // This is achieved by setting the scrollSpeed multiplier to a high value (e.g. 10).
     scrollSpeed: 10.0,
   },
   options: {
@@ -40,7 +41,9 @@ const parallaxTopData = {
       imageOffset: 0,
     },
     intersectAbove: 250,
+    // When a parallax is used as a top hero gfx, viewportStartScrollPos is set to 0.
     viewportStartScrollPos: 0,
+    showStats: false,
   },
 };
 
@@ -54,33 +57,34 @@ const parallaxMiddleData = {
   },
   content: {
     headline: 'PARALLAX MIDDLE',
-    scrollSpeed: 2.0,
+    scrollSpeed: 1.0,
   },
   options: {
     landscape: {
       small: {
-        heightImageRatio: 0.5,
+        heightImageRatio: 0.4,
         imageScrollSpeed: 0.5,
         imageOffset: 0,
       },
       medium: {
-        heightImageRatio: 0.5,
-        imageScrollSpeed: 0.75,
+        heightImageRatio: 0.35,
+        imageScrollSpeed: 0.5,
         imageOffset: 0,
       },
       large: {
-        heightImageRatio: 0.5,
-        imageScrollSpeed: 0.75,
+        heightImageRatio: 0.3,
+        imageScrollSpeed: 0.5,
         imageOffset: 0,
       },
     },
     portrait: {
       heightImageRatio: 0.75,
-      imageScrollSpeed: 0.75,
+      imageScrollSpeed: 0.15,
       imageOffset: 0,
     },
     intersectAbove: 250,
     viewportStartScrollPos: 1.0,
+    showStats: false,
   },
 };
 
@@ -94,50 +98,45 @@ const parallaxBottomData = {
   },
   content: {
     headline: 'PARALLAX BOTTOM',
-    scrollSpeed: 2.0,
+    scrollSpeed: 1000.0,
   },
   options: {
     landscape: {
       small: {
-        heightImageRatio: 0.5,
-        imageScrollSpeed: 0.5,
+        heightImageRatio: 0.4,
+        imageScrollSpeed: 0.65,
         imageOffset: 0,
       },
       medium: {
-        heightImageRatio: 0.5,
+        heightImageRatio: 0.35,
         imageScrollSpeed: 0.75,
         imageOffset: 0,
       },
       large: {
-        heightImageRatio: 0.5,
-        imageScrollSpeed: 0.75,
+        heightImageRatio: 0.3,
+        imageScrollSpeed: 0.95,
         imageOffset: 0,
       },
     },
     portrait: {
       heightImageRatio: 0.75,
-      imageScrollSpeed: 0.75,
+      imageScrollSpeed: 0.3,
       imageOffset: 0,
     },
     intersectAbove: 250,
     viewportStartScrollPos: 1.0,
+    showStats: false,
   },
 };
 
-const Body = () => {
-  useEffect(() => {
-    // console.log('<Body> Mounted');
-  }, []);
-
-  return (
-    <div className="body">
-      <Parallax data={parallaxTopData} />
-      <Content />
-      <Parallax data={parallaxMiddleData} />
-      <Content />
-      <Parallax data={parallaxBottomData} />
-    </div>
-  );
-};
+const Body = () => (
+  <div className="body">
+    <Parallax data={parallaxTopData} />
+    <Content />
+    <Parallax data={parallaxMiddleData} />
+    <Content />
+    <Parallax data={parallaxBottomData} />
+  </div>
+);
 
 export default Body;

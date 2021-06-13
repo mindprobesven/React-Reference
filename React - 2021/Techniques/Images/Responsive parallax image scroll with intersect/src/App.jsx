@@ -2,7 +2,7 @@
 /*
 ---------------------------------------------------------------------------------------------
 
-Responsive parallax hero image scroller
+Responsive parallax image scroller
 
 Features:
 - Smooth resizing and setting breakpoints for landscape and portrait orientation.

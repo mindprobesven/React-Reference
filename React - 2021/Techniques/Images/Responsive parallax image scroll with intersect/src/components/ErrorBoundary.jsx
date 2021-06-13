@@ -21,7 +21,7 @@ class ErrorBoundary extends Component {
 
     if (errorInfo) {
       return (
-        <div className="error-container">
+        <div className="app-error">
           <h1>Something wend wrong!</h1>
           <p>{error.toString()}</p>
           <p style={{ whiteSpace: 'pre-wrap' }}>{errorInfo.componentStack}</p>

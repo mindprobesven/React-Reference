@@ -1,3 +1,23 @@
 .footer {
-  background: $footer-bg-color;
+  display: flex;
+  align-items: center;
+  font-size: $font-size-base;
+  width: 100%;
+  height: 3rem;
+  padding: 0 1.5rem;
+  background: $bg-color-secondary-base;
+  box-sizing: border-box;
+
+  &__text {
+    font-size: 0.85em;
+    color: $text-color-primary-base;
+  }
+}
+
+@include mq('tablet-sm') {
+  .footer {
+    font-size: $font-size-base + 3px;
+    height: 4rem;
+    padding: 0 2rem;
+  }
 }
