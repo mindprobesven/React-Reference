@@ -1,0 +1,43 @@
+// ----------------------------------------------------------
+//
+// Media query mixin
+//
+// This mixin is included in components to define media query
+// breakpoints.
+//
+// The breakpoints 'map' is specified in _variables.scss
+// 
+// Usage example:
+//
+// @include mq('phone-l-sm') {
+//   .element {
+//     ...
+//   }
+// }
+//
+// ----------------------------------------------------------
+
+@mixin mq($breakpoint) {
+  $raw-query: map-get($breakpoints, $breakpoint);
+
+  // Check if $raw-query is a string or a map
+  @if $raw-query {
+    $query: if(
+      // if condition
+      type-of($raw-query) == 'string',
+      // true return
+      unquote($raw-query),
+      // else return
+      // In this case $raw-query is of type 'map', so we convert
+      // the map to a string representation using inspect()
+      inspect($raw-query)
+    );
+
+    @media #{$query} {
+      @content;
+    }
+  } @else {
+    @error 'No value found for `#{$breakpoint}`. '
+         + 'Please make sure it is defined in `$breakpoints` map.';
+  }
+}

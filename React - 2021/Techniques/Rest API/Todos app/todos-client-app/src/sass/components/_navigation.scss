@@ -1,0 +1,37 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-base;
+  height: 3rem;
+
+  &__link-container {
+    margin-right: 0.75rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__link {
+    font-size: 0.9em;
+    font-weight: $font-weight-bold;
+    color: $text-color-primary-base;
+    text-decoration: none;
+  }
+}
+
+@include mq('tablet-sm') {
+  .navigation {
+    justify-content: flex-end;
+    font-size: $font-size-base + 5px;
+
+    &__link-container {
+      margin-right: 1.5rem;
+
+      &:last-child {
+        margin-right: 2rem;
+      }
+    }
+  }
+}
