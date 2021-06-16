@@ -1,0 +1,39 @@
+.content {
+  align-self: center;
+  font-size: $font-size-base;
+  width: 100%;
+  padding: 1.5rem;
+  background: $bg-color-secondary-base;
+  box-sizing: border-box;
+
+  &__divider {
+    width: 100%;
+    margin-bottom: 1em;
+    border: 1px dashed white;
+}
+
+  h1 {
+    font-size: 1.25em;
+    color: $text-color-secondary-base;
+    margin-bottom: 0.5em;
+  }
+
+  p {
+    font-size: 1em;
+    color: $text-color-primary-base;
+    margin-bottom: 1em;
+    line-height: 1.3em;
+  }
+}
+
+@include mq('tablet-sm') {
+  .content {
+    font-size: $font-size-base + 3px;
+    max-width: 750px;
+    padding: 3rem;
+
+    p {
+      line-height: 1.4em;
+    }
+  }
+}
