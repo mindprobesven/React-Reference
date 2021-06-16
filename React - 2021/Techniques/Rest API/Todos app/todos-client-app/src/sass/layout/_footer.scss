@@ -1,5 +1,6 @@
 .footer {
   display: flex;
+  flex-flow: row nowrap;
   align-items: center;
   font-size: $font-size-base;
   width: 100%;
