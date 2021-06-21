@@ -1,7 +1,7 @@
 {
-  "name": "mytodosclientapp",
+  "name": "customfontssass",
   "version": "1.0.0",
-  "description": "MyTodos Client App",
+  "description": "Using custom fonts with Sass",
   "private": true,
   "author": "Sven Kohn",
   "license": "ISC",
