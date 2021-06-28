@@ -1,0 +1,12 @@
+{
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "max-len": ["warn", 80, 2, {"ignoreComments": true}],
+    "indent": ["error", 2],
+    "semi": ["error", "always"],
+    "no-console":  ["error", { "allow": ["warn", "error", "log"] }]
+  },
+  "extends": ["airbnb", "airbnb/hooks"]
+}
