@@ -1,4 +1,4 @@
-const startExpressServer = require('./express/connection');
+const startExpressServer = require('./express/router');
 const mongoConnection = require('./mongo/connection');
 
 const init = async () => {
