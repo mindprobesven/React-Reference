@@ -2,80 +2,17 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 const express = require('express');
-const validator = require('validator');
-const { validationResult, checkSchema } = require('express-validator');
+const { validationResult } = require('express-validator');
+const userValidationSchema = require('../validation/userValidationSchema');
 
 const mongoConnection = require('../../mongo/connection');
-const userModelMethods = require('../../mongo/schemas/user');
+const UserModel = require('../../mongo/schemas/user');
+
 const logger = require('../../utils/logger');
 
 const adminRouter = express.Router();
 
 adminRouter.use(express.json());
-
-const userValidationSchema = checkSchema({
-  email: {
-    trim: true,
-    notEmpty: {
-      errorMessage: 'Email address not specified',
-      bail: true,
-    },
-    isLength: {
-      options: { max: 50 },
-      errorMessage: 'Email address is too long',
-      bail: true,
-    },
-    isEmail: {
-      errorMessage: 'Invalid email address',
-    },
-    normalizeEmail: true,
-  },
-  firstName: {
-    trim: true,
-    notEmpty: {
-      errorMessage: 'Not specified',
-      bail: true,
-    },
-    isLength: {
-      options: { max: 50 },
-      errorMessage: 'Too long',
-      bail: true,
-    },
-    // Custom isAlpha validator to allow special characters (e.g. ñ,ü) for multiple locales
-    custom: {
-      options: (value) => {
-        if (validator.isAlpha(value, 'en-US', { ignore: ' -' })
-        || validator.isAlpha(value, 'es-ES', { ignore: ' -' })
-        || validator.isAlpha(value, 'de-DE', { ignore: ' -' })) {
-          return value;
-        }
-        throw new Error('Invalid characters');
-      },
-    },
-  },
-  lastName: {
-    trim: true,
-    notEmpty: {
-      errorMessage: 'Not specified',
-      bail: true,
-    },
-    isLength: {
-      options: { max: 50 },
-      errorMessage: 'Too long',
-      bail: true,
-    },
-    custom: {
-      options: (value) => {
-        if (validator.isAlpha(value, 'en-US', { ignore: ' -' })
-        || validator.isAlpha(value, 'es-ES', { ignore: ' -' })
-        || validator.isAlpha(value, 'de-DE', { ignore: ' -' })) {
-          return value;
-        }
-        throw new Error('Invalid characters');
-      },
-    },
-  },
-});
 
 // Middleware
 // ------------------------------------------------------------------------------------------------
@@ -130,12 +67,62 @@ const validatePostRequest = (validationSchema) => async (req, res, next) => {
   }
 };
 
-// curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sVen@Mind-probe.com"}' http://127.0.0.1:5000/admin/user/add
-// curl -X POST --data '{"firstName":"Svena", "lastName":"Kohna", "email":"sVen2@mMind-probe.com"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
-// curl -X POST --data '{"firstName":"Svenb", "lastName":"Kohnb", "email":"sVenb@mMind-probe.com"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
-// curl -X POST --data '{"firstName":"Svend", "lastName":"Kohnd", "email":"sVen3@mMind-probe.com"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
-// curl -X POST --data '{"firstName":"Svene", "lastName":"Kohne", "email":"sVene@mind-probe.com"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
-// curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn!", "email":"sVen@Mind-probe..com"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+const validateGetRequest = async (req, res, next) => {
+  if (req.accepts('application/json') === 'application/json') {
+    return next();
+  }
+  logger.express.log({
+    level: 'error',
+    message: `[ ${req.method} ] 406 - Not acceptable - ${req.get('Accept')} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+  });
+
+  res.status(406).json({
+    status: 406,
+    error: 'Not acceptable',
+  });
+};
+
+// curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?sortBy=firstName&sortOrder=asc
+// curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?sortBy=createdAt&sortOrder=desc
+// curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=s
+// curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=lastName&searchTerm=k
+// curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=s&sortBy=firstName&sortOrder=asc
+// curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users
+// curl -X GET -H "Accept: text/html" http://127.0.0.1:5000/admin/users
+// curl -X GET http://127.0.0.1:5000/admin/users
+adminRouter.get(
+  '/users',
+  checkMongoConnection,
+  validateGetRequest,
+  async (req, res) => {
+    try {
+      const userModel = new UserModel();
+      const users = await userModel.getUsers(req.query);
+
+      logger.express.log({
+        level: 'info',
+        message: `[ ${req.method} ] 200 - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+      });
+
+      res.status(200).json(users);
+    } catch (error) {
+      logger.express.log({
+        level: 'error',
+        message: `[ ${req.method} ] 400 - ${error.name} - ${error.message} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+      });
+
+      res.status(400).json({
+        status: 400,
+        error: `${error.name} - ${error.message}`,
+      });
+    }
+  },
+);
+
+// curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+// curl -X POST --data '{"firstName":"Simon", "lastName":"Weisberger", "email":"simon@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+// curl -X POST --data '{"firstName":"Barbara", "lastName":"Massari Nola", "email":"barbara@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+// curl -X POST --data '{"firstName":"Valentina", "lastName":"Kohn", "email":"valentina@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
 adminRouter.post(
   '/user/add',
   checkMongoConnection,
@@ -143,28 +130,29 @@ adminRouter.post(
   async (req, res) => {
     // At this point guaranteed:
     // There is a connection to the MongoDB
-    // The input data is valid and contains all required fields
-    const emailExists = await userModelMethods.checkExistingEmail(req.body.email);
-
-    if (emailExists) {
-      logger.express.log({
-        level: 'error',
-        message: `[ ${req.method} ] 400 - Email exists - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
-      });
-
-      return res.status(400).json({
-        status: 400,
-        error: [{
-          value: req.body.email,
-          msg: 'Email exists',
-          param: 'email',
-          location: 'body',
-        }],
-      });
-    }
-
+    // The input data is valid, sanitized and contains all required fields
     try {
-      await userModelMethods.addUser(req.body);
+      const userModel = new UserModel({ ...req.body });
+
+      const isDuplicate = await userModel.isEmailDuplicate();
+      if (isDuplicate) {
+        logger.express.log({
+          level: 'error',
+          message: `[ ${req.method} ] 400 - Email exists - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+        });
+
+        return res.status(400).json({
+          status: 400,
+          error: [{
+            value: req.body.email,
+            msg: 'Email exists',
+            param: 'email',
+            location: 'body',
+          }],
+        });
+      }
+
+      await userModel.addUser();
 
       logger.express.log({
         level: 'info',
@@ -185,9 +173,5 @@ adminRouter.post(
     }
   },
 );
-
-adminRouter.get('/', (req, res) => {
-  res.json({ username: 'mindprobesven' });
-});
 
 module.exports = adminRouter;

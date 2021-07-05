@@ -14,24 +14,65 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  validated: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  posts: {
+    type: [Schema.Types.ObjectId],
+    required: true,
+    default: [],
+  },
 }, {
   timestamps: true,
 });
 
-userSchema.methods.checkExistingEmail = function checkExistingEmail(email) {
+userSchema.methods.isEmailDuplicate = function isEmailDuplicate() {
+  return new Promise((resolve, reject) => {
+    model('User')
+      .findOne({ email: new RegExp(this.email, 'i') })
+      .select('email')
+      .lean()
+      .then((isDuplicate) => {
+        if (isDuplicate) {
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch((error) => reject(error));
+  });
+};
+
+userSchema.methods.addUser = function addUser() {
+  return this.save();
+};
+
+userSchema.methods.getUsers = function getUsers({
+  searchFor,
+  searchTerm,
+  sortBy,
+  sortOrder,
+}) {
   return model('User')
-    .findOne({ email: new RegExp(email, 'i') })
-    .select('email')
+    .find((() => {
+      let filterObj = {};
+
+      if (searchFor && searchTerm) {
+        filterObj = {
+          [searchFor]: new RegExp(`^${searchTerm}`, 'i'),
+        };
+      }
+      return filterObj;
+    })())
+    .sort({ [sortBy]: sortOrder })
+    .select({
+      updatedAt: 0,
+      __v: 0,
+    })
     .lean();
 };
 
-userSchema.methods.addUser = function addUser(data) {
-  const UserModel = model('User', userSchema);
-  const newUserDoc = new UserModel({ ...data });
-  return newUserDoc.save();
-};
-
 const UserModel = model('User', userSchema);
-const userModelMethods = new UserModel();
 
-module.exports = userModelMethods;
+module.exports = UserModel;
