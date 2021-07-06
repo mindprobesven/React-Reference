@@ -48,6 +48,16 @@ userSchema.methods.addUser = function addUser() {
   return this.save();
 };
 
+userSchema.methods.editUser = function editUser(data) {
+  console.log(data);
+  return true;
+};
+
+userSchema.methods.getUserById = function getUserById(id) {
+  console.log(id);
+  return model('User').findOne({ _id: id });
+};
+
 userSchema.methods.getUsers = function getUsers({
   searchFor,
   searchTerm,

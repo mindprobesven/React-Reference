@@ -14,7 +14,7 @@ const app = express();
 const defaultErrorHandler = (error, req, res, next) => {
   logger.express.log({
     level: 'error',
-    message: error,
+    message: `[ ${req.method} ] 500 - ${error.name} - ${error.message}  - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
   });
 
   res.status(500).send('500 - Internal Server Error');
@@ -32,7 +32,7 @@ app.use('/admin', adminRouter);
 app.get('*', (req, res) => {
   logger.express.log({
     level: 'error',
-    message: `404 - [ ${req.method} ] - ${req.url} - ${req.ip} - ${req.get('user-agent')}`,
+    message: `[ ${req.method} ] 404 - Bad request - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
   });
 
   res.status(404).send('404 - Bad Request');
@@ -53,7 +53,7 @@ const startExpressServer = () => (
     } catch (error) {
       logger.express.log({
         level: 'error',
-        message: error,
+        message: `${error.name} - ${error.message}`,
       });
     }
   })

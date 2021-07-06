@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
@@ -123,6 +124,8 @@ adminRouter.get(
 // curl -X POST --data '{"firstName":"Simon", "lastName":"Weisberger", "email":"simon@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
 // curl -X POST --data '{"firstName":"Barbara", "lastName":"Massari Nola", "email":"barbara@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
 // curl -X POST --data '{"firstName":"Valentina", "lastName":"Kohn", "email":"valentina@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+// curl -X POST --data '{"firstName":"Thomas", "lastName":"Kohn", "email":"thomas@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+// curl -X POST --data '{"firstName":"ThomasБ", "lastName":"Kohn", "email":"thomas@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
 adminRouter.post(
   '/user/add',
   checkMongoConnection,
@@ -158,6 +161,50 @@ adminRouter.post(
         level: 'info',
         message: `[ ${req.method} ] 200 - New user created - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
       });
+
+      res.sendStatus(200);
+    } catch (error) {
+      logger.express.log({
+        level: 'error',
+        message: `[ ${req.method} ] 400 - ${error.name} - ${error.message} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+      });
+
+      res.status(400).json({
+        status: 400,
+        error: `${error.name} - ${error.message}`,
+      });
+    }
+  },
+);
+
+// curl -X POST --data '{"_id":"60e2ec628232b04b645378c4", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+// curl -X POST --data '{"_id":" 60e2ec628232b04b645378c4  ", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+// curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+// curl -X POST --data '{"_id":"60e2ec628232b04b645378c4", "firstName":"SvenБ", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+// curl -X POST --data '{"_id":"60e2ec628232b04b645378c4", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":"foo"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+// curl -X POST --data '{"_id":"60e2ec628232b04b645378c4", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+// curl -X GET http://127.0.0.1:5000/admin/user/edit1
+adminRouter.post(
+  '/user/edit',
+  checkMongoConnection,
+  validatePostRequest(userValidationSchema),
+  async (req, res) => {
+    try {
+      // First check if the request body contains an ID
+      if (!req.body._id) {
+        throw new Error('User ID not specified');
+      }
+
+      const userModel = new UserModel();
+      const documentToEdit = await userModel.getUserById(req.body._id);
+      // const documentToEdit = await userModel.getUserById('60e2ec628232b04b645378c2');
+      console.log(documentToEdit);
+
+      // Next, check if a user with the specified ID exists
+      if (!documentToEdit) {
+        console.log('User ID not found');
+      }
+      console.log('User ID found');
 
       res.sendStatus(200);
     } catch (error) {
