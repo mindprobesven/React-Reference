@@ -44,18 +44,22 @@ userSchema.methods.isEmailDuplicate = function isEmailDuplicate() {
   });
 };
 
-userSchema.methods.addUser = function addUser() {
-  return this.save();
+userSchema.methods.deleteUserById = function deleteUserById(_id) {
+  console.log(this);
+  return new Promise((resolve, reject) => {
+    model('User').deleteOne({ _id })
+      .then((result) => {
+        if (result.deletedCount > 0) {
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch((error) => reject(error));
+  });
 };
 
-userSchema.methods.editUser = function editUser(data) {
-  console.log(data);
-  return true;
-};
-
-userSchema.methods.getUserById = function getUserById(id) {
-  console.log(id);
-  return model('User').findOne({ _id: id });
+userSchema.methods.getUserById = function getUserById(_id) {
+  return model('User').findOne({ _id });
 };
 
 userSchema.methods.getUsers = function getUsers({

@@ -5,6 +5,7 @@
 const express = require('express');
 const { validationResult } = require('express-validator');
 const userValidationSchema = require('../validation/userValidationSchema');
+const docValidationSchema = require('../validation/docValidationSchema');
 
 const mongoConnection = require('../../mongo/connection');
 const UserModel = require('../../mongo/schemas/user');
@@ -89,8 +90,6 @@ const validateGetRequest = async (req, res, next) => {
 // curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=lastName&searchTerm=k
 // curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=s&sortBy=firstName&sortOrder=asc
 // curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users
-// curl -X GET -H "Accept: text/html" http://127.0.0.1:5000/admin/users
-// curl -X GET http://127.0.0.1:5000/admin/users
 adminRouter.get(
   '/users',
   checkMongoConnection,
@@ -125,7 +124,6 @@ adminRouter.get(
 // curl -X POST --data '{"firstName":"Barbara", "lastName":"Massari Nola", "email":"barbara@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
 // curl -X POST --data '{"firstName":"Valentina", "lastName":"Kohn", "email":"valentina@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
 // curl -X POST --data '{"firstName":"Thomas", "lastName":"Kohn", "email":"thomas@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
-// curl -X POST --data '{"firstName":"ThomasБ", "lastName":"Kohn", "email":"thomas@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
 adminRouter.post(
   '/user/add',
   checkMongoConnection,
@@ -155,7 +153,7 @@ adminRouter.post(
         });
       }
 
-      await userModel.addUser();
+      await userModel.save();
 
       logger.express.log({
         level: 'info',
@@ -177,34 +175,103 @@ adminRouter.post(
   },
 );
 
-// curl -X POST --data '{"_id":"60e2ec628232b04b645378c4", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-// curl -X POST --data '{"_id":" 60e2ec628232b04b645378c4  ", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-// curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-// curl -X POST --data '{"_id":"60e2ec628232b04b645378c4", "firstName":"SvenБ", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-// curl -X POST --data '{"_id":"60e2ec628232b04b645378c4", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":"foo"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-// curl -X POST --data '{"_id":"60e2ec628232b04b645378c4", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-// curl -X GET http://127.0.0.1:5000/admin/user/edit1
+/*
+curl -X POST --data '{"_id":"60e58431be6b9b3fa92bc189", "firstName":"Sven Michel", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":false}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+curl -X POST --data '{"firstName":"Sven Michel", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":false}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+*/
 adminRouter.post(
   '/user/edit',
-  checkMongoConnection,
-  validatePostRequest(userValidationSchema),
+  [
+    checkMongoConnection,
+    // First, validate the incoming user ID
+    validatePostRequest(docValidationSchema),
+    // Next, validate and sanitize the incoming user data
+    validatePostRequest(userValidationSchema),
+  ],
   async (req, res) => {
     try {
-      // First check if the request body contains an ID
-      if (!req.body._id) {
-        throw new Error('User ID not specified');
-      }
-
+      // Next, check if a user with the ID exists
       const userModel = new UserModel();
-      const documentToEdit = await userModel.getUserById(req.body._id);
-      // const documentToEdit = await userModel.getUserById('60e2ec628232b04b645378c2');
-      console.log(documentToEdit);
+      const docToEdit = await userModel.getUserById(req.body._id);
 
-      // Next, check if a user with the specified ID exists
-      if (!documentToEdit) {
-        console.log('User ID not found');
+      if (!docToEdit) {
+        throw new Error('User not found');
       }
-      console.log('User ID found');
+
+      const currentEmail = docToEdit.email;
+      const newEmail = req.body.email;
+
+      // Next, update the user document with the incoming data
+      docToEdit.set({ ...req.body });
+
+      // Next, in case the email has changed, we need to do a duplicate check
+      if (currentEmail !== newEmail) {
+        const isDuplicate = await docToEdit.isEmailDuplicate();
+        if (isDuplicate) {
+          logger.express.log({
+            level: 'error',
+            message: `[ ${req.method} ] 400 - Email exists - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+          });
+
+          return res.status(400).json({
+            status: 400,
+            error: [{
+              value: req.body.email,
+              msg: 'Email exists',
+              param: 'email',
+              location: 'body',
+            }],
+          });
+        }
+      }
+
+      // Finally, we use save() to run the schema validation and if it passes, the user data is updated in the database.
+      await docToEdit.save();
+
+      logger.express.log({
+        level: 'info',
+        message: `[ ${req.method} ] 200 - User updated - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+      });
+
+      res.sendStatus(200);
+    } catch (error) {
+      logger.express.log({
+        level: 'error',
+        message: `[ ${req.method} ] 400 - ${error.name} - ${error.message} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+      });
+
+      res.status(400).json({
+        status: 400,
+        error: `${error.name} - ${error.message}`,
+      });
+    }
+  },
+);
+
+/*
+curl -X POST --data '{"_id":"60e583e56dfbb43dbaa8e5bf"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/delete
+curl -X POST --data '{"_id":"foo"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/delete
+curl -X POST --data '{}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/delete
+*/
+adminRouter.post(
+  '/user/delete',
+  [
+    checkMongoConnection,
+    validatePostRequest(docValidationSchema),
+  ],
+  async (req, res) => {
+    try {
+      const userModel = new UserModel();
+      const isDeleted = await userModel.deleteUserById(req.body._id);
+
+      if (!isDeleted) {
+        throw new Error('Deleting the user failed');
+      }
+
+      logger.express.log({
+        level: 'info',
+        message: `[ ${req.method} ] 200 - User deleted successfully - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+      });
 
       res.sendStatus(200);
     } catch (error) {
