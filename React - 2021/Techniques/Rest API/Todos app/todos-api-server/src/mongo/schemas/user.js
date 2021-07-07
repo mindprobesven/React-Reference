@@ -44,10 +44,9 @@ userSchema.methods.isEmailDuplicate = function isEmailDuplicate() {
   });
 };
 
-userSchema.methods.deleteUserById = function deleteUserById(_id) {
-  console.log(this);
+userSchema.methods.deleteUserById = function deleteUserById(id) {
   return new Promise((resolve, reject) => {
-    model('User').deleteOne({ _id })
+    model('User').deleteOne({ _id: id })
       .then((result) => {
         if (result.deletedCount > 0) {
           resolve(true);
@@ -58,8 +57,8 @@ userSchema.methods.deleteUserById = function deleteUserById(_id) {
   });
 };
 
-userSchema.methods.getUserById = function getUserById(_id) {
-  return model('User').findOne({ _id });
+userSchema.methods.getUserById = function getUserById(id) {
+  return model('User').findOne({ _id: id });
 };
 
 userSchema.methods.getUsers = function getUsers({
@@ -68,7 +67,7 @@ userSchema.methods.getUsers = function getUsers({
   sortBy,
   sortOrder,
 }) {
-  return model('User')
+  return model('User1')
     .find((() => {
       let filterObj = {};
 

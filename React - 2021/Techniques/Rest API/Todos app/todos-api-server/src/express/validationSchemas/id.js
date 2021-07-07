@@ -1,7 +1,7 @@
 const { checkSchema } = require('express-validator');
 
-const docValidationSchema = checkSchema({
-  _id: {
+const idValidationSchema = checkSchema({
+  id: {
     trim: true,
     isLength: {
       options: { min: 24, max: 24 },
@@ -15,4 +15,4 @@ const docValidationSchema = checkSchema({
   },
 });
 
-module.exports = docValidationSchema;
+module.exports = idValidationSchema;
