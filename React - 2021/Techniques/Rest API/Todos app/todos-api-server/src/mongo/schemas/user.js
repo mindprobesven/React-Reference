@@ -67,7 +67,7 @@ userSchema.methods.getUsers = function getUsers({
   sortBy,
   sortOrder,
 }) {
-  return model('User1')
+  return model('User')
     .find((() => {
       let filterObj = {};
 

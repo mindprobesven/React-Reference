@@ -4,21 +4,23 @@ const express = require('express');
 const favicon = require('serve-favicon');
 
 const { ENV_TYPE, EXPRESS_PORT } = require('../config/config');
+
 const requestLogger = require('./middleware/requestLogger');
 const adminRouter = require('./routes/admin');
+const responseError = require('./responseHandlers/error');
 
 const logger = require('../utils/logger');
 
 const app = express();
 
 const defaultErrorHandler = (error, req, res, next) => {
-  logger.express.log({
-    level: 'error',
-    message: `[ ${req.method} ] 500 - ${error.name} - ${error.message}  - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
+  responseError({
+    req,
+    res,
+    status: 500,
+    error,
   });
-
-  res.status(500).send('500 - Internal Server Error');
-  next();
+  return next();
 };
 
 // Middleware to handle favicon.ico requests
@@ -29,14 +31,12 @@ app.use(requestLogger);
 
 app.use('/admin', adminRouter);
 
-app.get('*', (req, res) => {
-  logger.express.log({
-    level: 'error',
-    message: `[ ${req.method} ] 404 - Bad request - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
-  });
-
-  res.status(404).send('404 - Bad Request');
-});
+app.get('*', (req, res) => responseError({
+  req,
+  res,
+  status: 404,
+  message: '404 - Bad Request',
+}));
 
 app.use(defaultErrorHandler);
 

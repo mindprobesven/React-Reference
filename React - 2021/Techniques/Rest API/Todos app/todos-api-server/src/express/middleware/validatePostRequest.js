@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const { validationResult } = require('express-validator');
-const logger = require('../../utils/logger');
+const responseError = require('../responseHandlers/error');
 
 const validatePostRequest = (validationSchema) => async (req, res, next) => {
   // First checks if the request header contains the fields 'Content-Type' and 'Accept' with an acceptable content type (application/json)
@@ -14,25 +14,18 @@ const validatePostRequest = (validationSchema) => async (req, res, next) => {
     if (errors.isEmpty()) {
       return next();
     }
-
-    logger.express.log({
-      level: 'error',
-      message: `[ ${req.method} ] 400 - Validation failed for incoming data - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
-    });
-
-    return res.status(400).json({
-      status: 400,
-      error: errors.array(),
+    return responseError({
+      req,
+      res,
+      message: 'Validation failed for incoming data',
+      payload: errors.array(),
     });
   }
-  logger.express.log({
-    level: 'error',
-    message: `[ ${req.method} ] 406 - Not acceptable - ${req.get('Accept')} <- -> ${req.get('Content-Type')} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
-  });
-
-  return res.status(406).json({
+  return responseError({
+    req,
+    res,
     status: 406,
-    error: 'Not acceptable',
+    message: '406 - Not acceptable',
   });
 };
 

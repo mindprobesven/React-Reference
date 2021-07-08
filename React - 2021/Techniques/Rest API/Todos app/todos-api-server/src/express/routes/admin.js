@@ -8,73 +8,18 @@ const validatePostRequest = require('../middleware/validatePostRequest');
 const idValidationSchema = require('../validationSchemas/id');
 const userValidationSchema = require('../validationSchemas/user');
 
-const UserModel = require('../../mongo/schemas/user');
+const responseSuccess = require('../responseHandlers/success');
+const responseError = require('../responseHandlers/error');
 
-const logger = require('../../utils/logger');
+const UserModel = require('../../mongo/schemas/user');
 
 const adminRouter = express.Router();
 
 adminRouter.use(express.json());
 
-const responseSuccess = ({
-  req,
-  res,
-  status,
-  message,
-  payload = undefined,
-}) => {
-  logger.express.log({
-    level: 'info',
-    message: `[ ${req.method} ] ${status} - ${message} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
-  });
-
-  if (payload) {
-    return res.status(status).json(payload);
-  }
-
-  return res.sendStatus(status);
-};
-
-const responseError = ({
-  req,
-  res,
-  status,
-  errorMessage = undefined,
-  errorPayload = undefined,
-  error = undefined,
-}) => {
-  if (error) {
-    logger.express.log({
-      level: 'error',
-      message: `[ ${req.method} ] ${status} - ${error.name} - ${error.message} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
-    });
-
-    return res.status(status).send(`${error.name} - ${error.message}`);
-  }
-
-  if (errorMessage && errorPayload) {
-    logger.express.log({
-      level: 'error',
-      message: `[ ${req.method} ] ${status} - ${errorMessage} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
-    });
-
-    return res.status(status).json({ error: errorPayload });
-  }
-
-  if (errorMessage) {
-    logger.express.log({
-      level: 'error',
-      message: `[ ${req.method} ] ${status} - ${errorMessage} - ${req.originalUrl} - ${req.ip} - ${req.get('user-agent')}`,
-    });
-
-    return res.status(status).send(errorMessage);
-  }
-
-  return res.sendStatus(status);
-};
-
 /*
 curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?sortBy=firstName&sortOrder=asc
+curl -X GET -H "Accept: application1/json" http://127.0.0.1:5000/admin/users/?sortBy=firstName&sortOrder=asc
 curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?sortBy=createdAt&sortOrder=desc
 curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=s
 curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=lastName&searchTerm=k
@@ -95,17 +40,11 @@ adminRouter.get(
       return responseSuccess({
         req,
         res,
-        status: 200,
         message: 'Sending user data',
         payload: users,
       });
     } catch (error) {
-      return responseError({
-        req,
-        res,
-        status: 400,
-        error,
-      });
+      return responseError({ req, res, error });
     }
   },
 );
@@ -135,9 +74,8 @@ adminRouter.post(
         return responseError({
           req,
           res,
-          status: 400,
-          errorMessage: 'Email exists',
-          errorPayload: [{
+          message: 'Email exists',
+          payload: [{
             value: req.body.email,
             msg: 'Email exists',
             param: 'email',
@@ -151,22 +89,17 @@ adminRouter.post(
       return responseSuccess({
         req,
         res,
-        status: 200,
         message: 'New user created',
       });
     } catch (error) {
-      return responseError({
-        req,
-        res,
-        status: 400,
-        error,
-      });
+      return responseError({ req, res, error });
     }
   },
 );
 
 /*
 curl -X POST --data '{"id":"60e5a0bbdea4cf620c439d48", "firstName":"Sven Michel", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":false}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+curl -X POST --data '{"id":"60e5a0bbdea4cf620c439d48", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
 */
 adminRouter.post(
   '/user/edit',
@@ -200,9 +133,8 @@ adminRouter.post(
           return responseError({
             req,
             res,
-            status: 400,
-            errorMessage: 'Email exists',
-            errorPayload: [{
+            message: 'Email exists',
+            payload: [{
               value: req.body.email,
               msg: 'Email exists',
               param: 'email',
@@ -218,16 +150,10 @@ adminRouter.post(
       return responseSuccess({
         req,
         res,
-        status: 200,
         message: 'User updated',
       });
     } catch (error) {
-      return responseError({
-        req,
-        res,
-        status: 400,
-        error,
-      });
+      return responseError({ req, res, error });
     }
   },
 );
@@ -253,16 +179,10 @@ adminRouter.post(
       return responseSuccess({
         req,
         res,
-        status: 200,
         message: 'User deleted successfully',
       });
     } catch (error) {
-      return responseError({
-        req,
-        res,
-        status: 400,
-        error,
-      });
+      return responseError({ req, res, error });
     }
   },
 );
