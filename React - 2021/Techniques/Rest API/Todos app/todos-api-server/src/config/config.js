@@ -13,7 +13,7 @@ const MONGO_OPTIONS = {
   heartbeatFrequencyMS: 5000,
 };
 const MONGO_DB = 'todos-app';
-const MONGO_URI = `mongodb://localhost:27017/${MONGO_DB}`;
+const MONGO_URI = `mongodb://1localhost:27017/${MONGO_DB}`;
 
 module.exports = {
   ENV,

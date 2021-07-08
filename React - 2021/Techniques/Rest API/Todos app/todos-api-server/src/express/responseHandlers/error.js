@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
 const logger = require('../../utils/logger');
 
+/**
+ * Sends and logs a HTTP `error` response
+ */
 const responseError = ({
   req,
   res,

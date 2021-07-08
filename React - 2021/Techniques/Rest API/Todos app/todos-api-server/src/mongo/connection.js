@@ -15,9 +15,7 @@ const MongoConnection = (() => {
     isConnected: false,
   };
 
-  // ------------------------------------------------------------------------------------------------
-  // Catch database connection and readyState events and handle them
-  // ------------------------------------------------------------------------------------------------
+  /** Catch database `readyState` change events and handle them. */
   const handleReadyStateStatusChange = () => {
     switch (db.readyState) {
     case 0:
@@ -62,6 +60,7 @@ const MongoConnection = (() => {
     }
   };
 
+  /** Catch database `connection` change events and handle them. */
   const handleConnectionStatusChange = (event) => {
     switch (event) {
     case 'reconnected':
@@ -100,9 +99,7 @@ const MongoConnection = (() => {
     .on('reconnectFailed', () => handleConnectionStatusChange('reconnectFailed'))
     .on('error', () => handleConnectionStatusChange('error'));
 
-  // ------------------------------------------------------------------------------------------------
-  // Catch process events if the app is restarted or exited and gracefully close the database connection
-  // ------------------------------------------------------------------------------------------------
+  /** Catch `process` events if the app is restarted or exited and gracefully close the database connection */
   const gracefulExit = () => {
     db.close()
       .then(() => {
@@ -119,10 +116,9 @@ const MongoConnection = (() => {
     .on('SIGTERM', gracefulExit)
     .on('SIGUSR2', gracefulExit);
 
-  // ------------------------------------------------------------------------------------------------
-  // MongoConnectionClass
-  // ------------------------------------------------------------------------------------------------
+  /** MongoConnectionClass */
   class MongoConnectionClass {
+    /** Establishes a connection to the MongoDB. */
     connect() {
       return new Promise((resolve) => {
         mongoose.connect(MONGO_URI, MONGO_OPTIONS)
@@ -136,6 +132,7 @@ const MongoConnection = (() => {
       });
     }
 
+    /** Returns `true` if connected to MongoDB, otherwise `false`. */
     get isConnected() {
       return privateProps.isConnected;
     }

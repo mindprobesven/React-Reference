@@ -40,6 +40,7 @@ app.get('*', (req, res) => responseError({
 
 app.use(defaultErrorHandler);
 
+/** Starts the Express server and listens on the configured port. */
 const startExpressServer = () => (
   new Promise((resolve) => {
     try {
