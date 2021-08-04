@@ -1,0 +1,1 @@
+{"version":3,"file":"server.js","sourceRoot":"","sources":["../src/server.ts"],"names":[],"mappings":";;;;;AAAA,8DAAkD;AAElD,MAAM,IAAI,GAAG,GAAG,EAAE;IAChB,gBAAkB,EAAE,CAAC;AACvB,CAAC,CAAC;AAEF,IAAI,EAAE,CAAC","sourcesContent":["import startExpressServer from './express/router';\n\nconst init = () => {\n  startExpressServer();\n};\n\ninit();\n"]}

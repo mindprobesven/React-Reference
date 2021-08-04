@@ -1,0 +1,79 @@
+{
+  "compilerOptions": {
+    // Module and Target
+    // ------------------------------------------------------------------------------------------
+    // Sets the module system. "CommonJS" for node projects.
+    "module": "CommonJS",
+
+    // Targeting an ECMAScript version
+    "target": "ES2020",
+    
+    // Lib
+    // ------------------------------------------------------------------------------------------
+    // "lib" includes a default set of type definitions.
+    // TypeScript automatically includes APIs matching the "target" specified.
+    "lib": ["ES2020"],
+
+    // "nolib" disables automatic inclusion of any library files.
+    // "noLib": true
+
+    // Files will be emitted into this directory
+    "outDir": "./dist",
+
+    // Rules
+    // ------------------------------------------------------------------------------------------
+    "strict": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+
+    // Tells TypeScript to warn you if you write certain code that can’t be correctly interpreted
+    // by a single-file transpilation process (Babel).
+    // Ensure that each file can be safely transpiled without relying on other imports.
+    // "isolatedModules": true,
+    
+    "forceConsistentCasingInFileNames": true,
+
+    // Source maps
+    // ------------------------------------------------------------------------------------------
+    // This generates separate source map files.
+    // "sourceMap": true,
+
+    // Instead of generating separate source map files, this will put the source map directly inside
+    // a transpiled JavaScript file, which references the TypeScript code in the project.
+    // "inlineSourceMap": true,
+
+    // This will generate source map files which contain the TypeScript code, rather than reference
+    // it. The TypeScript code is contained within the 'sourcesContent' field in the JSON.
+    "sourceMap": true,
+    "inlineSources": true,
+
+    // Declaration
+    // ------------------------------------------------------------------------------------------
+    // Generate .d.ts files for every TypeScript or JavaScript file inside your project.
+    "declaration": true,
+    // Configure the root directory for where declaration files are emitted.
+    "declarationDir": "./dist/types",
+    // Generates a source map for .d.ts files which map back to the original .ts source file.
+    // This will allow editors such as VS Code to go to the original .ts file when using features
+    // like 'Go to Definition'
+    "declarationMap": true,
+
+    // JavaScript support
+    // ------------------------------------------------------------------------------------------
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "watchOptions": {
+    "watchFile": "useFsEvents",
+    "watchDirectory": "useFsEvents",
+    "synchronousWatchDirectory": true,
+    "fallbackPolling": "dynamicPriority"
+  }
+}
