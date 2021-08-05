@@ -1,1 +1,1 @@
-{"version":3,"file":"router.d.ts","sourceRoot":"","sources":["../../../src/express/router.ts"],"names":[],"mappings":"AAgBA,MAAM,CAAC,OAAO,UAAU,kBAAkB,IAAI,IAAI,CAIjD"}
+{"version":3,"file":"router.d.ts","sourceRoot":"","sources":["../../../src/express/router.ts"],"names":[],"mappings":"AA2BA,MAAM,CAAC,OAAO,OAAO,aAAa;IAChC,OAAO,CAAC,MAAM,CAAC,MAAM,CAAgB;IAErC,OAAO,CAAC,OAAO,CAAC;IAEhB,OAAO;IAIP,OAAO,CAAC,SAAS;IAOjB,MAAM,CAAC,KAAK,IAAI,OAAO,CAAC,IAAI,CAAC;CAoB9B"}

@@ -20,6 +20,7 @@
     "indent": ["error", 2],
     "semi": ["error", "always"],
     "no-console":  ["error", { "allow": ["warn", "error", "log"] }],
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "no-void": ["error", { "allowAsStatement": true }]
   }
 }

@@ -1,7 +1,6 @@
-import startExpressServer from './express/router';
+import ExpressServer from './express/router';
 
-const init = () => {
-  startExpressServer();
-};
-
-init();
+void (async () => {
+  await ExpressServer.start();
+  console.log('Here');
+})();
