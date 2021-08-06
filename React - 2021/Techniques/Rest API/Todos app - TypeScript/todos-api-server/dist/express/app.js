@@ -8,6 +8,9 @@ const express_1 = __importDefault(require("express"));
 const serve_favicon_1 = __importDefault(require("serve-favicon"));
 const config_1 = require("../config/config");
 const requestLogger_1 = __importDefault(require("./middleware/requestLogger"));
+const defaultErrorHandler_1 = __importDefault(require("./middleware/defaultErrorHandler"));
+const error_1 = __importDefault(require("./responseHandlers/error"));
+const logger_1 = __importDefault(require("../utils/logger"));
 console.log('Loaded router module');
 class ExpressServer {
     constructor() {
@@ -18,20 +21,34 @@ class ExpressServer {
         this.express.use(requestLogger_1.default);
         this.express.get('/', (req, res) => {
             console.log('Request');
+            throw new Error('Foo');
             res.sendStatus(200);
         });
+        this.express.get('*', (req, res) => error_1.default({
+            req,
+            res,
+            status: 404,
+            message: '404 - Bad Request',
+        }));
+        this.express.use(defaultErrorHandler_1.default);
     }
     listen() {
         return new Promise((resolve, reject) => {
             try {
                 this.express.listen(config_1.EXPRESS_PORT, () => {
-                    console.log(`${config_1.ENV_TYPE} server is listening on port ${config_1.EXPRESS_PORT}!`);
+                    logger_1.default.express.log({
+                        level: 'info',
+                        message: `${config_1.ENV_TYPE} server is listening on port ${config_1.EXPRESS_PORT}!`,
+                    });
                     resolve(true);
                 });
             }
             catch (error) {
                 if (error instanceof Error) {
-                    console.log(error.name);
+                    logger_1.default.express.log({
+                        level: 'error',
+                        message: `${error.name} - ${error.message}`,
+                    });
                     reject(error);
                 }
             }
@@ -48,4 +65,4 @@ class ExpressServer {
     }
 }
 exports.default = ExpressServer;
-//# sourceMappingURL=router.js.map
+//# sourceMappingURL=app.js.map

@@ -6,4 +6,4 @@ export default class ExpressServer {
     private listen;
     static start(): Promise<boolean>;
 }
-//# sourceMappingURL=router.d.ts.map
+//# sourceMappingURL=app.d.ts.map
