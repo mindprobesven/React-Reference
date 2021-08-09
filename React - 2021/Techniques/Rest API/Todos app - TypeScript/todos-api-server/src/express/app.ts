@@ -39,12 +39,12 @@ export default class ExpressServer {
       res.sendStatus(200);
     });
 
-    this.express.get('*', (req: express.Request, res: express.Response) => responseError({
+    /* this.express.get('*', (req: express.Request, res: express.Response) => responseError({
       req,
       res,
       status: 404,
       message: '404 - Bad Request',
-    }));
+    })); */
 
     this.express.use(defaultErrorHandler);
   }

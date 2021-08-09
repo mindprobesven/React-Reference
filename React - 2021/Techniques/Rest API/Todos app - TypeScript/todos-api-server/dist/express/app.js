@@ -9,7 +9,6 @@ const serve_favicon_1 = __importDefault(require("serve-favicon"));
 const config_1 = require("../config/config");
 const requestLogger_1 = __importDefault(require("./middleware/requestLogger"));
 const defaultErrorHandler_1 = __importDefault(require("./middleware/defaultErrorHandler"));
-const error_1 = __importDefault(require("./responseHandlers/error"));
 const logger_1 = __importDefault(require("../utils/logger"));
 console.log('Loaded router module');
 class ExpressServer {
@@ -24,12 +23,6 @@ class ExpressServer {
             throw new Error('Foo');
             res.sendStatus(200);
         });
-        this.express.get('*', (req, res) => error_1.default({
-            req,
-            res,
-            status: 404,
-            message: '404 - Bad Request',
-        }));
         this.express.use(defaultErrorHandler_1.default);
     }
     listen() {

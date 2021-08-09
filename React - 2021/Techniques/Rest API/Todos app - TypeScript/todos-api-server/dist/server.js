@@ -14,12 +14,4 @@ const initAPIServer = async () => {
     }
 };
 void initAPIServer();
-const add = (num1, num2) => {
-    console.log('Adding...');
-    console.log(num1);
-    console.log(num2);
-    return num1 + num1;
-};
-console.log(add(5));
-console.log(add(5, 10));
 //# sourceMappingURL=server.js.map

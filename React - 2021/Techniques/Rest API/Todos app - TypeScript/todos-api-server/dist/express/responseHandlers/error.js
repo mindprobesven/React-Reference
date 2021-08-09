@@ -4,7 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const logger_1 = __importDefault(require("../../utils/logger"));
-const responseError = ({ req, res, status = 400, message, payload, error, }) => {
+const responseError = (req, res, message, error, status = 400) => {
+    console.log(Array.isArray(error));
+    console.log(error instanceof Error);
+    console.log(error === null);
+    console.log('--------');
+};
+const responseError3 = ({ req, res, status = 400, message, payload, error, }) => {
     if (message) {
         logger_1.default.express.log({
             level: 'error',

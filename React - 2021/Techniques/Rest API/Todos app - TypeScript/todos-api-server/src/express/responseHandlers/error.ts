@@ -4,7 +4,29 @@
 import express from 'express';
 import logger from '../../utils/logger';
 
-type ResponseError = {
+interface ResponseError {
+  (req: express.Request, res: express.Response, message: string, error: Array<Record<string, unknown>>, status?: number,): void;
+  (req: express.Request, res: express.Response, message: null, error: Error, status?: number): void;
+  (req: express.Request, res: express.Response, message: string, error: null, status?: number): void;
+}
+
+const responseError: ResponseError = (
+  req: express.Request,
+  res: express.Response,
+  message: unknown,
+  error: unknown,
+  status = 400,
+): void => {
+  console.log(Array.isArray(error));
+  console.log(error instanceof Error);
+  console.log(error === null);
+  console.log('--------');
+  // console.log(message);
+  // console.log(error);
+  // console.log(status);
+};
+
+type ResponseError3 = {
   req: express.Request;
   res: express.Response;
   status: number;
@@ -16,14 +38,14 @@ type ResponseError = {
 /**
  * Sends and logs a HTTP `error` response
  */
-const responseError = ({
+const responseError3 = ({
   req,
   res,
   status = 400,
   message,
   payload,
   error,
-}: ResponseError): express.Response => {
+}: ResponseError3): express.Response => {
   if (message) {
     logger.express.log({
       level: 'error',
