@@ -4,21 +4,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const logger_1 = __importDefault(require("../../utils/logger"));
-const responseError = (req, res, message, error, status = 400) => {
-    console.log(Array.isArray(error));
-    console.log(error instanceof Error);
-    console.log(error === null);
-    console.log('--------');
-};
-const responseError3 = ({ req, res, status = 400, message, payload, error, }) => {
-    if (message) {
+const responseError = (req, res, status, message, error) => {
+    if (error instanceof Error) {
+        logger_1.default.express.log({
+            level: 'error',
+            message: `[ ${req.method} ] ${status} - ${error.name} - ${error.message} - ${req.originalUrl} - ${req.ip} - ${String(req.get('user-agent'))}`,
+        });
+        res.status(status).send(`${error.name} - ${error.message}`);
+    }
+    if (Array.isArray(error) && typeof message === 'string') {
         logger_1.default.express.log({
             level: 'error',
             message: `[ ${req.method} ] ${status} - ${message} - ${req.originalUrl} - ${req.ip} - ${String(req.get('user-agent'))}`,
         });
-        return res.status(status).send(message);
+        res.status(status).json({ error });
     }
-    return res.sendStatus(status);
+    if (error === null && typeof message === 'string') {
+        logger_1.default.express.log({
+            level: 'error',
+            message: `[ ${req.method} ] ${status} - ${message} - ${req.originalUrl} - ${req.ip} - ${String(req.get('user-agent'))}`,
+        });
+        res.status(status).send(message);
+    }
 };
 exports.default = responseError;
 //# sourceMappingURL=error.js.map

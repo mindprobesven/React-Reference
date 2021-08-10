@@ -14,5 +14,5 @@ exports.MONGO_OPTIONS = {
     heartbeatFrequencyMS: 5000,
 };
 exports.MONGO_DB = 'todos-app';
-exports.MONGO_URI = `mongodb://1localhost:27017/${exports.MONGO_DB}`;
+exports.MONGO_URI = `mongodb://localhost:27017/${exports.MONGO_DB}`;
 //# sourceMappingURL=config.js.map

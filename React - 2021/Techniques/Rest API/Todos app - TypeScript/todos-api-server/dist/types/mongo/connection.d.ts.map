@@ -1,0 +1,1 @@
+{"version":3,"file":"connection.d.ts","sourceRoot":"","sources":["../../../src/mongo/connection.ts"],"names":[],"mappings":"AASA,cAAM,KAAK;IACT,OAAO,CAAC,MAAM,CAAC,KAAK,CAAQ;IAE5B,OAAO,CAAC,WAAW,CAAU;IAE7B,OAAO;IAIP,OAAO,CAAC,kBAAkB,CAuGxB;IAEF,OAAO,CAAC,iBAAiB,CAcvB;IAEF,MAAM,KAAK,WAAW,IAAI,OAAO,CAKhC;IAED,MAAM,CAAC,OAAO,IAAI,OAAO,CAAC,OAAO,CAAC;CASnC;AAED,eAAe,KAAK,CAAC"}

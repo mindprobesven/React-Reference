@@ -1,6 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import path from 'path';
 import express from 'express';
@@ -11,11 +9,12 @@ import { ENV_TYPE, EXPRESS_PORT } from '../config/config';
 import requestLogger from './middleware/requestLogger';
 import defaultErrorHandler from './middleware/defaultErrorHandler';
 
+import AdminController from './controllers/adminController';
+
 import responseError from './responseHandlers/error';
 
 import logger from '../utils/logger';
 
-console.log('Loaded router module');
 export default class ExpressServer {
   private static server: ExpressServer;
 
@@ -26,26 +25,21 @@ export default class ExpressServer {
   }
 
   private configure() {
+    // Middleware to parse json from requests
+    this.express.use(express.json());
+
     // Middleware to handle favicon.ico requests
     this.express.use(favicon(path.join(__dirname, '../../public', 'favicon.ico')));
 
     // Middleware for requests logging
     this.express.use(requestLogger);
 
-    // curl -X GET -H "Accept: application/json" http://127.0.0.1:5000
-    this.express.get('/', (req, res) => {
-      console.log('Request');
-      throw new Error('Foo');
-      res.sendStatus(200);
-    });
+    this.express.use('/admin', AdminController.create());
 
-    /* this.express.get('*', (req: express.Request, res: express.Response) => responseError({
-      req,
-      res,
-      status: 404,
-      message: '404 - Bad Request',
-    })); */
+    // Handle 404s
+    this.express.get('*', (req, res) => responseError(req, res, 404, '404 - Bad Request', null));
 
+    // Middleware to handle errors
     this.express.use(defaultErrorHandler);
   }
 
@@ -76,8 +70,7 @@ export default class ExpressServer {
       if (typeof this.server === 'undefined') {
         this.server = new ExpressServer();
         this.server.configure();
-
-        this.server.listen().then(() => resolve(true)).catch((error: Error) => resolve(false));
+        this.server.listen().then(() => resolve(true)).catch(() => resolve(false));
       }
     });
   }

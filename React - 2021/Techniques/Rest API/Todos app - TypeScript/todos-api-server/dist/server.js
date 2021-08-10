@@ -4,13 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./express/app"));
+const connection_1 = __importDefault(require("./mongo/connection"));
 const initAPIServer = async () => {
     const isListening = await app_1.default.start();
     if (isListening) {
-        console.log('Listening...');
-    }
-    else {
-        console.log('NOT Listening!');
+        await connection_1.default.connect();
     }
 };
 void initAPIServer();

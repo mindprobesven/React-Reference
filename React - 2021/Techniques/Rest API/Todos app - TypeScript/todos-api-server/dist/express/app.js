@@ -9,20 +9,19 @@ const serve_favicon_1 = __importDefault(require("serve-favicon"));
 const config_1 = require("../config/config");
 const requestLogger_1 = __importDefault(require("./middleware/requestLogger"));
 const defaultErrorHandler_1 = __importDefault(require("./middleware/defaultErrorHandler"));
+const adminController_1 = __importDefault(require("./controllers/adminController"));
+const error_1 = __importDefault(require("./responseHandlers/error"));
 const logger_1 = __importDefault(require("../utils/logger"));
-console.log('Loaded router module');
 class ExpressServer {
     constructor() {
         this.express = express_1.default();
     }
     configure() {
+        this.express.use(express_1.default.json());
         this.express.use(serve_favicon_1.default(path_1.default.join(__dirname, '../../public', 'favicon.ico')));
         this.express.use(requestLogger_1.default);
-        this.express.get('/', (req, res) => {
-            console.log('Request');
-            throw new Error('Foo');
-            res.sendStatus(200);
-        });
+        this.express.use('/admin', adminController_1.default.create());
+        this.express.get('*', (req, res) => error_1.default(req, res, 404, '404 - Bad Request', null));
         this.express.use(defaultErrorHandler_1.default);
     }
     listen() {
@@ -52,7 +51,7 @@ class ExpressServer {
             if (typeof this.server === 'undefined') {
                 this.server = new ExpressServer();
                 this.server.configure();
-                this.server.listen().then(() => resolve(true)).catch((error) => resolve(false));
+                this.server.listen().then(() => resolve(true)).catch(() => resolve(false));
             }
         });
     }
