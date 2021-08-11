@@ -15,6 +15,11 @@ import responseError from './responseHandlers/error';
 
 import logger from '../utils/logger';
 
+enum Status {
+  OK = 'OK',
+  Fail = 'Fail',
+  Duplicate = 'Duplicate',
+}
 export default class ExpressServer {
   private static server: ExpressServer;
 
@@ -65,12 +70,14 @@ export default class ExpressServer {
     });
   }
 
-  static async start(): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
+  static async start(): Promise<Status> {
+    return new Promise((resolve) => {
       if (typeof this.server === 'undefined') {
         this.server = new ExpressServer();
         this.server.configure();
-        this.server.listen().then(() => resolve(true)).catch(() => resolve(false));
+        this.server.listen().then(() => resolve(Status.OK)).catch(() => resolve(Status.Fail));
+      } else {
+        resolve(Status.Duplicate);
       }
     });
   }

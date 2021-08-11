@@ -1,0 +1,1 @@
+{"version":3,"file":"checkMongoConnection.d.ts","sourceRoot":"","sources":["../../../../src/express/middleware/checkMongoConnection.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,SAAS,CAAC;AAK9B,QAAA,MAAM,oBAAoB,QACnB,QAAQ,OAAO,OACf,QAAQ,QAAQ,QACf,QAAQ,YAAY,KACzB,IAKF,CAAC;AAEF,eAAe,oBAAoB,CAAC"}

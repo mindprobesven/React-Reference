@@ -7,6 +7,11 @@ import { MONGO_URI, MONGO_OPTIONS } from '../config/config';
 
 import logger from '../utils/logger';
 
+enum Status {
+  OK = 'OK',
+  Fail = 'Fail',
+  Duplicate = 'Duplicate',
+}
 class Mongo {
   private static mongo: Mongo;
 
@@ -144,12 +149,14 @@ class Mongo {
     return false;
   }
 
-  static connect(): Promise<boolean> {
+  static connect(): Promise<Status> {
     return new Promise((resolve) => {
       if (typeof this.mongo === 'undefined') {
         this.mongo = new Mongo();
         this.mongo.initEventListeners();
-        this.mongo.connectToDatabase().then(() => resolve(true)).catch(() => resolve(false));
+        this.mongo.connectToDatabase().then(() => resolve(Status.OK)).catch(() => resolve(Status.Fail));
+      } else {
+        resolve(Status.Duplicate);
       }
     });
   }

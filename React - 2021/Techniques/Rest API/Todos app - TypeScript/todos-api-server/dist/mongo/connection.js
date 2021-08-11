@@ -7,6 +7,12 @@ const process_1 = __importDefault(require("process"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = require("../config/config");
 const logger_1 = __importDefault(require("../utils/logger"));
+var Status;
+(function (Status) {
+    Status["OK"] = "OK";
+    Status["Fail"] = "Fail";
+    Status["Duplicate"] = "Duplicate";
+})(Status || (Status = {}));
 class Mongo {
     constructor() {
         this.initEventListeners = () => {
@@ -128,7 +134,10 @@ class Mongo {
             if (typeof this.mongo === 'undefined') {
                 this.mongo = new Mongo();
                 this.mongo.initEventListeners();
-                this.mongo.connectToDatabase().then(() => resolve(true)).catch(() => resolve(false));
+                this.mongo.connectToDatabase().then(() => resolve(Status.OK)).catch(() => resolve(Status.Fail));
+            }
+            else {
+                resolve(Status.Duplicate);
             }
         });
     }

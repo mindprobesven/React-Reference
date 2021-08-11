@@ -12,6 +12,12 @@ const defaultErrorHandler_1 = __importDefault(require("./middleware/defaultError
 const adminController_1 = __importDefault(require("./controllers/adminController"));
 const error_1 = __importDefault(require("./responseHandlers/error"));
 const logger_1 = __importDefault(require("../utils/logger"));
+var Status;
+(function (Status) {
+    Status["OK"] = "OK";
+    Status["Fail"] = "Fail";
+    Status["Duplicate"] = "Duplicate";
+})(Status || (Status = {}));
 class ExpressServer {
     constructor() {
         this.express = express_1.default();
@@ -51,7 +57,10 @@ class ExpressServer {
             if (typeof this.server === 'undefined') {
                 this.server = new ExpressServer();
                 this.server.configure();
-                this.server.listen().then(() => resolve(true)).catch(() => resolve(false));
+                this.server.listen().then(() => resolve(Status.OK)).catch(() => resolve(Status.Fail));
+            }
+            else {
+                resolve(Status.Duplicate);
             }
         });
     }

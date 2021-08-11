@@ -1,12 +1,16 @@
 /* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable class-methods-use-this */
 
 import express from 'express';
 
+import checkMongoConnection from '../middleware/checkMongoConnection';
 import validateGetRequest from '../middleware/validateGetRequest';
+import validatePostRequest from '../middleware/validatePostRequest';
+
+import userValidationSchema from '../validationSchemas/user';
 
 import responseSuccess from '../responseHandlers/success';
+
+import UserModel from '../../mongo/schemas/user';
 
 class AdminController {
   private static controller: AdminController;
@@ -30,14 +34,59 @@ class AdminController {
     */
     this.router.get(
       '/users',
-      [validateGetRequest],
-      this.getAllUsers,
+      [checkMongoConnection, validateGetRequest],
+      this.getUsers,
+    );
+
+    /*
+    curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json1" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Sven11 Michel-ñ", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+
+    curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Simon", "lastName":"Weisberger", "email":"simon@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Barbara", "lastName":"Massari Nola", "email":"barbara@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Valentina", "lastName":"Kohn", "email":"valentina@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Thomas", "lastName":"Kohn", "email":"thomas@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    */
+    this.router.post(
+      '/user/add',
+      [checkMongoConnection, validatePostRequest(userValidationSchema)],
+      this.addUser,
     );
   }
 
-  private getAllUsers = (req: express.Request, res: express.Response): void => {
+  private getUsers = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+      const userDoc = new UserModel();
+      console.log(await userDoc.getUsers1());
+
+      console.log(await UserModel.getUsers2());
+
+      /* const result = await UserModel.find({})
+        .select({
+          updatedAt: 0,
+          __v: 0,
+        })
+        .lean();
+
+      console.log(result); */
+
+      // const Model1 = model('User');
+      // const user1 = new Model1();
+
+      // const userModel: Model<unknown, {}, {}> = new UserModel();
+      // const users = await userModel.getUsers(req.query);
+    } catch (error) {
+      console.log(error);
+    }
+
     responseSuccess(req, res, 200, 'Sending user data', [{ first: 'Sven', last: 'Kohn' }]);
-    // responseSuccess(req, res, 200, 'Sending 200 only');
+  };
+
+  private addUser = (req: express.Request, res: express.Response): void => {
+    console.log(req.body);
+    responseSuccess(req, res, 200, 'OK');
   };
 
   static create(): express.Router {
