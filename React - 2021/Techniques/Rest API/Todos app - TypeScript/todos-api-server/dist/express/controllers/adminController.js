@@ -14,14 +14,15 @@ class AdminController {
     constructor() {
         this.getUsers = async (req, res) => {
             try {
-                const userDoc = new user_2.default();
-                console.log(await userDoc.getUsers1());
-                console.log(await user_2.default.getUsers2());
+                const users = await user_2.default.getUsersByQuery(req.query);
+                console.log(users);
+                success_1.default(req, res, 200, 'Sending user data', users);
             }
             catch (error) {
-                console.log(error);
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
             }
-            success_1.default(req, res, 200, 'Sending user data', [{ first: 'Sven', last: 'Kohn' }]);
         };
         this.addUser = (req, res) => {
             console.log(req.body);

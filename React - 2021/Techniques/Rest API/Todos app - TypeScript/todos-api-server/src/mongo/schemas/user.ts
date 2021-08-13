@@ -1,19 +1,23 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Schema, model, Model, ObjectId, Types,
 } from 'mongoose';
 
-interface IUser {
+// Schema interface
+// Typings for schema properties and instance methods.
+export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
   validated: boolean;
-  posts: ObjectId[];
   getUsers1: () => Promise<void>;
 }
 
+// Model interface
+// Typings for model static methods.
 interface IUserModel extends Model<IUser> {
-  getUsers2: () => Promise<void>;
+  getUsersByQuery: (query: Record<string, unknown>) => Promise<IUser[]>;
 }
 
 const userSchema = new Schema<IUser, IUserModel, IUser>({
@@ -35,38 +39,63 @@ const userSchema = new Schema<IUser, IUserModel, IUser>({
     required: true,
     default: false,
   },
-  posts: [Schema.Types.ObjectId],
-  /* posts: {
-    type: [Schema.Types.ObjectId],
-    required: true,
-    default: [],
-  }, */
 }, {
   timestamps: true,
 });
 
 userSchema.methods.getUsers1 = function getUsers1() {
   console.log('getUsers - Instance Method');
-
-  return model('User')
-    .find({})
-    .select({
-      updatedAt: 0,
-      __v: 0,
-    })
-    .lean();
 };
 
-userSchema.statics.getUsers2 = function getUsers2() {
-  console.log('getUsers - Static');
+interface IQuery {
+  searchFor?: string;
+  searchTerm?: string;
+  sortBy?: string;
+  sortOrder?: string;
+}
+
+userSchema.statics.getUsersByQuery = function getUsersByQuery({
+  searchFor,
+  searchTerm,
+  sortBy,
+  sortOrder,
+}: IQuery) {
+  console.log(searchFor);
+  console.log(searchTerm);
+  console.log(sortBy);
+  console.log(sortOrder);
+
+  const queryObj: { [key: string]: unknown } = {};
+  const sortObj: { [key: string]: unknown } = {};
+
+  if (searchFor && searchTerm) {
+    queryObj[searchFor] = new RegExp(`^${searchTerm}`, 'i');
+  }
+
+  if (sortBy && sortOrder) {
+    sortObj[sortBy] = sortOrder;
+  }
+
+  console.log(queryObj);
+  console.log(sortObj);
 
   return this
-    .find({})
+    .find(
+      queryObj,
+      { updatedAt: 0, __v: 0 },
+      {
+        sort: sortObj,
+        lean: true,
+      },
+    );
+
+  /* .find(filterObj)
+    .sort({ [sortBy]: sortOrder })
     .select({
       updatedAt: 0,
       __v: 0,
     })
-    .lean();
+    .lean(); */
 };
 
 const UserModel = model('User', userSchema);

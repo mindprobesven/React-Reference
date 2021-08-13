@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 
 import express from 'express';
@@ -23,6 +24,9 @@ class AdminController {
 
   private configure(): void {
     /*
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=s
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=p
+
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?sortBy=firstName&sortOrder=asc
     curl -X GET -H "Accept: application1/json" http://127.0.0.1:5000/admin/users/?sortBy=firstName&sortOrder=asc
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?sortBy=createdAt&sortOrder=desc
@@ -58,30 +62,22 @@ class AdminController {
 
   private getUsers = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
-      const userDoc = new UserModel();
-      console.log(await userDoc.getUsers1());
-
-      console.log(await UserModel.getUsers2());
-
-      /* const result = await UserModel.find({})
-        .select({
-          updatedAt: 0,
-          __v: 0,
-        })
-        .lean();
-
-      console.log(result); */
-
-      // const Model1 = model('User');
-      // const user1 = new Model1();
-
-      // const userModel: Model<unknown, {}, {}> = new UserModel();
-      // const users = await userModel.getUsers(req.query);
+      const users = await UserModel.getUsersByQuery(req.query);
+      console.log(users);
+      // console.log(users[0].constructor.name);
+      responseSuccess(req, res, 200, 'Sending user data', users);
+      // users[0] = { foo: 'foo' };
+      // console.log(JSON.stringify(users[0].constructor.name));
+      // void users[0].getUsers1();
+      /* if (Array.isArray(users)) {
+        responseSuccess(req, res, 200, 'Sending user data', users);
+      } */
+      // throw new Error('foo');
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
     }
-
-    responseSuccess(req, res, 200, 'Sending user data', [{ first: 'Sven', last: 'Kohn' }]);
   };
 
   private addUser = (req: express.Request, res: express.Response): void => {
