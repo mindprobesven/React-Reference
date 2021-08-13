@@ -47,11 +47,13 @@ userSchema.methods.getUsers1 = function getUsers1() {
   console.log('getUsers - Instance Method');
 };
 
-interface IQuery {
-  searchFor?: string;
-  searchTerm?: string;
-  sortBy?: string;
-  sortOrder?: string;
+interface IQueryConfig {
+  filter: Record<string, unknown>;
+  select: Record<string, number>;
+  options: {
+    sort: Record<string, string>;
+    lean: boolean;
+  };
 }
 
 userSchema.statics.getUsersByQuery = function getUsersByQuery({
@@ -59,43 +61,22 @@ userSchema.statics.getUsersByQuery = function getUsersByQuery({
   searchTerm,
   sortBy,
   sortOrder,
-}: IQuery) {
-  console.log(searchFor);
-  console.log(searchTerm);
-  console.log(sortBy);
-  console.log(sortOrder);
-
-  const queryObj: { [key: string]: unknown } = {};
-  const sortObj: { [key: string]: unknown } = {};
+}: Record<string, string>) {
+  const config: IQueryConfig = {
+    filter: {},
+    select: { updatedAt: 0, __v: 0 },
+    options: { sort: {}, lean: true },
+  };
 
   if (searchFor && searchTerm) {
-    queryObj[searchFor] = new RegExp(`^${searchTerm}`, 'i');
+    config.filter[searchFor] = new RegExp(`^${searchTerm}`, 'i');
   }
 
   if (sortBy && sortOrder) {
-    sortObj[sortBy] = sortOrder;
+    config.options.sort[sortBy] = sortOrder;
   }
 
-  console.log(queryObj);
-  console.log(sortObj);
-
-  return this
-    .find(
-      queryObj,
-      { updatedAt: 0, __v: 0 },
-      {
-        sort: sortObj,
-        lean: true,
-      },
-    );
-
-  /* .find(filterObj)
-    .sort({ [sortBy]: sortOrder })
-    .select({
-      updatedAt: 0,
-      __v: 0,
-    })
-    .lean(); */
+  return this.find(config.filter, config.select, config.options);
 };
 
 const UserModel = model('User', userSchema);

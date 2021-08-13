@@ -10,6 +10,7 @@ import validatePostRequest from '../middleware/validatePostRequest';
 import userValidationSchema from '../validationSchemas/user';
 
 import responseSuccess from '../responseHandlers/success';
+import responseError from '../responseHandlers/error';
 
 import UserModel from '../../mongo/schemas/user';
 
@@ -63,19 +64,11 @@ class AdminController {
   private getUsers = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       const users = await UserModel.getUsersByQuery(req.query);
-      console.log(users);
-      // console.log(users[0].constructor.name);
       responseSuccess(req, res, 200, 'Sending user data', users);
-      // users[0] = { foo: 'foo' };
-      // console.log(JSON.stringify(users[0].constructor.name));
-      // void users[0].getUsers1();
-      /* if (Array.isArray(users)) {
-        responseSuccess(req, res, 200, 'Sending user data', users);
-      } */
-      // throw new Error('foo');
+      throw new Error('foo');
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error.message);
+        responseError(req, res, 400, null, error);
       }
     }
   };

@@ -27,25 +27,18 @@ userSchema.methods.getUsers1 = function getUsers1() {
     console.log('getUsers - Instance Method');
 };
 userSchema.statics.getUsersByQuery = function getUsersByQuery({ searchFor, searchTerm, sortBy, sortOrder, }) {
-    console.log(searchFor);
-    console.log(searchTerm);
-    console.log(sortBy);
-    console.log(sortOrder);
-    const queryObj = {};
-    const sortObj = {};
+    const config = {
+        filter: {},
+        select: { updatedAt: 0, __v: 0 },
+        options: { sort: {}, lean: true },
+    };
     if (searchFor && searchTerm) {
-        queryObj[searchFor] = new RegExp(`^${searchTerm}`, 'i');
+        config.filter[searchFor] = new RegExp(`^${searchTerm}`, 'i');
     }
     if (sortBy && sortOrder) {
-        sortObj[sortBy] = sortOrder;
+        config.options.sort[sortBy] = sortOrder;
     }
-    console.log(queryObj);
-    console.log(sortObj);
-    return this
-        .find(queryObj, { updatedAt: 0, __v: 0 }, {
-        sort: sortObj,
-        lean: true,
-    });
+    return this.find(config.filter, config.select, config.options);
 };
 const UserModel = mongoose_1.model('User', userSchema);
 exports.default = UserModel;

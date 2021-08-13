@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
-import express from 'express';
 
-import { IUser } from '../../mongo/schemas/user';
+import express from 'express';
 
 import logger from '../../utils/logger';
 
@@ -10,7 +9,7 @@ const responseSuccess = (
   res: express.Response,
   status: number,
   message: string,
-  payload?: IUser[],
+  payload?: unknown[],
 ): void => {
   logger.express.log({
     level: 'info',

@@ -9,18 +9,19 @@ const validateGetRequest_1 = __importDefault(require("../middleware/validateGetR
 const validatePostRequest_1 = __importDefault(require("../middleware/validatePostRequest"));
 const user_1 = __importDefault(require("../validationSchemas/user"));
 const success_1 = __importDefault(require("../responseHandlers/success"));
+const error_1 = __importDefault(require("../responseHandlers/error"));
 const user_2 = __importDefault(require("../../mongo/schemas/user"));
 class AdminController {
     constructor() {
         this.getUsers = async (req, res) => {
             try {
                 const users = await user_2.default.getUsersByQuery(req.query);
-                console.log(users);
                 success_1.default(req, res, 200, 'Sending user data', users);
+                throw new Error('foo');
             }
             catch (error) {
                 if (error instanceof Error) {
-                    console.log(error.message);
+                    error_1.default(req, res, 400, null, error);
                 }
             }
         };
