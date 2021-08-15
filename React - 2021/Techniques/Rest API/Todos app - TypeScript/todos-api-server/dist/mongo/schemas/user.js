@@ -23,22 +23,37 @@ const userSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-userSchema.methods.getUsers1 = function getUsers1() {
-    console.log('getUsers - Instance Method');
+userSchema.methods.isEmailDuplicate = function isEmailDuplicate() {
+    const query = {
+        filter: { email: new RegExp(this.email, 'i') },
+        select: { email: 1 },
+        options: { lean: true },
+    };
+    return new Promise((resolve, reject) => {
+        mongoose_1.model('User')
+            .findOne(query.filter, query.select, query.options)
+            .then((foundDuplicate) => {
+            if (foundDuplicate) {
+                resolve(true);
+            }
+            resolve(false);
+        })
+            .catch((error) => reject(error));
+    });
 };
 userSchema.statics.getUsersByQuery = function getUsersByQuery({ searchFor, searchTerm, sortBy, sortOrder, }) {
-    const config = {
+    const query = {
         filter: {},
         select: { updatedAt: 0, __v: 0 },
-        options: { sort: {}, lean: true },
+        options: { lean: true },
     };
     if (searchFor && searchTerm) {
-        config.filter[searchFor] = new RegExp(`^${searchTerm}`, 'i');
+        query.filter[searchFor] = new RegExp(`^${searchTerm}`, 'i');
     }
     if (sortBy && sortOrder) {
-        config.options.sort[sortBy] = sortOrder;
+        query.options.sort = { [sortBy]: sortOrder };
     }
-    return this.find(config.filter, config.select, config.options);
+    return this.find(query.filter, query.select, query.options);
 };
 const UserModel = mongoose_1.model('User', userSchema);
 exports.default = UserModel;

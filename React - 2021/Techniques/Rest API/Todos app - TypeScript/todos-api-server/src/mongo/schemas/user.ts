@@ -1,8 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Schema, model, Model, ObjectId, Types,
-} from 'mongoose';
+import { Schema, model, Model } from 'mongoose';
 
 // Schema interface
 // Typings for schema properties and instance methods.
@@ -11,13 +9,22 @@ export interface IUser {
   lastName: string;
   email: string;
   validated: boolean;
-  getUsers1: () => Promise<void>;
+  isEmailDuplicate: () => Promise<boolean>;
 }
 
 // Model interface
 // Typings for model static methods.
 interface IUserModel extends Model<IUser> {
   getUsersByQuery: (query: Record<string, unknown>) => Promise<IUser[]>;
+}
+
+interface IFindQuery {
+  filter: Record<string, unknown>;
+  select: Record<string, number>;
+  options: {
+    sort?: Record<string, string>;
+    lean: boolean;
+  };
 }
 
 const userSchema = new Schema<IUser, IUserModel, IUser>({
@@ -43,18 +50,25 @@ const userSchema = new Schema<IUser, IUserModel, IUser>({
   timestamps: true,
 });
 
-userSchema.methods.getUsers1 = function getUsers1() {
-  console.log('getUsers - Instance Method');
-};
-
-interface IQueryConfig {
-  filter: Record<string, unknown>;
-  select: Record<string, number>;
-  options: {
-    sort: Record<string, string>;
-    lean: boolean;
+userSchema.methods.isEmailDuplicate = function isEmailDuplicate() {
+  const query: IFindQuery = {
+    filter: { email: new RegExp(this.email, 'i') },
+    select: { email: 1 },
+    options: { lean: true },
   };
-}
+
+  return new Promise((resolve, reject) => {
+    model('User')
+      .findOne(query.filter, query.select, query.options)
+      .then((foundDuplicate) => {
+        if (foundDuplicate) {
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch((error) => reject(error));
+  });
+};
 
 userSchema.statics.getUsersByQuery = function getUsersByQuery({
   searchFor,
@@ -62,21 +76,21 @@ userSchema.statics.getUsersByQuery = function getUsersByQuery({
   sortBy,
   sortOrder,
 }: Record<string, string>) {
-  const config: IQueryConfig = {
+  const query: IFindQuery = {
     filter: {},
     select: { updatedAt: 0, __v: 0 },
-    options: { sort: {}, lean: true },
+    options: { lean: true },
   };
 
   if (searchFor && searchTerm) {
-    config.filter[searchFor] = new RegExp(`^${searchTerm}`, 'i');
+    query.filter[searchFor] = new RegExp(`^${searchTerm}`, 'i');
   }
 
   if (sortBy && sortOrder) {
-    config.options.sort[sortBy] = sortOrder;
+    query.options.sort = { [sortBy]: sortOrder };
   }
 
-  return this.find(config.filter, config.select, config.options);
+  return this.find(query.filter, query.select, query.options);
 };
 
 const UserModel = model('User', userSchema);

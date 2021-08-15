@@ -1,15 +1,16 @@
 /* eslint-disable max-len */
 import express from 'express';
 
-import { validationResult, ValidationChain } from 'express-validator';
+import { validationResult } from 'express-validator';
+// import { validationResult, ValidationChain } from 'express-validator';
 
 import responseError from '../responseHandlers/error';
 
-type ValidationSchema = ValidationChain[] & {
+interface IValidationSchema {
   run: (req: express.Request) => Promise<unknown[]>;
-};
+}
 
-const validatePostRequest = (validationSchema: ValidationSchema) => async (
+const validatePostRequest = (validationSchema: IValidationSchema) => async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,

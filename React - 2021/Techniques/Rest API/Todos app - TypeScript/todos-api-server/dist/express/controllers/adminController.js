@@ -15,9 +15,8 @@ class AdminController {
     constructor() {
         this.getUsers = async (req, res) => {
             try {
-                const users = await user_2.default.getUsersByQuery(req.query);
+                const users = await user_2.default.getUsersByQuery({ ...req.query });
                 success_1.default(req, res, 200, 'Sending user data', users);
-                throw new Error('foo');
             }
             catch (error) {
                 if (error instanceof Error) {
@@ -25,9 +24,28 @@ class AdminController {
                 }
             }
         };
-        this.addUser = (req, res) => {
-            console.log(req.body);
-            success_1.default(req, res, 200, 'OK');
+        this.addUser = async (req, res) => {
+            try {
+                const newUserDoc = new user_2.default({ ...req.body });
+                const isDuplicate = await newUserDoc.isEmailDuplicate();
+                if (isDuplicate) {
+                    const validationError = [{
+                            value: newUserDoc.email,
+                            msg: 'Email exists',
+                            param: 'email',
+                            location: 'body',
+                        }];
+                    error_1.default(req, res, 400, 'Email exists', validationError);
+                    return;
+                }
+                await newUserDoc.save();
+                success_1.default(req, res, 200, 'New user created');
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    error_1.default(req, res, 400, null, error);
+                }
+            }
         };
         this.router = express_1.default.Router();
     }

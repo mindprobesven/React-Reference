@@ -4,7 +4,7 @@ export interface IUser {
     lastName: string;
     email: string;
     validated: boolean;
-    getUsers1: () => Promise<void>;
+    isEmailDuplicate: () => Promise<boolean>;
 }
 interface IUserModel extends Model<IUser> {
     getUsersByQuery: (query: Record<string, unknown>) => Promise<IUser[]>;

@@ -25,6 +25,7 @@ class AdminController {
 
   private configure(): void {
     /*
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor1=firstName&searchTerm=s
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=s
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=p
 
@@ -47,6 +48,9 @@ class AdminController {
     curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json1" http://127.0.0.1:5000/admin/user/add
     curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
     curl -X POST --data '{"firstName":"Sven11 Michel-ñ", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Sven", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"SvEn@MIndprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
+    curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven1@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
 
     curl -X POST --data '{"firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
     curl -X POST --data '{"firstName":"Simon", "lastName":"Weisberger", "email":"simon@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/add
@@ -63,9 +67,8 @@ class AdminController {
 
   private getUsers = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
-      const users = await UserModel.getUsersByQuery(req.query);
+      const users = await UserModel.getUsersByQuery({ ...req.query });
       responseSuccess(req, res, 200, 'Sending user data', users);
-      throw new Error('foo');
     } catch (error) {
       if (error instanceof Error) {
         responseError(req, res, 400, null, error);
@@ -73,9 +76,31 @@ class AdminController {
     }
   };
 
-  private addUser = (req: express.Request, res: express.Response): void => {
-    console.log(req.body);
-    responseSuccess(req, res, 200, 'OK');
+  private addUser = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+      const newUserDoc = new UserModel({ ...req.body });
+
+      const isDuplicate = await newUserDoc.isEmailDuplicate();
+
+      if (isDuplicate) {
+        const validationError = [{
+          value: newUserDoc.email,
+          msg: 'Email exists',
+          param: 'email',
+          location: 'body',
+        }];
+        responseError(req, res, 400, 'Email exists', validationError);
+        return;
+      }
+
+      await newUserDoc.save();
+
+      responseSuccess(req, res, 200, 'New user created');
+    } catch (error) {
+      if (error instanceof Error) {
+        responseError(req, res, 400, null, error);
+      }
+    }
   };
 
   static create(): express.Router {
