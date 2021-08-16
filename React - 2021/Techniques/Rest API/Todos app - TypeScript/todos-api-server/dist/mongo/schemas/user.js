@@ -55,6 +55,21 @@ userSchema.statics.getUsersByQuery = function getUsersByQuery({ searchFor, searc
     }
     return this.find(query.filter, query.select, query.options);
 };
+userSchema.statics.getUserById = function getUserById(id) {
+    return this.findOne({ _id: id });
+};
+userSchema.statics.deleteUserById = function deleteUserById(id) {
+    return new Promise((resolve, reject) => {
+        this.deleteOne({ _id: id })
+            .then((result) => {
+            if (result.deletedCount && result.deletedCount > 0) {
+                resolve(true);
+            }
+            resolve(false);
+        })
+            .catch((error) => reject(error));
+    });
+};
 const UserModel = mongoose_1.model('User', userSchema);
 exports.default = UserModel;
 //# sourceMappingURL=user.js.map

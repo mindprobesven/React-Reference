@@ -1,8 +1,6 @@
 /* eslint-disable max-len */
 import express from 'express';
-
 import { validationResult } from 'express-validator';
-// import { validationResult, ValidationChain } from 'express-validator';
 
 import responseError from '../responseHandlers/error';
 

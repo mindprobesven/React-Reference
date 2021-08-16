@@ -1,10 +1,13 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Schema, model, Model } from 'mongoose';
+
+import {
+  Schema, model, Model, Document,
+} from 'mongoose';
 
 // Schema interface
 // Typings for schema properties and instance methods.
-export interface IUser {
+export interface IUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
@@ -16,6 +19,8 @@ export interface IUser {
 // Typings for model static methods.
 interface IUserModel extends Model<IUser> {
   getUsersByQuery: (query: Record<string, unknown>) => Promise<IUser[]>;
+  getUserById: (id: string) => Promise<IUser>;
+  deleteUserById: (id: string) => Promise<boolean>;
 }
 
 interface IFindQuery {
@@ -91,6 +96,23 @@ userSchema.statics.getUsersByQuery = function getUsersByQuery({
   }
 
   return this.find(query.filter, query.select, query.options);
+};
+
+userSchema.statics.getUserById = function getUserById(id: string) {
+  return this.findOne({ _id: id });
+};
+
+userSchema.statics.deleteUserById = function deleteUserById(id: string) {
+  return new Promise((resolve, reject) => {
+    this.deleteOne({ _id: id })
+      .then((result) => {
+        if (result.deletedCount && result.deletedCount > 0) {
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch((error) => reject(error));
+  });
 };
 
 const UserModel = model('User', userSchema);

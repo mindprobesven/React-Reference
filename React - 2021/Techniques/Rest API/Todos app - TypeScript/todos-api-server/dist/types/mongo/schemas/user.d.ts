@@ -1,5 +1,5 @@
-import { Model } from 'mongoose';
-export interface IUser {
+import { Model, Document } from 'mongoose';
+export interface IUser extends Document {
     firstName: string;
     lastName: string;
     email: string;
@@ -8,6 +8,8 @@ export interface IUser {
 }
 interface IUserModel extends Model<IUser> {
     getUsersByQuery: (query: Record<string, unknown>) => Promise<IUser[]>;
+    getUserById: (id: string) => Promise<IUser>;
+    deleteUserById: (id: string) => Promise<boolean>;
 }
 declare const UserModel: IUserModel;
 export default UserModel;

@@ -6,6 +6,8 @@ declare class AdminController {
     private configure;
     private getUsers;
     private addUser;
+    private editUser;
+    private deleteUser;
     static create(): express.Router;
 }
 export default AdminController;
