@@ -7,8 +7,10 @@ const express_1 = __importDefault(require("express"));
 const checkMongoConnection_1 = __importDefault(require("../middleware/checkMongoConnection"));
 const validateGetRequest_1 = __importDefault(require("../middleware/validateGetRequest"));
 const validatePostRequest_1 = __importDefault(require("../middleware/validatePostRequest"));
-const user_1 = __importDefault(require("../validationSchemas/user"));
+const validateQuery_1 = __importDefault(require("../middleware/validateQuery"));
 const id_1 = __importDefault(require("../validationSchemas/id"));
+const user_1 = __importDefault(require("../validationSchemas/user"));
+const userQuery_1 = __importDefault(require("../validationSchemas/userQuery"));
 const success_1 = __importDefault(require("../responseHandlers/success"));
 const error_1 = __importDefault(require("../responseHandlers/error"));
 const user_2 = __importDefault(require("../../mongo/schemas/user"));
@@ -100,14 +102,24 @@ class AdminController {
         this.router = express_1.default.Router();
     }
     configure() {
-        this.router.get('/users', [checkMongoConnection_1.default, validateGetRequest_1.default], this.getUsers);
-        this.router.post('/user/add', [checkMongoConnection_1.default, validatePostRequest_1.default(user_1.default)], this.addUser);
+        this.router.get('/users', [
+            checkMongoConnection_1.default,
+            validateGetRequest_1.default,
+            validateQuery_1.default(userQuery_1.default),
+        ], this.getUsers);
+        this.router.post('/user/add', [
+            checkMongoConnection_1.default,
+            validatePostRequest_1.default(user_1.default),
+        ], this.addUser);
         this.router.post('/user/edit', [
             checkMongoConnection_1.default,
             validatePostRequest_1.default(id_1.default),
             validatePostRequest_1.default(user_1.default),
         ], this.editUser);
-        this.router.post('/user/delete', [checkMongoConnection_1.default, validatePostRequest_1.default(id_1.default)], this.deleteUser);
+        this.router.post('/user/delete', [
+            checkMongoConnection_1.default,
+            validatePostRequest_1.default(id_1.default),
+        ], this.deleteUser);
     }
     static create() {
         if (typeof this.controller === 'undefined') {

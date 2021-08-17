@@ -3,9 +3,11 @@ import express from 'express';
 import checkMongoConnection from '../middleware/checkMongoConnection';
 import validateGetRequest from '../middleware/validateGetRequest';
 import validatePostRequest from '../middleware/validatePostRequest';
+import validateQuery from '../middleware/validateQuery';
 
-import userValidationSchema from '../validationSchemas/user';
 import idValidationSchema from '../validationSchemas/id';
+import userValidationSchema from '../validationSchemas/user';
+import userQuerySchema from '../validationSchemas/userQuery';
 
 import responseSuccess from '../responseHandlers/success';
 import responseError from '../responseHandlers/error';
@@ -23,12 +25,21 @@ class AdminController {
 
   private configure(): void {
     /*
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=first%20Name&searchTerm=s&sortBy=firstName&sortOrder=asc
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=first-Name&searchTerm=s&sortBy=firstName&sortOrder=asc
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor1=firstName&searchTerm=s&sortBy=firstName&sortOrder=asc
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstNamefirstName&searchTerm=s&sortBy=firstName&sortOrder=asc
+
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=firstName&searchTerm=s&sortBy=firstName&sortOrder=asc
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users
     */
     this.router.get(
       '/users',
-      [checkMongoConnection, validateGetRequest],
+      [
+        checkMongoConnection,
+        validateGetRequest,
+        validateQuery(userQuerySchema),
+      ],
       this.getUsers,
     );
 
@@ -41,16 +52,15 @@ class AdminController {
     */
     this.router.post(
       '/user/add',
-      [checkMongoConnection, validatePostRequest(userValidationSchema)],
+      [
+        checkMongoConnection,
+        validatePostRequest(userValidationSchema),
+      ],
       this.addUser,
     );
 
     /*
-    curl -X POST --data '{"id":"611a475b0c5aee3a699b1f9a", "firstName":"Sven Michel", "lastName":"Kohn", "email":"valentina@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-    curl -X POST --data '{"id":"611a475b0c", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-    curl -X POST --data '{"id":"611a475b0c5aee3a699b1f9a", "firstName":"Sven", "lastName":"Kohn", "email":"sven@mindprobe.io"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-    curl -X POST --data '{"id":"611a475b0c5aee3a699b1f9a", "firstName":"Sven Michel", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
-    curl -X POST --data '{"id":"611a475b0c5aee3a699b1f9a", "firstName":"Sven Michel", "lastName":"Kohn", "email":"sven1@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit
+    curl -X POST --data '{"id":"611a475b0c5aee3a699b1f9a", "firstName":"Sven Michel", "lastName":"Kohn", "email":"sven@mindprobe.io", "validated":true}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/edit'
     */
     this.router.post(
       '/user/edit',
@@ -63,12 +73,14 @@ class AdminController {
     );
 
     /*
-    curl -X POST --data '{"id":"60e58431be"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/delete
     curl -X POST --data '{"id":"611a475b0c5aee3a699b1f9a"}' -H "Accept: application/json" -H "Content-Type: application/json" http://127.0.0.1:5000/admin/user/delete
     */
     this.router.post(
       '/user/delete',
-      [checkMongoConnection, validatePostRequest(idValidationSchema)],
+      [
+        checkMongoConnection,
+        validatePostRequest(idValidationSchema),
+      ],
       this.deleteUser,
     );
   }
