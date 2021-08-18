@@ -25,6 +25,9 @@ class AdminController {
 
   private configure(): void {
     /*
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=sven
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?sortOrder=asc
+    curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?sortOrder=aSc
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=first%20Name&searchTerm=s&sortBy=firstName&sortOrder=asc
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor=first-Name&searchTerm=s&sortBy=firstName&sortOrder=asc
     curl -X GET -H "Accept: application/json" http://127.0.0.1:5000/admin/users/?searchFor1=firstName&searchTerm=s&sortBy=firstName&sortOrder=asc

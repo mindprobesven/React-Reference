@@ -1,26 +1,62 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const validator_1 = __importDefault(require("validator"));
 const express_validator_1 = require("express-validator");
 const userQuerySchema = express_validator_1.checkSchema({
     searchFor: {
         in: ['query'],
         optional: true,
         isLength: {
-            options: { max: 25 },
-            errorMessage: 'Too long',
+            options: { min: 1, max: 25 },
+            errorMessage: 'Invalid length',
             bail: true,
         },
-        custom: {
-            options: (value) => {
-                if (validator_1.default.isAlphanumeric(value, 'en-US', { ignore: '-' })) {
-                    return true;
-                }
-                throw new Error('Invalid characters');
-            },
+        isAlpha: {
+            options: ['en-US', { ignore: '-' }],
+            errorMessage: 'Invalid characters',
+            bail: true,
+        },
+    },
+    searchTerm: {
+        in: ['query'],
+        optional: true,
+        isLength: {
+            options: { min: 1, max: 50 },
+            errorMessage: 'Invalid length',
+            bail: true,
+        },
+        isAlpha: {
+            options: ['en-US', { ignore: '-' }],
+            errorMessage: 'Invalid characters',
+            bail: true,
+        },
+    },
+    sortBy: {
+        in: ['query'],
+        optional: true,
+        isLength: {
+            options: { min: 1, max: 25 },
+            errorMessage: 'Invalid length',
+            bail: true,
+        },
+        isAlpha: {
+            options: ['en-US', { ignore: '-' }],
+            errorMessage: 'Invalid characters',
+            bail: true,
+        },
+    },
+    sortOrder: {
+        in: ['query'],
+        optional: true,
+        toLowerCase: true,
+        isLength: {
+            options: { min: 3, max: 4 },
+            errorMessage: 'Invalid length',
+            bail: true,
+        },
+        isIn: {
+            options: [['asc', 'desc']],
+            errorMessage: 'Invalid value',
+            bail: true,
         },
     },
 });

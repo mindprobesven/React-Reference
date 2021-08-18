@@ -1,1 +1,1 @@
-{"version":3,"file":"userQuery.d.ts","sourceRoot":"","sources":["../../../../src/express/validationSchemas/userQuery.ts"],"names":[],"mappings":"AAGA,QAAA,MAAM,eAAe;;CAmBnB,CAAC;AAEH,eAAe,eAAe,CAAC"}
+{"version":3,"file":"userQuery.d.ts","sourceRoot":"","sources":["../../../../src/express/validationSchemas/userQuery.ts"],"names":[],"mappings":"AAGA,QAAA,MAAM,eAAe;;CA0DnB,CAAC;AAEH,eAAe,eAAe,CAAC"}
